@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tesseract_ocr/android_ios.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class TesseractOcrTest extends StatefulWidget {

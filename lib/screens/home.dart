@@ -1,43 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tesseract_ocr/android_ios.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:memento_flutter/themes/custom_theme.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({
     Key? key,
   }) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  String extractedText = "";
-  bool isLoading = false;
-
-  Future runOcr(String imagePath) async {
-    extractedText = await FlutterTesseractOcr.extractText(imagePath,
-        language: 'kor+eng+chi_tra',
-        args: {
-          "preserve_interword_spaces": "1",
-        });
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future runFilePicker() async {
-    setState(() {
-      isLoading = true;
-    });
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      await runOcr(pickedFile.path);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +15,39 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
         elevation: 0,
+        toolbarHeight: 70,
       ),
-      body: Center(
-        child: isLoading
-            ? const CircularProgressIndicator()
-            : Text(
-                extractedText,
-                style: CustomTheme.themeData.textTheme.bodyMedium,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(children: [
+          Container(
+            decoration: const BoxDecoration(
+                border:
+                    Border(top: BorderSide(width: 1, color: Colors.black26))),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "특허법",
+                        style: CustomTheme.themeData.textTheme.titleLarge,
+                      ),
+                      Text(
+                        "저장한 판례 22개",
+                        style: CustomTheme.themeData.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                  const Icon(Icons.notifications_none)
+                ],
               ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: CustomTheme.themeData.primaryColor,
-        onPressed: runFilePicker,
-        child: const Icon(Icons.add),
+            ),
+          )
+        ]),
       ),
     );
   }
