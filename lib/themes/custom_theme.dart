@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomTheme {
   static ThemeData themeData = ThemeData(
+    fontFamily: "NotoSansKR",
     primaryColor: const Color(0xFF4CA2DA),
     textTheme: const TextTheme(
         titleLarge: TextStyle(

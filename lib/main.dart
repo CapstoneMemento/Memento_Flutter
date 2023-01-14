@@ -13,6 +13,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Notes',
       theme: CustomTheme.themeData,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("내 암기장"),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
+          elevation: 0,
+        ),
+      ),
     );
   }
 }
