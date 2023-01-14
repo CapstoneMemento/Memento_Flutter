@@ -15,17 +15,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String extractedText = "";
+  bool isLoading = false;
 
   Future runOcr(String imagePath) async {
     extractedText = await FlutterTesseractOcr.extractText(imagePath,
-        language: 'kor',
+        language: 'kor+eng+chi_tra',
         args: {
           "preserve_interword_spaces": "1",
         });
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future runFilePicker() async {
+    setState(() {
+      isLoading = true;
+    });
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -44,10 +50,12 @@ class _HomeState extends State<Home> {
         elevation: 0,
       ),
       body: Center(
-        child: Text(
-          extractedText,
-          style: CustomTheme.themeData.textTheme.bodyMedium,
-        ),
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : Text(
+                extractedText,
+                style: CustomTheme.themeData.textTheme.bodyMedium,
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomTheme.themeData.primaryColor,
