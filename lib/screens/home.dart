@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Home extends StatelessWidget {
   Home({
@@ -8,10 +9,71 @@ class Home extends StatelessWidget {
   }) : super(key: key);
 
   final List<Map<String, dynamic>> modalItems = [
-    {"icon": Icons.edit, "text": "직접 입력하기"},
-    {"icon": Icons.camera_alt, "text": "사진 촬영하기"},
-    {"icon": Icons.photo, "text": "앨범에서 가져오기"},
+    {"id": "edit", "icon": Icons.edit, "text": "직접 입력하기"},
+    {"id": "camera", "icon": Icons.camera_alt, "text": "사진 촬영하기"},
+    {"id": "photo", "icon": Icons.photo, "text": "앨범에서 가져오기"},
   ];
+
+  Future<dynamic> showModalBottomSheet(BuildContext context) {
+    return showMaterialModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 180,
+            child: (Column(
+                children: modalItems
+                    .map((e) => GestureDetector(
+                          onTap: () {
+                            if (e["id"] == "edit") {
+                              // 직접 입력하기
+                            }
+                            if (e["id"] == "photo") {
+                              runFilePicker();
+                            }
+                            if (e["id"] == "camera") {
+                              // 카메라 실행하기
+                            }
+                          },
+                          child: Flexible(
+                            fit: FlexFit.tight,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                width: 1,
+                                color: Colors.black26,
+                              ))),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  children: [
+                                    Icon(e["icon"]),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      e["text"],
+                                      style: CustomTheme
+                                          .themeData.textTheme.bodyMedium,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList())),
+          );
+        });
+  }
+
+  Future runFilePicker() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // run OCR
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,38 +121,7 @@ class Home extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomTheme.themeData.primaryColor,
         onPressed: () {
-          showMaterialModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return SizedBox(
-                  height: 170,
-                  child: (Column(
-                      children: modalItems
-                          .map((e) => Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                  width: 1,
-                                  color: Colors.black26,
-                                ))),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Wrap(
-                                    spacing: 16,
-                                    children: [
-                                      Icon(e["icon"]),
-                                      Text(
-                                        e["text"],
-                                        style: CustomTheme
-                                            .themeData.textTheme.bodyMedium,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ))
-                          .toList())),
-                );
-              });
+          showModalBottomSheet(context);
         },
         child: const Icon(Icons.add),
       ),

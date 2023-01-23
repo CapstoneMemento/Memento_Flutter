@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Notes',
       theme: CustomTheme.themeData,
-      home: const Home(),
+      home: Home(),
     );
   }
 }
