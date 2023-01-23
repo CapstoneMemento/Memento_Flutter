@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 

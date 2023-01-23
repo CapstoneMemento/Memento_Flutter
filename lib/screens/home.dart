@@ -1,4 +1,6 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/cameraScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +25,11 @@ class Home extends StatelessWidget {
             child: (Column(
                 children: modalItems
                     .map((e) => GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            WidgetsFlutterBinding.ensureInitialized();
+                            final List<CameraDescription> cameras =
+                                await availableCameras();
+
                             if (e["id"] == "edit") {
                               // 직접 입력하기
                             }
@@ -31,7 +37,12 @@ class Home extends StatelessWidget {
                               runFilePicker();
                             }
                             if (e["id"] == "camera") {
-                              // 카메라 실행하기
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CameraScreen(
+                                            camera: cameras.first,
+                                          )));
                             }
                           },
                           child: Flexible(
