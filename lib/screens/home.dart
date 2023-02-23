@@ -1,14 +1,22 @@
-import 'package:camera/camera.dart';
+import 'dart:io';
+
+import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/cameraScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 
-class Home extends StatelessWidget {
-  Home({
+class Home extends StatefulWidget {
+  const Home({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late File scannedImage; // 카메라로 스캔한 이미지
 
   final List<Map<String, dynamic>> modalItems = [
     {"id": "edit", "icon": Icons.edit, "text": "직접 입력하기"},
@@ -27,22 +35,16 @@ class Home extends StatelessWidget {
                     .map((e) => GestureDetector(
                           onTap: () async {
                             WidgetsFlutterBinding.ensureInitialized();
-                            final List<CameraDescription> cameras =
-                                await availableCameras();
 
-                            if (e["id"] == "edit") {
-                              // 직접 입력하기
-                            }
+                            // 직접 입력하기
+                            if (e["id"] == "edit") {}
+                            // 앨범에서 가져오기
                             if (e["id"] == "photo") {
-                              runFilePicker();
+                              runFilePicker(context);
                             }
+                            // 사진 촬영하기
                             if (e["id"] == "camera") {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CameraScreen(
-                                            camera: cameras.first,
-                                          )));
+                              openImageScanner(context);
                             }
                           },
                           child: Flexible(
@@ -78,11 +80,27 @@ class Home extends StatelessWidget {
         });
   }
 
-  Future runFilePicker() async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      // run OCR
+  openImageScanner(BuildContext context) async {
+    var image = await DocumentScannerFlutter.launch(context,
+        source: ScannerFileSource.CAMERA);
+
+    // 촬영한 이미지 저장
+    if (image != null) {
+      scannedImage = image;
+      // 네이버 OCR로 텍스트 추출
+      setState(() {});
+    }
+  }
+
+  runFilePicker(BuildContext context) async {
+    var image = await DocumentScannerFlutter.launch(context,
+        source: ScannerFileSource.GALLERY);
+
+    // 앨범에서 선택한 이미지 저장
+    if (image != null) {
+      scannedImage = image;
+      // 네이버 OCR로 텍스트 추출
+      setState(() {});
     }
   }
 
