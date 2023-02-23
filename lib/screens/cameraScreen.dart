@@ -4,6 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:memento_flutter/screens/displayPictureScreen.dart';
 import 'package:path_provider/path_provider.dart';
 
+// 사진 촬영을 위해 필요한 카메라 화면 (현재 사용 X)
 class CameraScreen extends StatefulWidget {
   final CameraDescription camera;
 

@@ -3,6 +3,8 @@ import 'package:flutter_tesseract_ocr/android_ios.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
+// tesseract ocr 테스트를 위한 위젯 (현재 사용 X)
+// 밑줄, 동그라미 필기 모두 문자로 인식함. 성능 개선이 매우 필요함
 class TesseractOcrTest extends StatefulWidget {
   const TesseractOcrTest({
     Key? key,

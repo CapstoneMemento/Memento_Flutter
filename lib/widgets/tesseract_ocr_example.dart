@@ -6,6 +6,7 @@ import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 
+// 문서에 있는 예시
 class TesseractOcrExample extends StatelessWidget {
   // This widget is the root of your application.
   @override
