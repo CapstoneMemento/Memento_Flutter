@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/subjectScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
@@ -122,27 +123,16 @@ class _HomeState extends State<Home> {
             decoration: const BoxDecoration(
                 border:
                     Border(top: BorderSide(width: 1, color: Colors.black26))),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "특허법",
-                        style: CustomTheme.themeData.textTheme.titleLarge,
-                      ),
-                      Text(
-                        "저장한 판례 22개",
-                        style: CustomTheme.themeData.textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                  const Icon(Icons.notifications_none)
-                ],
-              ),
+            child: ListTile(
+              title: const Text("특허법"),
+              subtitle: const Text("저장한 판례 22개"),
+              trailing: const Icon(Icons.notifications_none),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SubjectScreen()));
+              },
             ),
           )
         ]),
