@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/noteScreen.dart';
+import 'package:memento_flutter/screens/noteListScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
-class SubjectScreen extends StatelessWidget {
-  const SubjectScreen({super.key});
+class SubjectListScreen extends StatelessWidget {
+  const SubjectListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SubjectScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
           title: const Text("특허법"),
           centerTitle: true,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
           elevation: 0,
           toolbarHeight: 60,
@@ -36,7 +36,7 @@ class SubjectScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const NoteScreen()));
+                          builder: (context) => const NoteListScreen()));
                 },
               ),
             ),
@@ -52,7 +52,7 @@ class SubjectScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const NoteScreen()));
+                          builder: (context) => const NoteListScreen()));
                 },
               ),
             )

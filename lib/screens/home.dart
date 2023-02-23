@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/subjectScreen.dart';
+import 'package:memento_flutter/screens/subjectListScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
@@ -111,7 +111,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("내 암기장"),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
         elevation: 0,
         toolbarHeight: 60,
@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const SubjectScreen()));
+                        builder: (context) => const SubjectListScreen()));
               },
             ),
           )
