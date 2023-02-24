@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/home.dart';
+import 'package:memento_flutter/themes/custom_theme.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text("Hello Flutter"),
-        ),
-      ),
+    return MaterialApp(
+      title: 'My Notes',
+      theme: CustomTheme.themeData,
+      home: const Home(),
     );
   }
 }
