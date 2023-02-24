@@ -41,7 +41,8 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   camera: ^0.9.3+1
   document_scanner_flutter: ^0.2.7
-  firebase_storage: ^3.1.6
+  firebase_storage: ^11.0.14
+  firebase_core: ^2.7.0
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "961027754985",
+    "project_id": "memento-38505",
+    "storage_bucket": "memento-38505.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961027754985:android:fcf27798441b69e346d978",
+        "android_client_info": {
+          "package_name": "com.example.memento_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961027754985-1aqkhrp25l6n95dos9g6ngod280np8cg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkFgmBDREHKMNHumpi2uu0QyxrRlSORkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961027754985-1aqkhrp25l6n95dos9g6ngod280np8cg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "961027754985-09g5d3mabkp987ah52hrfu8b34os0loj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mementoFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:document_scanner_flutter/configs/configs.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/subjectListScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
@@ -17,13 +18,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late File scannedImage; // 카메라로 스캔한 이미지
+  late File scannedImage; // 스캔한 이미지
 
   final List<Map<String, dynamic>> modalItems = [
     {"id": "edit", "icon": Icons.edit, "text": "직접 입력하기"},
     {"id": "camera", "icon": Icons.camera_alt, "text": "사진 촬영하기"},
     {"id": "photo", "icon": Icons.photo, "text": "앨범에서 가져오기"},
   ];
+
+/* Firebase storage 초기화 */
+  final storageRef = FirebaseStorage.instance.ref();
+  late final imageRef = storageRef.child("scannedImage.jpg");
 
   Future<dynamic> showModalBottomSheet(BuildContext context) {
     return showMaterialModalBottomSheet(
@@ -81,6 +86,7 @@ class _HomeState extends State<Home> {
         });
   }
 
+  /* '사진 촬영하기' 선택 시, 문서 스캐너 실행 */
   openImageScanner(BuildContext context) async {
     var image = await DocumentScannerFlutter.launch(context,
         source: ScannerFileSource.CAMERA);
@@ -93,6 +99,7 @@ class _HomeState extends State<Home> {
     }
   }
 
+/* '앨범에서 가졍괴' 선택 시 실행하는 함수 */
   runFilePicker(BuildContext context) async {
     var image = await DocumentScannerFlutter.launch(context,
         source: ScannerFileSource.GALLERY);
@@ -100,6 +107,14 @@ class _HomeState extends State<Home> {
     // 앨범에서 선택한 이미지 저장
     if (image != null) {
       scannedImage = image;
+
+      // Firebase storage에 이미지 저장
+      try {
+        imageRef.putFile(scannedImage);
+      } catch (error) {
+        debugPrint(error.toString());
+      }
+
       // 네이버 OCR로 텍스트 추출
       setState(() {});
     }
