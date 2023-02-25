@@ -43,6 +43,7 @@ dependencies:
   document_scanner_flutter: ^0.2.7
   firebase_storage: ^11.0.14
   firebase_core: ^2.7.0
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

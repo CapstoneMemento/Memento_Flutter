@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
 
   /* '사진 촬영하기' 선택 시, 문서 스캐너 실행 */
   openImageScanner(BuildContext context) async {
-    var image = await DocumentScannerFlutter.launch(context,
+    final image = await DocumentScannerFlutter.launch(context,
         source: ScannerFileSource.CAMERA);
 
     // 촬영한 이미지 저장
@@ -100,22 +100,24 @@ class _HomeState extends State<Home> {
     }
   }
 
-/* '앨범에서 가졍괴' 선택 시 실행하는 함수 */
+/* '앨범에서 가져오기' 선택 시 실행하는 함수 */
   runFilePicker(BuildContext context) async {
-    var image = await DocumentScannerFlutter.launch(context,
+    final image = await DocumentScannerFlutter.launch(context,
         source: ScannerFileSource.GALLERY);
 
     // 앨범에서 선택한 이미지 저장
     if (image != null) {
       scannedImage = image;
 
-      // Firebase storage에 이미지 저장
       try {
-        await scannedImageRef.putFile(scannedImage);
+        await scannedImageRef.putFile(scannedImage); // Firebase storage에 이미지 저장
+        final downloadURL =
+            await scannedImageRef.getDownloadURL(); // image URL 가져오기
+
       } catch (error) {
         log(error.toString());
       }
-      debugPrint(scannedImageRef.fullPath);
+
       // 네이버 OCR로 텍스트 추출
       setState(() {});
     }
