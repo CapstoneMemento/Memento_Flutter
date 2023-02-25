@@ -39,23 +39,23 @@ class _HomeState extends State<Home> {
             height: 180,
             child: (Column(
                 children: modalItems
-                    .map((e) => GestureDetector(
-                          onTap: () async {
-                            WidgetsFlutterBinding.ensureInitialized();
+                    .map((e) => Flexible(
+                          fit: FlexFit.tight,
+                          child: GestureDetector(
+                            onTap: () async {
+                              WidgetsFlutterBinding.ensureInitialized();
 
-                            // 직접 입력하기
-                            if (e["id"] == "edit") {}
-                            // 앨범에서 가져오기
-                            if (e["id"] == "photo") {
-                              runFilePicker(context);
-                            }
-                            // 사진 촬영하기
-                            if (e["id"] == "camera") {
-                              openImageScanner(context);
-                            }
-                          },
-                          child: Flexible(
-                            fit: FlexFit.tight,
+                              // 직접 입력하기
+                              if (e["id"] == "edit") {}
+                              // 앨범에서 가져오기
+                              if (e["id"] == "photo") {
+                                runFilePicker(context);
+                              }
+                              // 사진 촬영하기
+                              if (e["id"] == "camera") {
+                                openImageScanner(context);
+                              }
+                            },
                             child: Container(
                               decoration: const BoxDecoration(
                                   border: Border(
@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
       } catch (error) {
         log(error.toString());
       }
-
+      debugPrint(scannedImageRef.fullPath);
       // 네이버 OCR로 텍스트 추출
       setState(() {});
     }
