@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:document_scanner_flutter/configs/configs.dart';
@@ -18,17 +19,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late File scannedImage; // 스캔한 이미지
-
   final List<Map<String, dynamic>> modalItems = [
     {"id": "edit", "icon": Icons.edit, "text": "직접 입력하기"},
     {"id": "camera", "icon": Icons.camera_alt, "text": "사진 촬영하기"},
     {"id": "photo", "icon": Icons.photo, "text": "앨범에서 가져오기"},
   ];
 
+  late File scannedImage; // 스캔한 이미지
+
 /* Firebase storage 초기화 */
   final storageRef = FirebaseStorage.instance.ref();
-  late final imageRef = storageRef.child("scannedImage.jpg");
+  late final scannedImageRef = storageRef.child("scannedImage.jpg");
 
   Future<dynamic> showModalBottomSheet(BuildContext context) {
     return showMaterialModalBottomSheet(
@@ -110,9 +111,9 @@ class _HomeState extends State<Home> {
 
       // Firebase storage에 이미지 저장
       try {
-        imageRef.putFile(scannedImage);
+        await scannedImageRef.putFile(scannedImage);
       } catch (error) {
-        debugPrint(error.toString());
+        log(error.toString());
       }
 
       // 네이버 OCR로 텍스트 추출

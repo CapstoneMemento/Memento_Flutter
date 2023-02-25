@@ -5,6 +5,7 @@ import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // 다음 함수가 실행될 때까지 기다린다.
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
