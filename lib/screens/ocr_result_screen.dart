@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class OCRResultScreen extends StatelessWidget {
@@ -6,8 +7,17 @@ class OCRResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: BaseAppBar(),
+    return Scaffold(
+      appBar: BaseAppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Home()));
+              },
+              icon: const Icon(Icons.close, color: Colors.black))
+        ],
+      ),
     );
   }
 }

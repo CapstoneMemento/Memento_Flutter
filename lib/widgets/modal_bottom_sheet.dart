@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import "package:http/http.dart" as http;
 
@@ -26,6 +25,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   ];
 
   late File scannedImage; // 스캔한 이미지
+  late String extractedText; // 추출한 텍스트
 
   /* Firebase storage 초기화 */
   final storageRef = FirebaseStorage.instance.ref();
@@ -89,40 +89,38 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         });
   }
 
-  /* '사진 촬영하기' 선택 시, 문서 스캐너 실행 */
+  /* 이미지 스캐너 실행 */
   void openImageScanner(BuildContext context,
       {required ScannerFileSource source}) async {
-    final image = await DocumentScannerFlutter.launch(context,
-        source: source,
-        labelsConfig: {
-          ScannerLabelsConfig.ANDROID_NEXT_BUTTON_LABEL: "Next Step",
-          ScannerLabelsConfig.ANDROID_OK_LABEL: "OK"
-        });
+    final image = await DocumentScannerFlutter.launch(
+      context,
+      source: source,
+    );
 
     if (image != null) {
       setState(() {
         scannedImage = image;
       });
-      final downloadURL = saveImageToStorage();
-      runOCR(downloadURL);
+      saveImageToStorage();
+      getImageURL()
+          .then((url) => runOCR(url)); // Future을 String으로 바꾸기 위해 then 사용
     }
   }
 
-/* 저장소에 사진을 저장하고, 다운 URL 받아오기 */
-  Future<String> saveImageToStorage() async {
+  /* 저장소에 사진을 저장 */
+  void saveImageToStorage() async {
     // Firebase storage에 이미지 저장
-    try {
-      await scannedImageRef.putFile(scannedImage);
-    } catch (error) {
-      log(error.toString());
-    }
-    // image URL 가져오기
+    await scannedImageRef.putFile(scannedImage);
+  }
+
+  /* 저장소 이미지 URL 가져오기 */
+  Future<String> getImageURL() async {
     final downloadURL = await scannedImageRef.getDownloadURL();
     return downloadURL;
   }
 
   /* 입력한 이미지 URL로 네이버 OCR 실행 */
-  Future<List> runOCR(Future<String> imageURL) async {
+  void runOCR(String imageURL) async {
     final url = Uri.parse(Constants.invokeURL); // url을 uri로 변환
     final headers = {"X-OCR-SECRET": Constants.secretKey};
     final body = {
@@ -140,11 +138,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         await http.post(url, headers: headers, body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      final textFields = jsonDecode(response.body).images[0].fields;
-      return textFields;
+      final textFields = jsonDecode(response.body)["images"][0]["fields"];
+      // 리스트에서 문자만 합치기
+      for (final textField in textFields) {
+        extractedText += "${textField["inferText"]} ";
+      }
+      setState(() {});
     }
-
-    return []; // 응답 실패하면 빈 리스트 반환
   }
 
   @override
