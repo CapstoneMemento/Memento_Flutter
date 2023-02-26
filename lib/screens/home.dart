@@ -53,11 +53,13 @@ class _HomeState extends State<Home> {
                               if (e["id"] == "edit") {}
                               // 앨범에서 가져오기
                               if (e["id"] == "photo") {
-                                runFilePicker(context);
+                                openImageScanner(context,
+                                    source: ScannerFileSource.GALLERY);
                               }
                               // 사진 촬영하기
                               if (e["id"] == "camera") {
-                                openImageScanner(context);
+                                openImageScanner(context,
+                                    source: ScannerFileSource.CAMERA);
                               }
                             },
                             child: Container(
@@ -92,45 +94,40 @@ class _HomeState extends State<Home> {
   }
 
   /* '사진 촬영하기' 선택 시, 문서 스캐너 실행 */
-  openImageScanner(BuildContext context) async {
-    var image = await DocumentScannerFlutter.launch(context,
-        source: ScannerFileSource.CAMERA);
+  openImageScanner(BuildContext context,
+      {required ScannerFileSource source}) async {
+    final image = await DocumentScannerFlutter.launch(context,
+        source: source,
+        labelsConfig: {
+          ScannerLabelsConfig.ANDROID_NEXT_BUTTON_LABEL: "Next Step",
+          ScannerLabelsConfig.ANDROID_OK_LABEL: "OK"
+        });
 
-    // 촬영한 이미지 저장
     if (image != null) {
       scannedImage = image;
-      // 네이버 OCR로 텍스트 추출
-      setState(() {});
-    }
-  }
-
-/* '앨범에서 가져오기' 선택 시 실행하는 함수 */
-  runFilePicker(BuildContext context) async {
-    // 앨범 실행
-    var image = await DocumentScannerFlutter.launch(context,
-        source: ScannerFileSource.GALLERY);
-
-    // 앨범에서 선택한 이미지 저장
-    if (image != null) {
-      scannedImage = image;
-
-      // Firebase storage에 이미지 저장
-      try {
-        await scannedImageRef.putFile(scannedImage);
-      } catch (error) {
-        log(error.toString());
-      }
-      // image URL 가져오기
-      var downloadURL = await scannedImageRef.getDownloadURL();
+      final downloadURL = saveImageToStorage();
       runOCR(downloadURL);
     }
   }
 
-  /* 네이버 OCR 실행 */
-  void runOCR(String imageURL) async {
-    var url = Uri.parse(Constants.invokeURL); // url을 uri로 변환
-    var headers = {"X-OCR-SECRET": Constants.secretKey};
-    var body = {
+/* 저장소에 사진을 저장하고, 다운 URL 받아오기 */
+  Future<String> saveImageToStorage() async {
+    // Firebase storage에 이미지 저장
+    try {
+      await scannedImageRef.putFile(scannedImage);
+    } catch (error) {
+      log(error.toString());
+    }
+    // image URL 가져오기
+    final downloadURL = await scannedImageRef.getDownloadURL();
+    return downloadURL;
+  }
+
+  /* 입력한 이미지 URL로 네이버 OCR 실행 */
+  void runOCR(Future<String> imageURL) async {
+    final url = Uri.parse(Constants.invokeURL); // url을 uri로 변환
+    final headers = {"X-OCR-SECRET": Constants.secretKey};
+    final body = {
       "images": [
         {"format": "jpeg", "name": "note", "data": null, "url": imageURL}
       ],
@@ -141,9 +138,9 @@ class _HomeState extends State<Home> {
       "enableTableDetection": false
     }; // images 안에 List 때문에 object로 인식되지 않으므로, jsonEncode 사용
     try {
-      var response =
+      final response =
           await http.post(url, headers: headers, body: jsonEncode(body));
-      // print(jsonDecode(response.body)); // 응답 확인 완료
+      jsonDecode(response.body);
     } catch (error) {
       // print(error);
     }
