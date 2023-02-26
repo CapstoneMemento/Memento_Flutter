@@ -7,6 +7,7 @@ import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/screens/ocr_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -25,7 +26,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   ];
 
   late File scannedImage; // 스캔한 이미지
-  late String extractedText; // 추출한 텍스트
+  String imageDownloadURL = ""; // 저장한 이미지 URL
+  String extractedText = ""; // 추출한 텍스트
+  bool isLoading = false;
 
   /* Firebase storage 초기화 */
   final storageRef = FirebaseStorage.instance.ref();
@@ -99,24 +102,27 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
 
     if (image != null) {
       setState(() {
+        isLoading = true;
         scannedImage = image;
       });
-      saveImageToStorage();
-      getImageURL()
-          .then((url) => runOCR(url)); // Future을 String으로 바꾸기 위해 then 사용
+      await saveImageToStorage();
+      await getImageURL();
+      runOCR(imageDownloadURL);
     }
   }
 
   /* 저장소에 사진을 저장 */
-  void saveImageToStorage() async {
+  saveImageToStorage() async {
     // Firebase storage에 이미지 저장
     await scannedImageRef.putFile(scannedImage);
   }
 
   /* 저장소 이미지 URL 가져오기 */
-  Future<String> getImageURL() async {
+  getImageURL() async {
     final downloadURL = await scannedImageRef.getDownloadURL();
-    return downloadURL;
+    setState(() {
+      imageDownloadURL = downloadURL;
+    });
   }
 
   /* 입력한 이미지 URL로 네이버 OCR 실행 */
@@ -143,8 +149,20 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       for (final textField in textFields) {
         extractedText += "${textField["inferText"]} ";
       }
-      setState(() {});
+      setState(() {
+        isLoading = false;
+      });
+      navigateToOCRResult(); // 결과 화면으로 이동
     }
+  }
+
+  /* 추출한 텍스트 결과 페이지로 이동 */
+  void navigateToOCRResult() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => OCRResultScreen(
+                imageURL: imageDownloadURL, extractedText: extractedText)));
   }
 
   @override
