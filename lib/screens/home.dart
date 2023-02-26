@@ -7,7 +7,7 @@ import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/screens/subjectListScreen.dart';
+import 'package:memento_flutter/screens/subject_list_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
@@ -140,7 +140,7 @@ class _HomeState extends State<Home> {
     try {
       final response =
           await http.post(url, headers: headers, body: jsonEncode(body));
-      jsonDecode(response.body);
+      final textFields = jsonDecode(response.body).images[0].fields;
     } catch (error) {
       // print(error);
     }

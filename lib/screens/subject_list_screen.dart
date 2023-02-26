@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/noteListScreen.dart';
+import 'package:memento_flutter/screens/note_list_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class SubjectListScreen extends StatelessWidget {
