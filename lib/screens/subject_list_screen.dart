@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note_list_screen.dart';
-import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class SubjectListScreen extends StatelessWidget {
   const SubjectListScreen({super.key});
@@ -8,18 +8,13 @@ class SubjectListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: BaseAppBar(
+          title: const Text("특허법"),
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
-          title: const Text("특허법"),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
-          elevation: 0,
-          toolbarHeight: 60,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

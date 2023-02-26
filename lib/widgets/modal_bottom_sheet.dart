@@ -90,7 +90,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   }
 
   /* '사진 촬영하기' 선택 시, 문서 스캐너 실행 */
-  openImageScanner(BuildContext context,
+  void openImageScanner(BuildContext context,
       {required ScannerFileSource source}) async {
     final image = await DocumentScannerFlutter.launch(context,
         source: source,
@@ -100,7 +100,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         });
 
     if (image != null) {
-      scannedImage = image;
+      setState(() {
+        scannedImage = image;
+      });
       final downloadURL = saveImageToStorage();
       runOCR(downloadURL);
     }
@@ -120,7 +122,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   }
 
   /* 입력한 이미지 URL로 네이버 OCR 실행 */
-  void runOCR(Future<String> imageURL) async {
+  Future<List> runOCR(Future<String> imageURL) async {
     final url = Uri.parse(Constants.invokeURL); // url을 uri로 변환
     final headers = {"X-OCR-SECRET": Constants.secretKey};
     final body = {
@@ -133,13 +135,16 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       "version": "V2",
       "enableTableDetection": false
     }; // images 안에 List 때문에 object로 인식되지 않으므로, jsonEncode 사용
-    try {
-      final response =
-          await http.post(url, headers: headers, body: jsonEncode(body));
+
+    final response =
+        await http.post(url, headers: headers, body: jsonEncode(body));
+
+    if (response.statusCode == 200) {
       final textFields = jsonDecode(response.body).images[0].fields;
-    } catch (error) {
-      // print(error);
+      return textFields;
     }
+
+    return []; // 응답 실패하면 빈 리스트 반환
   }
 
   @override

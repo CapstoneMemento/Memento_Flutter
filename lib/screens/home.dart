@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/subject_list_screen.dart';
-import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 
 class Home extends StatefulWidget {
@@ -16,13 +16,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("내 암기장"),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
-        elevation: 0,
-        toolbarHeight: 60,
+      appBar: const BaseAppBar(
+        title: Text("내 암기장"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

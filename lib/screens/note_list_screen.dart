@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class NoteListScreen extends StatelessWidget {
   const NoteListScreen({super.key});
@@ -7,21 +8,13 @@ class NoteListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
-          title: const Text(
-            "발명의 종류",
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
-          elevation: 0,
-          toolbarHeight: 60,
-        ),
+        appBar: BaseAppBar(
+            title: const Text("발명의 종류"),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.black))),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: ListView(children: [
