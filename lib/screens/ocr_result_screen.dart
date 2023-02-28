@@ -4,9 +4,7 @@ import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class OCRResultScreen extends StatelessWidget {
-  const OCRResultScreen(
-      {Key? key, required this.imageURL, required this.extractedText})
-      : super(key: key);
+  const OCRResultScreen({required this.imageURL, required this.extractedText});
 
   final String imageURL;
   final String extractedText;

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/config/constants.dart';
 import 'package:memento_flutter/screens/ocr_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/loading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ModalBottomSheet extends StatefulWidget {
@@ -34,64 +35,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final storageRef = FirebaseStorage.instance.ref();
   late final scannedImageRef = storageRef.child("scannedImage.jpg");
 
-  Future<dynamic> showModalBottomSheet(BuildContext context) {
-    return showMaterialModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return SizedBox(
-            height: 180,
-            child: (Column(
-                children: modalItems
-                    .map((e) => Flexible(
-                          fit: FlexFit.tight,
-                          child: GestureDetector(
-                            onTap: () async {
-                              WidgetsFlutterBinding.ensureInitialized();
-
-                              // 직접 입력하기
-                              if (e["id"] == "edit") {}
-                              // 앨범에서 가져오기
-                              if (e["id"] == "photo") {
-                                openImageScanner(context,
-                                    source: ScannerFileSource.GALLERY);
-                              }
-                              // 사진 촬영하기
-                              if (e["id"] == "camera") {
-                                openImageScanner(context,
-                                    source: ScannerFileSource.CAMERA);
-                              }
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                width: 1,
-                                color: Colors.black26,
-                              ))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Row(
-                                  children: [
-                                    Icon(e["icon"]),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      e["text"],
-                                      style: CustomTheme
-                                          .themeData.textTheme.bodyMedium,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ))
-                    .toList())),
-          );
-        });
-  }
-
   /* 이미지 스캐너 실행 */
   void openImageScanner(BuildContext context,
       {required ScannerFileSource source}) async {
@@ -107,7 +50,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       });
       await saveImageToStorage();
       await getImageURL();
-      runOCR(imageDownloadURL);
+      await runOCR(imageDownloadURL);
+      navigateToOCRResult(); // 결과 화면으로 이동
     }
   }
 
@@ -126,7 +70,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   }
 
   /* 입력한 이미지 URL로 네이버 OCR 실행 */
-  void runOCR(String imageURL) async {
+  runOCR(String imageURL) async {
     final url = Uri.parse(Constants.invokeURL); // url을 uri로 변환
     final headers = {"X-OCR-SECRET": Constants.secretKey};
     final body = {
@@ -152,7 +96,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       setState(() {
         isLoading = false;
       });
-      navigateToOCRResult(); // 결과 화면으로 이동
     }
   }
 
@@ -161,18 +104,79 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => OCRResultScreen(
-                imageURL: imageDownloadURL, extractedText: extractedText)));
+          builder: (context) => OCRResultScreen(
+              imageURL: imageDownloadURL, extractedText: extractedText),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: CustomTheme.themeData.primaryColor,
-      onPressed: () {
-        showModalBottomSheet(context);
-      },
-      child: const Icon(Icons.add),
-    );
+    return isLoading
+        ? Loading()
+        : FloatingActionButton(
+            backgroundColor: CustomTheme.themeData.primaryColor,
+            onPressed: () {
+              showMaterialModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                      height: 180,
+                      child: (Column(
+                          children: modalItems
+                              .map((e) => Flexible(
+                                    fit: FlexFit.tight,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        WidgetsFlutterBinding
+                                            .ensureInitialized();
+
+                                        // 직접 입력하기
+                                        if (e["id"] == "edit") {}
+                                        // 앨범에서 가져오기
+                                        if (e["id"] == "photo") {
+                                          openImageScanner(context,
+                                              source:
+                                                  ScannerFileSource.GALLERY);
+                                        }
+                                        // 사진 촬영하기
+                                        if (e["id"] == "camera") {
+                                          openImageScanner(context,
+                                              source: ScannerFileSource.CAMERA);
+                                        }
+                                        // modalBottomSheet 닫기
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                          width: 1,
+                                          color: Colors.black26,
+                                        ))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Row(
+                                            children: [
+                                              Icon(e["icon"]),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                e["text"],
+                                                style: CustomTheme.themeData
+                                                    .textTheme.bodyMedium,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                              .toList())),
+                    );
+                  });
+            },
+            child: const Icon(Icons.add),
+          );
   }
 }
