@@ -13,14 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool isLoading = false;
-
-  void setIsLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
