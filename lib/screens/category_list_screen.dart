@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note_list_screen.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
-class SubjectListScreen extends StatelessWidget {
-  const SubjectListScreen({super.key});
+class CategoryListScreen extends StatelessWidget {
+  const CategoryListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
