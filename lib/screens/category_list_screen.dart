@@ -3,17 +3,21 @@ import 'package:memento_flutter/screens/note_list_screen.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class CategoryListScreen extends StatelessWidget {
-  // DB에서 카테고리 정보 불러오기
+  // DB에서 목차 정보 불러오기
   final List<Map<String, dynamic>> categoryList = [
     {"id": "1", "title": "발명의 종류", "caseNum": 10},
     {"id": "2", "title": "PCT", "caseNum": 12}
   ];
 
+  final String subject; // 이전 화면에서 선택한 과목
+
+  CategoryListScreen({required this.subject});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: BaseAppBar(
-          title: const Text("특허법"),
+          title: Text(subject),
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -37,8 +41,9 @@ class CategoryListScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const NoteListScreen()));
+                                    builder: (context) => NoteListScreen(
+                                          category: e["title"],
+                                        )));
                           },
                         ),
                       ))

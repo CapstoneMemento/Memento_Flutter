@@ -19,11 +19,15 @@ class NoteListScreen extends StatelessWidget {
     }
   ];
 
+  final String category; // 이전 화면에서 선택한 목차
+
+  NoteListScreen({required this.category});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: BaseAppBar(
-            title: const Text("발명의 종류"),
+            title: Text(category),
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
