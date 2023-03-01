@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/screens/note_edit_screen.dart';
@@ -15,6 +16,36 @@ class OCRResultScreen extends StatefulWidget {
 }
 
 class _OCRResultScreenState extends State<OCRResultScreen> {
+  final List<Map<String, dynamic>> dialogItems = [
+    {
+      "id": "1",
+      "title": "통문장",
+      "onPressed": (context) {
+        // 문장 그대로 저장
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Home()));
+      }
+    },
+    {
+      "id": "2",
+      "title": "키워드",
+      "onPressed": (context) {
+        // 키워드 선택 화면으로 이동
+      }
+    },
+    {
+      "id": "3",
+      "title": "두문자",
+      "onPressed": (context) {
+        // 두문자 선택 화면으로 이동
+      }
+    }
+  ];
+
+  /* Firebase storage 초기화 */
+  final storageRef = FirebaseStorage.instance.ref();
+  late final scannedImageRef = storageRef.child("scannedImage.jpg");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +80,12 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                       builder: (context) =>
                           NoteEditScreen(extractedText: widget.extractedText),
                     ));
-                setState(() {
-                  widget.extractedText = editedText;
-                });
+                // 이전 버튼을 누르면 editedText가 존재하지 않는다.
+                if (editedText) {
+                  setState(() {
+                    widget.extractedText = editedText;
+                  });
+                }
               },
             ),
           ),
@@ -60,11 +94,28 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Icon(Icons.check),
-        onPressed: () {
-          // DB에 노트 저장
-          // Home 화면으로 이동
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Home()));
+        onPressed: () async {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    title: const Text("암기 방식 선택"),
+                    content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: dialogItems
+                            .map((e) => OutlinedButton(
+                                  child: Text(e["title"]),
+                                  onPressed: () {
+                                    // 문장 그대로 저장
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Home()));
+                                  },
+                                ))
+                            .toList()));
+              });
         },
       ),
     );
