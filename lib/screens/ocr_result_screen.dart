@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
+import 'package:memento_flutter/screens/keyword_select_screen.dart';
 import 'package:memento_flutter/screens/note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
@@ -16,29 +17,16 @@ class OCRResultScreen extends StatefulWidget {
 }
 
 class _OCRResultScreenState extends State<OCRResultScreen> {
+  /* Dialog에 표시할 아이템 */
   final List<Map<String, dynamic>> dialogItems = [
+    {"id": "sentence", "title": "통문장"},
     {
-      "id": "1",
-      "title": "통문장",
-      "onPressed": (context) {
-        // 문장 그대로 저장
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const Home()));
-      }
-    },
-    {
-      "id": "2",
+      "id": "keyword",
       "title": "키워드",
-      "onPressed": (context) {
-        // 키워드 선택 화면으로 이동
-      }
     },
     {
-      "id": "3",
+      "id": "acronyms",
       "title": "두문자",
-      "onPressed": (context) {
-        // 두문자 선택 화면으로 이동
-      }
     }
   ];
 
@@ -48,6 +36,13 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void saveSentence() {
+      // 문장 그대로 저장
+      // 홈으로 이동
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Home()));
+    }
+
     return Scaffold(
       appBar: BaseAppBar(
         title: Text(
@@ -104,15 +99,26 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: dialogItems
                             .map((e) => OutlinedButton(
-                                  child: Text(e["title"]),
                                   onPressed: () {
-                                    // 문장 그대로 저장
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Home()));
+                                    if (e["id"] == "sentence") {
+                                      saveSentence();
+                                    }
+                                    if (e["id"] == "keyword") {
+                                      // 키워드 선택 화면으로 이동
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  KeywordSelectScreen(
+                                                    extractedText:
+                                                        widget.extractedText,
+                                                  )));
+                                    }
+                                    if (e["id"] == "acronyms") {
+                                      // 두문자 선택 화면으로 이동
+                                    }
                                   },
+                                  child: Text(e["title"]),
                                 ))
                             .toList()));
               });
