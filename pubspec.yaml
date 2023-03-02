@@ -45,6 +45,7 @@ dependencies:
   firebase_core: ^2.7.0
   http: ^0.13.5
   provider: ^6.0.5
+  extended_image: ^6.4.1
 
 dev_dependencies:
   flutter_test:
