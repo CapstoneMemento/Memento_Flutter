@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
@@ -62,7 +63,12 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(widget.imageURL),
+          ExtendedImage.network(
+            widget.imageURL,
+            fit: BoxFit.fill,
+            cache: true,
+            compressionRatio: 0.5,
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: GestureDetector(
