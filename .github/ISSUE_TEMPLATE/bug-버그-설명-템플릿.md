@@ -1,5 +1,5 @@
 ---
-name: "[Bug] 제목을 입력하세요"
+name: Bug 버그 설명 템플릿
 about: Create a report to help us improve
 title: ''
 labels: ''
