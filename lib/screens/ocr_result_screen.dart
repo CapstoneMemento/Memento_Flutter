@@ -81,8 +81,10 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                       builder: (context) =>
                           NoteEditScreen(extractedText: widget.extractedText),
                     ));
-                // 이전 버튼을 누르면 editedText가 존재하지 않는다.
-                if (editedText) {
+
+                /* 이전 버튼을 누르거나, 수정 없이 저장을 누르면,
+                 editedText가 존재하지 않는다. */
+                if (editedText != null) {
                   setState(() {
                     widget.extractedText = editedText;
                   });

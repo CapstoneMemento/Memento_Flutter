@@ -12,7 +12,7 @@ class NoteEditScreen extends StatefulWidget {
 }
 
 class _NoteEditScreenState extends State<NoteEditScreen> {
-  late String editedText;
+  late String editedText = widget.extractedText;
 
   @override
   Widget build(BuildContext context) {
