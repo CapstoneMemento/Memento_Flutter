@@ -79,6 +79,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
                           text: e[0],
                           style: e[1] ? highlightStyle : const TextStyle()))
                       .toList()),
+              toolbarOptions: const ToolbarOptions(selectAll: false),
               onSelectionChanged: ((selection, cause) {
                 print(selection);
                 print(cause);
@@ -114,7 +115,12 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
                   // 오름차순 정렬
                   setState(() {
-                    selectedIndex.sort();
+                    selectedIndex.sort(((a, b) {
+                      if (a[0] == b[0]) {
+                        return a[1].compareTo(b[1]);
+                      }
+                      return a[0].compareTo(b[0]);
+                    }));
                   });
                 }
               }),
