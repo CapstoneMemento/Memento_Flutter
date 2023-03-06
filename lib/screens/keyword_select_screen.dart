@@ -44,22 +44,40 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     /* 시작 인덱스가 동일하고
       끝 인덱스가 기존 끝 인덱스보다 크면,
       최근 거로 대체 (드래그에서 여러 단어를 밑줄 그을 경우) */
-    var flag = false;
+    var isSaveNew = true;
 
     for (int i = 0; i < selectedIndex.length; i++) {
       final start = selectedIndex[i][0]; // 시작 인덱스
       final end = selectedIndex[i][1]; // 끝 인덱스
 
+      /* 기존 밑줄을 다시 길게 누르면 삭제 */
+      if (newStartIndex >= start && newEndIndex <= end) {
+        // 기존 인덱스 삭제
+        selectedIndex.removeAt(i);
+        // 새 인덱스 저장 X
+        isSaveNew = false;
+        break;
+      }
+
+      /* 기존 인덱스를 포함하면 삭제하고 새로 저장 (수정 필요) */
+      if (newStartIndex < start && newEndIndex >= start) {
+        print("삭제");
+        // 기존 인덱스 삭제
+        selectedIndex.removeAt(i);
+      }
+
+      // 사용자가 밑줄 긋는 중이면
       if (start == newStartIndex && end < newEndIndex) {
+        // 기존 끝 인덱스 갱신
         selectedIndex[i][1] = newEndIndex;
-        flag = true;
+        // 새 인덱스 저장 X
+        isSaveNew = false;
         break;
       }
     }
 
-    /* 시작 인덱스가 동일한 아이템이 없으면 새로 추가
-      (한 단어만 밑줄 칠 경우) */
-    if (!flag) {
+    /* 새 인덱스 저장 */
+    if (isSaveNew) {
       selectedIndex.add([newStartIndex, newEndIndex]);
     }
   }
@@ -112,8 +130,12 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
                       .toList()),
               toolbarOptions: const ToolbarOptions(selectAll: false),
               onSelectionChanged: ((selection, cause) {
+                print(cause);
+                print(selection);
+
                 /* 사용자가 키워드를 선택하면 index 저장 */
-                if (cause == SelectionChangedCause.longPress) {
+                if (cause == SelectionChangedCause.longPress ||
+                    cause == SelectionChangedCause.drag) {
                   saveIndex(selection.baseOffset, selection.extentOffset);
                   // 오름차순 정렬
                   sortIndex(selectedIndex);
