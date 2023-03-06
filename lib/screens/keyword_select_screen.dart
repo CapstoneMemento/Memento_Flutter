@@ -25,22 +25,53 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     final List<List<dynamic>> result = []; // [String text, bool highlighted]
 
     int prevEndIndex = 0; // 이전 end index
+    /* 선택한 text이면 true, 아니면 false를 String과 함께 저장 */
+    for (List<int> index in selectedIndex) {
+      final start = index[0];
+      final end = index[1];
 
-    if (selectedIndex.isNotEmpty) {
-      /* 선택한 text이면 true, 아니면 false를 String과 함께 저장 */
-      for (List<int> index in selectedIndex) {
-        final start = index[0];
-        final end = index[1];
-
-        result.add([totalText.substring(prevEndIndex, start), false]);
-        result.add([totalText.substring(start, end), true]);
-        prevEndIndex = end; // 이전 end index 저장
-      }
+      result.add([totalText.substring(prevEndIndex, start), false]);
+      result.add([totalText.substring(start, end), true]);
+      prevEndIndex = end; // 이전 end index 저장
     }
     // 마지막 문자 저장
     result.add([totalText.substring(prevEndIndex), false]);
 
     return result;
+  }
+
+  void saveIndex(int newStartIndex, int newEndIndex) {
+    /* 시작 인덱스가 동일하고
+      끝 인덱스가 기존 끝 인덱스보다 크면,
+      최근 거로 대체 (드래그에서 여러 단어를 밑줄 그을 경우) */
+    var flag = false;
+
+    for (int i = 0; i < selectedIndex.length; i++) {
+      final start = selectedIndex[i][0]; // 시작 인덱스
+      final end = selectedIndex[i][1]; // 끝 인덱스
+
+      if (start == newStartIndex && end < newEndIndex) {
+        selectedIndex[i][1] = newEndIndex;
+        flag = true;
+        break;
+      }
+    }
+
+    /* 시작 인덱스가 동일한 아이템이 없으면 새로 추가
+      (한 단어만 밑줄 칠 경우) */
+    if (!flag) {
+      selectedIndex.add([newStartIndex, newEndIndex]);
+    }
+  }
+
+  /* 오름차순 정렬 */
+  void sortIndex(List<List<int>> index) {
+    selectedIndex.sort(((a, b) {
+      if (a[0] == b[0]) {
+        return a[1].compareTo(b[1]);
+      }
+      return a[0].compareTo(b[0]);
+    }));
   }
 
   @override
@@ -81,47 +112,12 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
                       .toList()),
               toolbarOptions: const ToolbarOptions(selectAll: false),
               onSelectionChanged: ((selection, cause) {
-                print(selection);
-                print(cause);
                 /* 사용자가 키워드를 선택하면 index 저장 */
                 if (cause == SelectionChangedCause.longPress) {
-                  /* 시작 start 인덱스가 동일하고
-                  끝 end 인덱스가 기존 거보다 크면,
-                  최근 거로 대체 (드래그에서 여러 단어를 밑줄 그을 경우) */
-                  var flag = false;
-
-                  for (int i = 0; i < selectedIndex.length; i++) {
-                    final start = selectedIndex[i][0]; // 시작 인덱스
-                    final end = selectedIndex[i][1]; // 끝 인덱스
-
-                    if (start == selection.baseOffset &&
-                        end < selection.extentOffset) {
-                      setState(() {
-                        selectedIndex[i][1] = selection.extentOffset;
-                      });
-                      flag = true;
-                      break;
-                    }
-                  }
-
-                  /* 시작 인덱스가 동일한 아이템이 없으면 새로 추가
-                    (한 단어만 밑줄 칠 경우) */
-                  if (!flag) {
-                    setState(() {
-                      selectedIndex
-                          .add([selection.baseOffset, selection.extentOffset]);
-                    });
-                  }
-
+                  saveIndex(selection.baseOffset, selection.extentOffset);
                   // 오름차순 정렬
-                  setState(() {
-                    selectedIndex.sort(((a, b) {
-                      if (a[0] == b[0]) {
-                        return a[1].compareTo(b[1]);
-                      }
-                      return a[0].compareTo(b[0]);
-                    }));
-                  });
+                  sortIndex(selectedIndex);
+                  setState(() {});
                 }
               }),
             ),
