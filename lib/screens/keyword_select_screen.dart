@@ -15,6 +15,8 @@ class KeywordSelectScreen extends StatefulWidget {
 class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   // 선택한 문자의 인덱스 [start, end]
   final List<List<int>> selectedIndex = [];
+  // 선택한 문자 [text, highlighted]
+  List<List<dynamic>> selectedText = [];
   // 선택한 문자 text style
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
@@ -36,6 +38,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     }
     // 마지막 문자 저장
     result.add([totalText.substring(prevEndIndex), false]);
+    selectedText = result; // 선택한 문자 저장
 
     return result;
   }
@@ -61,7 +64,6 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
       /* 기존 인덱스를 포함하면 삭제하고 새로 저장 (수정 필요) */
       if (newStartIndex < start && newEndIndex >= start) {
-        print("삭제");
         // 기존 인덱스 삭제
         selectedIndex.removeAt(i);
       }
@@ -130,9 +132,6 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
                       .toList()),
               toolbarOptions: const ToolbarOptions(selectAll: false),
               onSelectionChanged: ((selection, cause) {
-                print(cause);
-                print(selection);
-
                 /* 사용자가 키워드를 선택하면 index 저장 */
                 if (cause == SelectionChangedCause.longPress ||
                     cause == SelectionChangedCause.drag) {
@@ -151,7 +150,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           // 판례 제목 지정으로 이동
         },
         backgroundColor: CustomTheme.themeData.primaryColor,
-        child: const Icon(Icons.check),
+        child: const Text("다음"),
       ),
     );
   }
