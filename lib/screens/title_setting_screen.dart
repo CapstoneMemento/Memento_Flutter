@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/subject_select_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
@@ -7,6 +8,7 @@ class TitleSettingScreen extends StatelessWidget {
 
   TitleSettingScreen({required this.selectedText});
 
+  late String title; // 판례 제목
   // 선택한 문자 text style
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
@@ -29,14 +31,18 @@ class TitleSettingScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            decoration: const InputDecoration(
               contentPadding:
                   EdgeInsets.symmetric(vertical: 14, horizontal: 10),
               border: OutlineInputBorder(),
               labelText: "판례 제목을 입력하세요",
               labelStyle: TextStyle(fontSize: 14),
             ),
+            onChanged: (value) {
+              // 제목 지정
+              title = value;
+            },
           ),
           const SizedBox(
             height: 16,
@@ -61,7 +67,8 @@ class TitleSettingScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 암기장 / 목차 지정
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SubjectSelectScreen()));
         },
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
