@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/noteScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
@@ -49,6 +50,10 @@ class NoteListScreen extends StatelessWidget {
                         trailing: const Icon(Icons.add),
                         onTap: () {
                           // 해당 노트 화면으로 이동
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => NoteScreen())));
                         },
                       ))
                   .toList()),

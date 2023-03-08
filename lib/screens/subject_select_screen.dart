@@ -1,5 +1,6 @@
 // 과목, 목차 지정 화면
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/noteScreen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
@@ -69,6 +70,11 @@ class _SubjectSelectScreenState extends State<SubjectSelectScreen> {
                                   });
                                 } else {
                                   // 생성한 노트 확인하기
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              NoteScreen())));
                                 }
                               },
                             ),
