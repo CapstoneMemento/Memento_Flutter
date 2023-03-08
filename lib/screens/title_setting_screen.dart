@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/subject_select_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/keyword_text.dart';
 
 class TitleSettingScreen extends StatelessWidget {
   final List<List<dynamic>> selectedText;
@@ -54,15 +55,7 @@ class TitleSettingScreen extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          SelectableText.rich(
-            TextSpan(
-                children: selectedText
-                    .map((e) => TextSpan(
-                        text: e[0],
-                        style: e[1] ? highlightStyle : const TextStyle()))
-                    .toList()),
-            toolbarOptions: const ToolbarOptions(selectAll: false),
-          ),
+          KeywordText(selectedText: selectedText)
         ]),
       ),
       floatingActionButton: FloatingActionButton(
