@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/title_setting_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
@@ -148,6 +149,11 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // 판례 제목 지정으로 이동
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TitleSettingScreen(selectedText: selectedText)));
         },
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
