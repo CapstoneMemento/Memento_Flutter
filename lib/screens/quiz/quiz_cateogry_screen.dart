@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note_list_screen.dart';
+import 'package:memento_flutter/screens/quiz/quiz_note_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
@@ -56,9 +57,8 @@ class QuizCategoryScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NoteListScreen(
-                                          category: e["title"],
-                                        )));
+                                    builder: (context) =>
+                                        const QuizNoteScreen()));
                           },
                         ),
                       ))
