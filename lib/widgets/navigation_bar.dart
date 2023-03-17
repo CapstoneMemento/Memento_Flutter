@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
-import 'package:memento_flutter/screens/quiz_screen.dart';
+import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
