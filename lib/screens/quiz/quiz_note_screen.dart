@@ -8,6 +8,9 @@ class QuizNoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const answerForTest =
+        "본 사건에서 A씨가 제기한 집합소유권 부인 청구권은 적부되어야 한다. 본 사건에서 B씨가 주장하는 집합소유권의 존재는 인정되어야 한다. 이에 따라, A씨는 B씨와 동일한 권리를 가지며, 해당 부동산에 대한 집합소유권을 행사할 수 있다.";
+
     final ButtonStyle ElevatedButtonStyle = ElevatedButton.styleFrom(
       backgroundColor: CustomTheme.themeData.primaryColor,
     );
