@@ -3,11 +3,13 @@ import 'package:memento_flutter/screens/subject_select_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/keyword_text.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class TitleSettingScreen extends StatelessWidget {
+  final String noteId;
   final List<Map<String, dynamic>> selectedText;
 
-  TitleSettingScreen({required this.selectedText});
+  TitleSettingScreen({required this.noteId, required this.selectedText});
 
   late String title; // 판례 제목
   // 선택한 문자 text style
@@ -17,15 +19,24 @@ class TitleSettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BaseAppBar(
-        leading: Icon(
-          Icons.arrow_back_ios,
+      appBar: BaseAppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
           color: Colors.black,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         actions: [
-          Icon(
-            Icons.close,
+          IconButton(
+            icon: const Icon(Icons.close),
             color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NavigationBarWidget()),
+                  (route) => false);
+            },
           ),
         ],
       ),
@@ -41,7 +52,6 @@ class TitleSettingScreen extends StatelessWidget {
               labelStyle: TextStyle(fontSize: 14),
             ),
             onChanged: (value) {
-              // 제목 지정
               title = value;
             },
           ),
@@ -55,11 +65,14 @@ class TitleSettingScreen extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          KeywordText(selectedText: selectedText)
+          Expanded(
+              child: SingleChildScrollView(
+                  child: KeywordText(selectedText: selectedText)))
         ]),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // noteId로 title 저장
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => SubjectSelectScreen()));
         },
