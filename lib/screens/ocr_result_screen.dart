@@ -1,10 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
 import 'package:memento_flutter/screens/note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class OCRResultScreen extends StatefulWidget {
   final String imageURL; // 스캔한 이미지
@@ -61,8 +61,10 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
           IconButton(
             icon: const Icon(Icons.close, color: Colors.black),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Home()));
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NavigationBarWidget()),
+                  (route) => false);
             },
           )
         ],
@@ -104,7 +106,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) => KeywordSelectScreen(
-                        noteId: "123",
+                        noteId: noteId,
                         extractedText: widget.extractedText,
                       )));
         },

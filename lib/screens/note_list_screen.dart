@@ -31,7 +31,7 @@ class NoteListScreen extends StatelessWidget {
             title: Text(category),
             leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 icon: const Icon(Icons.arrow_back_ios, color: Colors.black))),
         body: Padding(

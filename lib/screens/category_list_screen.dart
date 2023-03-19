@@ -20,7 +20,7 @@ class CategoryListScreen extends StatelessWidget {
           title: Text(subject),
           leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
               icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
         ),

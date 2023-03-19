@@ -122,7 +122,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           icon: const Icon(Icons.arrow_back_ios),
           color: Colors.black,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
           },
         ),
         actions: [
@@ -132,7 +132,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
             onPressed: () {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                      builder: (context) => const NavigationBarWidget()),
+                      builder: (context) => NavigationBarWidget()),
                   (route) => false);
             },
           ),
@@ -169,12 +169,11 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // selectedIndex 키워드 저장소에 저장
           // 판례 제목 지정으로 이동
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      TitleSettingScreen(selectedText: selectedText)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => TitleSettingScreen(
+                  noteId: widget.noteId, selectedText: selectedText)));
         },
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
