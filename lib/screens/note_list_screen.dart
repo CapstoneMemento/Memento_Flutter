@@ -51,7 +51,9 @@ class NoteListScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => NoteScreen())));
+                                  builder: ((context) => NoteScreen(
+                                        noteId: e["id"],
+                                      ))));
                         },
                       ))
                   .toList()),

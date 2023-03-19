@@ -4,6 +4,7 @@ import 'package:memento_flutter/screens/note_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class SubjectSelectScreen extends StatefulWidget {
   String noteId;
@@ -31,6 +32,25 @@ class _SubjectSelectScreenState extends State<SubjectSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void goNext({required String id}) {
+      if (isSubject) {
+        // 선택한 과목의 목차로 넘어가기
+        setState(() {
+          isSubject = false;
+        });
+      } else {
+        // 목차 id DB에 저장
+        // 노트 화면으로 이동
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: ((context) => NavigationBarWidget())),
+            (route) => false);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: ((context) => NoteScreen(
+                  noteId: widget.noteId,
+                ))));
+      }
+    }
+
     return Scaffold(
       appBar: const BaseAppBar(
         leading: BackIconButton(),
@@ -65,19 +85,7 @@ class _SubjectSelectScreenState extends State<SubjectSelectScreen> {
                               title: Text(e["title"]),
                               subtitle: Text("저장한 판례 ${e["caseNum"]}개"),
                               onTap: () {
-                                if (isSubject) {
-                                  // 목차 선택으로 넘어가기
-                                  setState(() {
-                                    isSubject = false;
-                                  });
-                                } else {
-                                  // 생성한 노트 확인하기
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              NoteScreen())));
-                                }
+                                goNext(id: e["id"]);
                               },
                             ),
                           ))
