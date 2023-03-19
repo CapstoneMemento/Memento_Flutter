@@ -43,23 +43,30 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       setState(() {
         isLoading = true;
       });
-      await saveImageToStorage(image);
-      await getImageURL();
+      saveImageToStorage(image);
+      getImageURL();
       await runOCR(imageDownloadURL);
-      navigateToOCRResult(); // 결과 화면으로 이동
+
+      if (!mounted) return;
+      // 결과 화면으로 이동
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OCRResultScreen(
+                imageURL: imageDownloadURL, extractedText: extractedText),
+          ));
     }
   }
 
-  /* 저장소에 사진을 저장 */
-  saveImageToStorage(File image) async {
-    // Firebase storage에 이미지 저장
-    await scannedImageRef.putFile(image);
+  /* 저장소에 사진 저장 */
+  saveImageToStorage(File image) {
+    // storage에 이미지 저장
   }
 
   /* 저장소 이미지 URL 가져오기 */
-  getImageURL() async {
-    final downloadURL = await scannedImageRef.getDownloadURL();
-    imageDownloadURL = downloadURL;
+  getImageURL() {
+    imageDownloadURL =
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FGEVuv%2Fbtr4w5DtzIJ%2F5RtHFUfCcfrPUggN2hP0O0%2Fimg.png";
   }
 
   /* 입력한 이미지 URL로 네이버 OCR 실행 */
@@ -68,7 +75,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     final headers = {"X-OCR-SECRET": Constants.secretKey};
     final body = {
       "images": [
-        {"format": "jpeg", "name": "note", "data": null, "url": imageURL}
+        {"format": "png", "name": "note", "data": null, "url": imageURL}
       ],
       "lang": "ko",
       "requestId": "string",
@@ -92,16 +99,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         isLoading = false;
       });
     }
-  }
-
-  /* 추출한 텍스트 결과 페이지로 이동 */
-  void navigateToOCRResult() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OCRResultScreen(
-              imageURL: imageDownloadURL, extractedText: extractedText),
-        ));
   }
 
   @override
