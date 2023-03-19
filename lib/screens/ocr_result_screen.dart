@@ -1,5 +1,4 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
@@ -31,12 +30,27 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
     }
   ];
 
-  /* Firebase storage 초기화 */
-  final storageRef = FirebaseStorage.instance.ref();
-  late final scannedImageRef = storageRef.child("scannedImage.jpg");
+  void goEditText() async {
+    // 텍스트 편집 화면에서 수정한 노트 받아오기
+    final editedText = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              NoteEditScreen(extractedText: widget.extractedText),
+        ));
+
+    // 시용자가 텍스트를 수정했으면 갱신
+    if (editedText != null) {
+      setState(() {
+        widget.extractedText = editedText;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: BaseAppBar(
         title: Text(
@@ -54,35 +68,27 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ExtendedImage.network(
-            widget.imageURL,
-            fit: BoxFit.fill,
-            cache: true,
-            compressionRatio: 0.5,
+          Expanded(
+            child: Container(
+              width: deviceWidth,
+              decoration: const BoxDecoration(color: Colors.black),
+              child: ExtendedImage.network(
+                widget.imageURL,
+                fit: BoxFit.fitHeight,
+                cache: true,
+                compressionRatio: 0.5,
+              ),
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: GestureDetector(
-              child: Text(widget.extractedText),
-              onTap: () async {
-                // 텍스트 편집 화면에서 수정한 노트 받아오기
-                final editedText = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          NoteEditScreen(extractedText: widget.extractedText),
-                    ));
-
-                /* 이전 버튼을 누르거나, 수정 없이 저장을 누르면,
-                 editedText가 존재하지 않는다. */
-                if (editedText != null) {
-                  setState(() {
-                    widget.extractedText = editedText;
-                  });
-                }
-              },
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: GestureDetector(
+                onTap: goEditText,
+                child: Text(widget.extractedText),
+              ),
             ),
           ),
         ],
