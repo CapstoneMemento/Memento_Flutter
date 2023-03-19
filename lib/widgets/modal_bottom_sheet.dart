@@ -46,15 +46,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
       saveImageToStorage(image);
       getImageURL();
       await runOCR(imageDownloadURL);
-
-      if (!mounted) return;
       // 결과 화면으로 이동
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OCRResultScreen(
-                imageURL: imageDownloadURL, extractedText: extractedText),
-          ));
+      navigateToOCRResult();
     }
   }
 
@@ -99,6 +92,13 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         isLoading = false;
       });
     }
+  }
+
+  void navigateToOCRResult() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => OCRResultScreen(
+          imageURL: imageDownloadURL, extractedText: extractedText),
+    ));
   }
 
   @override
