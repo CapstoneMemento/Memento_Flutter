@@ -37,13 +37,6 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void saveSentence() {
-      // 문장 그대로 저장
-      // 홈으로 이동
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Home()));
-    }
-
     return Scaffold(
       appBar: BaseAppBar(
         title: Text(
@@ -98,7 +91,6 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
         onPressed: () async {
-          // extractedText 저장하고 노트 id 받기
           Navigator.push(
               context,
               MaterialPageRoute(
