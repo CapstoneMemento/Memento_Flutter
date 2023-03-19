@@ -26,7 +26,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     {"id": "photo", "icon": Icons.photo, "text": "앨범에서 가져오기"},
   ];
 
-  late File scannedImage; // 스캔한 이미지
   String imageDownloadURL = ""; // 저장한 이미지 URL
   String extractedText = ""; // 추출한 텍스트
   bool isLoading = false;
@@ -43,9 +42,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     if (image != null) {
       setState(() {
         isLoading = true;
-        scannedImage = image;
       });
-      await saveImageToStorage();
+      await saveImageToStorage(image);
       await getImageURL();
       await runOCR(imageDownloadURL);
       navigateToOCRResult(); // 결과 화면으로 이동
@@ -53,9 +51,9 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   }
 
   /* 저장소에 사진을 저장 */
-  saveImageToStorage() async {
+  saveImageToStorage(File image) async {
     // Firebase storage에 이미지 저장
-    await scannedImageRef.putFile(scannedImage);
+    await scannedImageRef.putFile(image);
   }
 
   /* 저장소 이미지 URL 가져오기 */

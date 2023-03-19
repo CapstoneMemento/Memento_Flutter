@@ -96,40 +96,15 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomTheme.themeData.primaryColor,
-        child: const Icon(Icons.check),
+        child: const Text("다음"),
         onPressed: () async {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                    title: const Text("암기 방식 선택"),
-                    content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: dialogItems
-                            .map((e) => OutlinedButton(
-                                  onPressed: () {
-                                    if (e["id"] == "sentence") {
-                                      saveSentence();
-                                    }
-                                    if (e["id"] == "keyword") {
-                                      // 키워드 선택 화면으로 이동
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  KeywordSelectScreen(
-                                                    extractedText:
-                                                        widget.extractedText,
-                                                  )));
-                                    }
-                                    if (e["id"] == "acronyms") {
-                                      // 두문자 선택 화면으로 이동
-                                    }
-                                  },
-                                  child: Text(e["title"]),
-                                ))
-                            .toList()));
-              });
+          // extractedText 저장하고 노트 id 받기
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => KeywordSelectScreen(
+                        extractedText: widget.extractedText,
+                      )));
         },
       ),
     );
