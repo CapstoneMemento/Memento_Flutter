@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
@@ -118,13 +119,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        leading: const BackIconButton(),
         actions: [
           IconButton(
             icon: const Icon(Icons.close),

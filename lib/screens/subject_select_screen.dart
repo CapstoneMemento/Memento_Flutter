@@ -2,9 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class SubjectSelectScreen extends StatefulWidget {
+  String noteId;
+
+  SubjectSelectScreen({required this.noteId});
+
   @override
   State<SubjectSelectScreen> createState() => _SubjectSelectScreenState();
 }
@@ -28,10 +33,7 @@ class _SubjectSelectScreenState extends State<SubjectSelectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BaseAppBar(
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-        ),
+        leading: BackIconButton(),
         actions: [
           Icon(
             Icons.close,

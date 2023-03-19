@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:memento_flutter/screens/subject_select_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/keyword_text.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
@@ -20,13 +22,7 @@ class TitleSettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        leading: const BackIconButton(),
         actions: [
           IconButton(
             icon: const Icon(Icons.close),
@@ -73,8 +69,12 @@ class TitleSettingScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // noteId로 title 저장
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SubjectSelectScreen()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SubjectSelectScreen(
+                        noteId: noteId,
+                      )));
         },
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),

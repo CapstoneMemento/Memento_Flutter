@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note_list_screen.dart';
+import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class CategoryListScreen extends StatelessWidget {
@@ -18,11 +19,7 @@ class CategoryListScreen extends StatelessWidget {
     return Scaffold(
         appBar: BaseAppBar(
           title: Text(subject),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
+          leading: const BackIconButton(),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
