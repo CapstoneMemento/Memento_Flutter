@@ -3,6 +3,7 @@ import 'package:memento_flutter/screens/note_list_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_note_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -24,12 +25,7 @@ class QuizCategoryScreen extends StatelessWidget {
     return Scaffold(
         appBar: BaseAppBar(
           title: Text(subjectTitle),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => QuizScreen()));
-              },
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
+          leading: const BackIconButton(),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

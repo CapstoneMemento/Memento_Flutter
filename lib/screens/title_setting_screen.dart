@@ -4,8 +4,8 @@ import 'package:memento_flutter/screens/subject_select_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/close_icon_button.dart';
 import 'package:memento_flutter/widgets/keyword_text.dart';
-import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class TitleSettingScreen extends StatelessWidget {
   final String noteId;
@@ -23,18 +23,7 @@ class TitleSettingScreen extends StatelessWidget {
     return Scaffold(
       appBar: BaseAppBar(
         leading: const BackIconButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            color: Colors.black,
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => NavigationBarWidget()),
-                  (route) => false);
-            },
-          ),
-        ],
+        actions: [CloseIconButton()],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

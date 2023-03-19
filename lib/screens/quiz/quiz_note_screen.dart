@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class QuizNoteScreen extends StatelessWidget {
@@ -16,16 +17,9 @@ class QuizNoteScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: BaseAppBar(
-        title: const Text("퀴즈 풀기"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => QuizScreen()));
-          },
-        ),
+      appBar: const BaseAppBar(
+        title: Text("퀴즈 풀기"),
+        leading: BackIconButton(),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

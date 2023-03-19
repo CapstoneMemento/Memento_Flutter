@@ -4,7 +4,7 @@ import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
-import 'package:memento_flutter/widgets/navigation_bar.dart';
+import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class KeywordSelectScreen extends StatefulWidget {
   final String noteId;
@@ -121,16 +121,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       appBar: BaseAppBar(
         leading: const BackIconButton(),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            color: Colors.black,
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => NavigationBarWidget()),
-                  (route) => false);
-            },
-          ),
+          CloseIconButton(),
         ],
       ),
       body: Padding(

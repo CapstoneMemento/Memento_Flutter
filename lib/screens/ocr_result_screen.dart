@@ -4,7 +4,7 @@ import 'package:memento_flutter/screens/keyword_select_screen.dart';
 import 'package:memento_flutter/screens/note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
-import 'package:memento_flutter/widgets/navigation_bar.dart';
+import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class OCRResultScreen extends StatefulWidget {
   final String imageURL; // 스캔한 이미지
@@ -57,17 +57,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
           "텍스트 추출 결과",
           style: CustomTheme.themeData.textTheme.titleMedium,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.black),
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => NavigationBarWidget()),
-                  (route) => false);
-            },
-          )
-        ],
+        actions: [CloseIconButton()],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

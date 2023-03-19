@@ -4,6 +4,7 @@ import 'package:memento_flutter/screens/note_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/close_icon_button.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class SubjectSelectScreen extends StatefulWidget {
@@ -52,14 +53,9 @@ class _SubjectSelectScreenState extends State<SubjectSelectScreen> {
     }
 
     return Scaffold(
-      appBar: const BaseAppBar(
-        leading: BackIconButton(),
-        actions: [
-          Icon(
-            Icons.close,
-            color: Colors.black,
-          ),
-        ],
+      appBar: BaseAppBar(
+        leading: const BackIconButton(),
+        actions: [CloseIconButton()],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
