@@ -5,7 +5,7 @@ import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/keyword_text.dart';
 
 class TitleSettingScreen extends StatelessWidget {
-  final List<List<dynamic>> selectedText;
+  final List<Map<String, dynamic>> selectedText;
 
   TitleSettingScreen({required this.selectedText});
 

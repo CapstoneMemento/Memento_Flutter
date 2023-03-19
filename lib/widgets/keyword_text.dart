@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class KeywordText extends StatelessWidget {
-  final List<List<dynamic>> selectedText;
+  final List<Map<String, dynamic>> selectedText;
 
   KeywordText({required this.selectedText});
 
@@ -15,7 +15,8 @@ class KeywordText extends StatelessWidget {
       TextSpan(
           children: selectedText
               .map((e) => TextSpan(
-                  text: e[0], style: e[1] ? highlightStyle : const TextStyle()))
+                  text: e["text"],
+                  style: e["isKeyword"] ? highlightStyle : const TextStyle()))
               .toList()),
       toolbarOptions: const ToolbarOptions(selectAll: false),
     );

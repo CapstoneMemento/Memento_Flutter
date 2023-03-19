@@ -97,10 +97,14 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
         onPressed: () async {
+          // 노트 저장하고 id 받아오기
+          const noteId = "123";
+
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => KeywordSelectScreen(
+                        noteId: "123",
                         extractedText: widget.extractedText,
                       )));
         },
