@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/note_list_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_note_screen.dart';
-import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
@@ -14,10 +12,10 @@ class QuizCategoryScreen extends StatelessWidget {
 
   // DB에서 목차 정보 불러오기
   final List<Map<String, dynamic>> categoryList = [
-    {"id": "1", "title": "민법총칙", "caseNum": 10},
-    {"id": "2", "title": "물권법", "caseNum": 12},
-    {"id": "3", "title": "채권 총론", "caseNum": 34},
-    {"id": "4", "title": "채권각론", "caseNum": 22},
+    {"id": "1", "title": "특허법 총칙", "caseNum": 10},
+    {"id": "2", "title": "발명 및 실시", "caseNum": 12},
+    {"id": "3", "title": "특허심사", "caseNum": 34},
+    {"id": "4", "title": "실체심사", "caseNum": 22},
   ];
 
   @override

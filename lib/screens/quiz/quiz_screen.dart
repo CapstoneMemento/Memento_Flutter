@@ -6,8 +6,6 @@ class QuizScreen extends StatelessWidget {
   // DB에서 과목 정보 불러오기
   final List<Map<String, dynamic>> subjectList = [
     {"id": "1", "title": "특허법", "caseNum": 22},
-    {"id": "2", "title": "산업재산권법", "caseNum": 12},
-    {"id": "3", "title": "민법개론", "caseNum": 32}
   ];
 
   @override
