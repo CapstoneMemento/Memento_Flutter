@@ -55,6 +55,9 @@ class QuizNoteScreen extends StatelessWidget {
         remainSentence = remainSentence.substring(endIndex);
       }
 
+      // 남은 문장 저장
+      result.add({"text": remainSentence, "isKeyword": false});
+
       return result;
     }
 
@@ -65,9 +68,14 @@ class QuizNoteScreen extends StatelessWidget {
                 e["isKeyword"]
                     ? WidgetSpan(
                         child: SizedBox(
-                        width: 10.0 * e["text"].length,
+                        width: 16.0 * e["text"].length,
+                        height: 26,
                         child: TextField(
-                          style: CustomTheme.themeData.textTheme.bodyMedium,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: CustomTheme.themeData.primaryColor,
+                          ),
                         ),
                       ))
                     : TextSpan(text: e["text"])
@@ -85,63 +93,54 @@ class QuizNoteScreen extends StatelessWidget {
         title: Text("퀴즈 풀기"),
         leading: BackIconButton(),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-              flex: 1,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              "판례 제목",
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "발명의 완성",
+              style: CustomTheme.themeData.textTheme.titleSmall,
+            ),
+            const SizedBox(
+              height: 26,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "판례 제목",
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "발명의 완성",
-                    style: CustomTheme.themeData.textTheme.titleSmall,
-                  )
+                  RichText(
+                      text: TextSpan(
+                    style: CustomTheme.themeData.textTheme.bodyMedium,
+                    children: getSpan(),
+                  )),
                 ],
-              )),
-          Flexible(
-              flex: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                          color: CustomTheme.themeData.primaryColor, width: 1)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("키워드를 입력하세요",
-                            style: CustomTheme.themeData.textTheme.titleSmall),
-                        RichText(
-                            text: TextSpan(
-                          style: CustomTheme.themeData.textTheme.bodyMedium,
-                          children: getSpan(),
-                        ))
-                      ],
-                    ),
-                  ),
-                ),
-              )),
-          Flexible(
-            flex: 1,
-            child: ElevatedButton(
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
               onPressed: () {
                 // 제출
               },
               style: elevatedButtonStyle,
               child: const Text("제출"),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 30,
+            ),
+          ],
+        ),
       ),
     );
   }
