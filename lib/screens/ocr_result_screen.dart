@@ -1,11 +1,10 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
 import 'package:memento_flutter/screens/note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class OCRResultScreen extends StatefulWidget {
   final String imageURL; // 스캔한 이미지
@@ -31,18 +30,26 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
     }
   ];
 
-  /* Firebase storage 초기화 */
-  final storageRef = FirebaseStorage.instance.ref();
-  late final scannedImageRef = storageRef.child("scannedImage.jpg");
+  void goEditText() async {
+    // 텍스트 편집 화면에서 수정한 노트 받아오기
+    final editedText = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              NoteEditScreen(extractedText: widget.extractedText),
+        ));
+
+    // 시용자가 텍스트를 수정했으면 갱신
+    if (editedText != null) {
+      setState(() {
+        widget.extractedText = editedText;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    void saveSentence() {
-      // 문장 그대로 저장
-      // 홈으로 이동
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Home()));
-    }
+    double deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: BaseAppBar(
@@ -50,84 +57,48 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
           "텍스트 추출 결과",
           style: CustomTheme.themeData.textTheme.titleMedium,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.black),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Home()));
-            },
-          )
-        ],
+        actions: [CloseIconButton()],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ExtendedImage.network(
-            widget.imageURL,
-            fit: BoxFit.fill,
-            cache: true,
-            compressionRatio: 0.5,
+          Expanded(
+            child: Container(
+              width: deviceWidth,
+              decoration: const BoxDecoration(color: Colors.black),
+              child: ExtendedImage.network(
+                widget.imageURL,
+                fit: BoxFit.fitHeight,
+                cache: true,
+                compressionRatio: 0.5,
+              ),
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: GestureDetector(
-              child: Text(widget.extractedText),
-              onTap: () async {
-                // 텍스트 편집 화면에서 수정한 노트 받아오기
-                final editedText = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          NoteEditScreen(extractedText: widget.extractedText),
-                    ));
-                // 텍스트를 수정하지 않으면, editedText가 존재하지 않는다.
-                if (editedText != "not changed") {
-                  setState(() {
-                    widget.extractedText = editedText;
-                  });
-                }
-              },
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: GestureDetector(
+                onTap: goEditText,
+                child: Text(widget.extractedText),
+              ),
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomTheme.themeData.primaryColor,
-        child: const Icon(Icons.check),
+        child: const Text("다음"),
         onPressed: () async {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                    title: const Text("암기 방식 선택"),
-                    content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: dialogItems
-                            .map((e) => OutlinedButton(
-                                  onPressed: () {
-                                    if (e["id"] == "sentence") {
-                                      saveSentence();
-                                    }
-                                    if (e["id"] == "keyword") {
-                                      // 키워드 선택 화면으로 이동
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  KeywordSelectScreen(
-                                                    extractedText:
-                                                        widget.extractedText,
-                                                  )));
-                                    }
-                                    if (e["id"] == "acronyms") {
-                                      // 두문자 선택 화면으로 이동
-                                    }
-                                  },
-                                  child: Text(e["title"]),
-                                ))
-                            .toList()));
-              });
+          // 노트 저장하고 id 받아오기
+          const noteId = "123";
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => KeywordSelectScreen(
+                        noteId: noteId,
+                        extractedText: widget.extractedText,
+                      )));
         },
       ),
     );

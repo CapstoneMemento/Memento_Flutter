@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 import 'firebase_options.dart';
-import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 void main() async {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Notes',
       theme: CustomTheme.themeData,
-      home: const Home(),
+      home: NavigationBarWidget(),
     );
   }
 }
