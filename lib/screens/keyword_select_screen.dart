@@ -158,7 +158,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // selectedIndex 키워드 저장소에 저장
+          // selectedIndex 키워드 DB에 저장
           // 판례 제목 지정으로 이동
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => TitleSettingScreen(
