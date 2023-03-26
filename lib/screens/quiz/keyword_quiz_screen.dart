@@ -63,7 +63,7 @@ class KeywordQuizScreen extends StatelessWidget {
       return result;
     }
 
-    List<InlineSpan> getSpan() {
+    List<InlineSpan> getSpanList() {
       final data = findKeyword(content, keywords);
       final spans = data
           .map((e) => {
@@ -126,7 +126,7 @@ class KeywordQuizScreen extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                     style: CustomTheme.themeData.textTheme.bodyMedium,
-                    children: getSpan(),
+                    children: getSpanList(),
                   )),
                 ],
               ),
