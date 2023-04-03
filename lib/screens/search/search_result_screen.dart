@@ -6,7 +6,7 @@ import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String query;
-  int count = 24; // 검색 결과 개수 -> initState로 불러오기
+  int count = 5; // 검색 결과 개수
 
   SearchResultScreen({required this.query});
 
@@ -52,9 +52,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BaseAppBar(
-        leading: BackIconButton(),
-        title: SearchBar(),
+      appBar: BaseAppBar(
+        leading: const BackIconButton(),
+        title: SearchBar(initialValue: widget.query),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -75,35 +75,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           const SizedBox(
             height: 12,
           ),
-          Expanded(
-            child: ListView(
-              children: result
-                  .map((item) => Container(
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    width: 1, color: Colors.black26))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: ListTileTheme(
-                            contentPadding: EdgeInsets.zero,
-                            child: ListTile(
-                              title: Text(
-                                item["title"],
-                                style:
-                                    CustomTheme.themeData.textTheme.titleSmall,
-                              ),
-                              subtitle: Text(
-                                item["content"],
-                                maxLines: 2,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ))
-                  .toList(),
-            ),
-          )
+          ResultList(result: result)
         ]),
       ),
     );
@@ -111,7 +83,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
 }
 
 class SearchBar extends StatelessWidget {
-  const SearchBar();
+  String initialValue;
+
+  SearchBar({required this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +107,7 @@ class SearchBar extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: TextFormField(
+                initialValue: initialValue,
                 style: CustomTheme.themeData.textTheme.bodyMedium,
                 decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -148,6 +123,45 @@ class SearchBar extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ResultList extends StatelessWidget {
+  const ResultList({
+    required this.result,
+  });
+
+  final List<Map<String, dynamic>> result;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        children: result
+            .map((item) => Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(width: 1, color: Colors.black26))),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTileTheme(
+                      contentPadding: EdgeInsets.zero,
+                      child: ListTile(
+                        title: Text(
+                          item["title"],
+                          style: CustomTheme.themeData.textTheme.titleSmall,
+                        ),
+                        subtitle: Text(
+                          item["content"],
+                          maxLines: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ))
+            .toList(),
       ),
     );
   }
