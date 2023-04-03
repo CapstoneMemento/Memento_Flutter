@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/search/search_result_screen.dart';
+
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  const SearchScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class SearchScreen extends StatelessWidget {
                   const Icon(
                     Icons.search,
                     size: 24,
+                    color: Color(0xFF323232),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -41,6 +44,12 @@ class SearchScreen extends StatelessWidget {
                               color: Colors.grey,
                               fontSize: 14,
                               fontWeight: FontWeight.w400)),
+                      onFieldSubmitted: (value) {
+                        // 검색 결과 화면에 검색어 전달
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                SearchResultScreen(query: value)));
+                      },
                     ),
                   ),
                 ],
