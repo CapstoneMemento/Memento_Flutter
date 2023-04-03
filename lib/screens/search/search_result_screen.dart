@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/search/search_note_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
@@ -157,6 +158,11 @@ class ResultList extends StatelessWidget {
                           item["content"],
                           maxLines: 2,
                         ),
+                        onTap: () {
+                          // 해당 판례 화면으로 이동
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: ((context) => SearchNoteScreen())));
+                        },
                       ),
                     ),
                   ),
