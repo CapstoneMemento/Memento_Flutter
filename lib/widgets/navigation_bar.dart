@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
+import 'package:memento_flutter/screens/search_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/base_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
@@ -8,7 +9,7 @@ import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 class NavigationBarWidget extends StatefulWidget {
   int selectedIndex;
 
-  NavigationBarWidget({this.selectedIndex = 0});
+  NavigationBarWidget({this.selectedIndex = 1});
 
   @override
   State<NavigationBarWidget> createState() => _NavigationBarWidgetState();
@@ -16,11 +17,15 @@ class NavigationBarWidget extends StatefulWidget {
 
 class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   static const List<String> appBarTitle = ["내 암기장", "", "퀴즈"];
-  static List<Widget> bodyOptions = [const Home(), const Home(), QuizScreen()];
+  static List<Widget> bodyOptions = [
+    const Home(),
+    const SearchScreen(),
+    QuizScreen()
+  ];
   static const List<Widget> floatingButtonOptions = [
     ModalBottomSheet(),
-    ModalBottomSheet(),
-    ModalBottomSheet()
+    SizedBox.shrink(),
+    SizedBox.shrink()
   ];
 
   void _onTap(int index) {
