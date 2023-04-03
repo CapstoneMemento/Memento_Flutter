@@ -18,9 +18,10 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       actions: actions,
       centerTitle: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
-      elevation: 0,
+      shadowColor: const Color(0x55000000),
+      elevation: 1,
     );
   }
 }
