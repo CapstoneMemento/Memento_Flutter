@@ -38,9 +38,7 @@ class CategoryListScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NoteListScreen(
-                                          category: e["title"],
-                                        )));
+                                    builder: (context) => NoteListScreen()));
                           },
                         ),
                       ))
