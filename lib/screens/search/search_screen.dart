@@ -10,6 +10,9 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const SizedBox(
+          height: 32,
+        ),
         Image.asset(
           "assets/images/logo.png",
           width: 120,

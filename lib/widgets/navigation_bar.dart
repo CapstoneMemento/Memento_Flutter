@@ -17,7 +17,7 @@ class NavigationBarWidget extends StatefulWidget {
 }
 
 class _NavigationBarWidgetState extends State<NavigationBarWidget> {
-  static const List<String> appBarTitle = ["내 암기장", "", "퀴즈"];
+  static const List<String> appBarTitle = ["내 암기장", "판례 검색", "퀴즈"];
   static List<Widget> bodyOptions = [
     const Home(),
     const SearchScreen(),

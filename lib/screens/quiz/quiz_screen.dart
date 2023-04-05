@@ -15,6 +15,9 @@ class QuizScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(
+            height: 16,
+          ),
           Text(
             "과목을 선택하세요 ✍️",
             style: CustomTheme.themeData.textTheme.titleSmall,
