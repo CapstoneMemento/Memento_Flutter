@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 
 class NoteListScreen extends StatelessWidget {
   // DB에서 노트 정보 불러오기

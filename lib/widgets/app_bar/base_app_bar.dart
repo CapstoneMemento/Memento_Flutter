@@ -21,7 +21,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       titleTextStyle: CustomTheme.themeData.textTheme.titleLarge,
       shadowColor: const Color(0x55000000),
-      elevation: 1,
+      elevation: 0,
     );
   }
 }

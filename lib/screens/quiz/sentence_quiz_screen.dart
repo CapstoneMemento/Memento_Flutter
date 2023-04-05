@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class SentenceQuizScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class SentenceQuizScreen extends StatelessWidget {
     );
 
     return Scaffold(
-        appBar: BaseAppBar(
+        appBar: MainAppBar(
           title: const Text("퀴즈 풀기"),
           leading: IconButton(
               onPressed: () {

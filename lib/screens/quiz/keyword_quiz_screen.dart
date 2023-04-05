@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/quiz/sentence_quiz_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class KeywordQuizScreen extends StatefulWidget {
   const KeywordQuizScreen();
@@ -134,7 +134,7 @@ class _KeywordQuizScreenState extends State<KeywordQuizScreen> {
     }
 
     return Scaffold(
-      appBar: const BaseAppBar(
+      appBar: const MainAppBar(
         title: Text("퀴즈 풀기"),
         leading: BackIconButton(),
       ),

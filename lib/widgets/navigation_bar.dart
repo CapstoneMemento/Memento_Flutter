@@ -4,7 +4,7 @@ import 'package:memento_flutter/screens/home.dart';
 import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/screens/search/search_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 
 class NavigationBarWidget extends StatefulWidget {
@@ -38,7 +38,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: BaseAppBar(
+        appBar: MainAppBar(
           title: Text(appBarTitle.elementAt(widget.selectedIndex)),
         ),
         body: bodyOptions.elementAt(widget.selectedIndex),

@@ -19,7 +19,7 @@ class QuizScreen extends StatelessWidget {
             height: 16,
           ),
           Text(
-            "과목을 선택하세요 ✍️",
+            "과목을 선택하세요",
             style: CustomTheme.themeData.textTheme.titleSmall,
           ),
           const SizedBox(

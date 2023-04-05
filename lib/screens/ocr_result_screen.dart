@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
 import 'package:memento_flutter/screens/note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
+import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class OCRResultScreen extends StatefulWidget {

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
+
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class KeywordSelectScreen extends StatefulWidget {
@@ -72,21 +73,25 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   }
 
   void saveIndex(int newStartIndex, int newEndIndex) {
-    var isSaveNew = true; // 인덱스 새로 저장?
+    var isSaveNew = true; // 인덱스 새로 저장
+    final isReverse = newStartIndex >= newEndIndex;
+
+    // 반대로 밑줄 그으면 종료
+    if (isReverse) {
+      return;
+    }
 
     for (var i = 0; i < selectedIndex.length; i++) {
       final start = selectedIndex[i]["start"]; // 시작 인덱스
       final end = selectedIndex[i]["end"]; // 끝 인덱스
-
       final pressAgain = newStartIndex >= start && newEndIndex <= end;
-      final isDragging = newStartIndex == start && newEndIndex > end;
+      final isDragging = newStartIndex == start;
       final include = newStartIndex < start && newEndIndex > start;
 
       // 기존 밑줄을 다시 길게 누르면 삭제
       if (pressAgain) {
-        // 기존 인덱스 삭제
         selectedIndex.removeAt(i);
-        // 새 인덱스 저장 X
+        // 새로 인덱스 저장 X
         isSaveNew = false;
         break;
       }
@@ -128,7 +133,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
+      appBar: MainAppBar(
         leading: const BackIconButton(),
         actions: [
           CloseIconButton(),
@@ -137,6 +142,9 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SizedBox(
+            height: 16,
+          ),
           Text(
             "키워드를 선택하세요.",
             style: CustomTheme.themeData.textTheme.titleSmall,

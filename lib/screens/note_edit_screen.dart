@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
-import 'package:memento_flutter/widgets/base_app_bar.dart';
 
 class NoteEditScreen extends StatefulWidget {
   final String extractedText;
@@ -18,7 +18,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
+      appBar: MainAppBar(
         leading: const BackIconButton(),
         actions: [
           TextButton(
