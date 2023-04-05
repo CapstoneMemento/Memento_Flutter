@@ -10,11 +10,11 @@ class CustomTheme {
           fontWeight: FontWeight.w700,
         ),
         titleMedium: TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.w700,
         ),
         titleSmall: TextStyle(
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: FontWeight.w700,
         ),
         bodyMedium: TextStyle(

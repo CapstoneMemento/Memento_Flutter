@@ -26,9 +26,20 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
 
-  /* 선택한 문자와 그러지 않은 문자를 나눠서 배열에 저장 */
-  List<Map<String, dynamic>> sliceText(
-      String totalText, List<Map<String, dynamic>> selectedIndex) {
+  List<InlineSpan> getSpanList() {
+    sliceText(widget.extractedText, selectedIndex);
+
+    final result = selectedText
+        .map((e) => TextSpan(
+            text: e["text"],
+            style: e["isKeyword"] ? highlightStyle : const TextStyle()))
+        .toList();
+
+    return result;
+  }
+
+  /* 선택한 문자와 그러지 않은 문자를 나눠서 selectedText에 저장 */
+  void sliceText(String totalText, List<Map<String, dynamic>> selectedIndex) {
     List<Map<String, dynamic>> result = []; // 선택한 문자 {text, isKeyword}
     int prevEndIndex = 0; // 이전 end index
 
@@ -45,9 +56,8 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     }
     // 마지막 문자 저장
     result.add({"text": totalText.substring(prevEndIndex), "isKeyword": false});
-    selectedText = result;
 
-    return result;
+    selectedText = result;
   }
 
   /* 사용자가 키워드를 선택하면 index 저장 */
@@ -139,14 +149,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
               selectionColor: Colors.yellow.withOpacity(0),
             ),
             child: SelectableText.rich(
-              TextSpan(
-                  children: sliceText(widget.extractedText, selectedIndex)
-                      .map((e) => TextSpan(
-                          text: e["text"],
-                          style: e["isKeyword"]
-                              ? highlightStyle
-                              : const TextStyle()))
-                      .toList()),
+              TextSpan(children: getSpanList()),
               toolbarOptions: const ToolbarOptions(selectAll: false),
               onSelectionChanged: _onSelectionChanged,
             ),
@@ -155,7 +158,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // selectedIndex 키워드 저장소에 저장
+          // selectedIndex 키워드 DB에 저장
           // 판례 제목 지정으로 이동
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => TitleSettingScreen(
