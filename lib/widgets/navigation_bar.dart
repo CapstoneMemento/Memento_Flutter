@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:memento_flutter/screens/home.dart';
+import 'package:memento_flutter/screens/note_list_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
 import 'package:memento_flutter/screens/search/search_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
@@ -10,7 +10,7 @@ import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 class NavigationBarWidget extends StatefulWidget {
   int selectedIndex;
 
-  NavigationBarWidget({this.selectedIndex = 1});
+  NavigationBarWidget({this.selectedIndex = 0});
 
   @override
   State<NavigationBarWidget> createState() => _NavigationBarWidgetState();
@@ -19,7 +19,7 @@ class NavigationBarWidget extends StatefulWidget {
 class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   static const List<String> appBarTitle = ["내 암기장", "판례 검색", "퀴즈"];
   static List<Widget> bodyOptions = [
-    const Home(),
+    NoteListScreen(),
     const SearchScreen(),
     QuizScreen()
   ];
