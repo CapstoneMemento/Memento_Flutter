@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:memento_flutter/screens/quiz/quiz_game_screen.dart';
+import 'package:memento_flutter/screens/quiz/quiz_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class QuizStartScreen extends StatelessWidget {
@@ -13,8 +13,10 @@ class QuizStartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (context) => QuizGameScreen()));
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => QuizGameScreen()));
+            .push(MaterialPageRoute(builder: (context) => QuizResultScreen()));
       },
       child: Center(
         child: Column(
