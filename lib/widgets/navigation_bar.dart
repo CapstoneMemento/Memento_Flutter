@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:memento_flutter/screens/note_list_screen.dart';
-import 'package:memento_flutter/screens/quiz/quiz_screen.dart';
+import 'package:memento_flutter/screens/quiz/quiz_start_screen.dart';
 import 'package:memento_flutter/screens/search/search_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
@@ -10,7 +10,7 @@ import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 class NavigationBarWidget extends StatefulWidget {
   int selectedIndex;
 
-  NavigationBarWidget({this.selectedIndex = 0});
+  NavigationBarWidget({this.selectedIndex = 2});
 
   @override
   State<NavigationBarWidget> createState() => _NavigationBarWidgetState();
@@ -21,7 +21,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   static List<Widget> bodyOptions = [
     NoteListScreen(),
     const SearchScreen(),
-    QuizScreen()
+    QuizStartScreen()
   ];
   static const List<Widget> floatingButtonOptions = [
     ModalBottomSheet(),

@@ -1,0 +1,27 @@
+<svg width="88" height="64" viewBox="0 0 88 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="&#236;&#186;&#144;&#235;&#166;&#173;&#237;&#132;&#176;_&#234;&#179;&#160;&#235;&#175;&#188;&#237;&#149;&#152;&#234;&#184;&#176;">
+<path id="Vector 3" d="M26.1731 7.84368C13.1731 4.77807 1.17315 19.9093 3.67315 33.4093C-5.32686 44.4093 3.97737 53.4093 12.6731 53.4093C20.1731 66.4093 39.1731 65.9093 46.8689 55.8437H61.6731C68.1731 58.8437 74 57.8437 78 55.8437C83.8042 52.9416 89.1429 45 87 37.5C84.8571 30 78.3398 27.576 75.1731 26.4093C77.1731 7.84369 61.1731 3.90929 52.6731 7.84369C46.8689 -1.59071 31.6731 -3.59071 26.1731 7.84368Z" fill="#4CA2DA"/>
+<g id="&#234;&#179;&#160;&#235;&#175;&#188; &#235;&#136;&#136;">
+<mask id="mask0_740_4896" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="12" y="20" width="17" height="23">
+<ellipse id="Ellipse 11" cx="20.5" cy="31.5" rx="8.5" ry="11.5" fill="white"/>
+</mask>
+<g mask="url(#mask0_740_4896)">
+<ellipse id="Ellipse 15" cx="20.5" cy="31.5" rx="8.5" ry="11.5" fill="white"/>
+<ellipse id="Ellipse 13" cx="20.5" cy="38" rx="5.5" ry="7" fill="#48484A"/>
+<rect id="Rectangle 2" x="11" y="17" width="19" height="16" fill="#A7DAFB"/>
+<path id="Rectangle 4" d="M12 40H29V49H12V40Z" fill="#A7DAFB"/>
+</g>
+</g>
+<g id="&#234;&#179;&#160;&#235;&#175;&#188; &#235;&#136;&#136;_2">
+<mask id="mask1_740_4896" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="31" y="20" width="17" height="23">
+<ellipse id="Ellipse 11_2" cx="39.5" cy="31.5" rx="8.5" ry="11.5" fill="white"/>
+</mask>
+<g mask="url(#mask1_740_4896)">
+<ellipse id="Ellipse 15_2" cx="39.5" cy="31.5" rx="8.5" ry="11.5" fill="white"/>
+<ellipse id="Ellipse 13_2" cx="39.5" cy="38" rx="5.5" ry="7" fill="#48484A"/>
+<rect id="Rectangle 2_2" x="30" y="17" width="19" height="16" fill="#A7DAFB"/>
+<path id="Rectangle 4_2" d="M31 40H48V49H31V40Z" fill="#A7DAFB"/>
+</g>
+</g>
+</g>
+</svg>
