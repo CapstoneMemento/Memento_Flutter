@@ -1,99 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screens/note_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/loading.dart';
 
-class NoteListScreen extends StatelessWidget {
-  // DB에서 노트 정보 불러오기
-  final List<Map<String, dynamic>> noteList = [
-    {
-      "id": "1",
-      "title": "모인대상발명을 변경하여 출원한 경우",
-      "content":
-          "모인대상발명의 구성을 일부 변경하였더라도, 그 변경이 통상의 기술자가 보통으로 채용하는 정도에 지나지 않고 그로 인하여 발명의 작용효과에 특별한 차이를 일으키지 않는 등 기술적 사상의 창작에 실질적으로 기여하지 않은 경우에 무권리자 출원에 해당한다."
-    },
-    {
-      "id": "2",
-      "title": "신규성의 동일성 판단의 의미",
-      "content":
-          "특허발명에서 구성요소로 특정된 물건의 구성이나 속성이 선행발명에 명시적으로 개시되어 있지 않은 경우라도 선행발명에 개시된 물건이 특허발명과 동일한 구성이나 속성을 갖는다는 점이 인정된다면, 이는 선행발명에 내재된 구성 또는 속성으로 볼 수 있다. 이와 같은 경우 특허발명이 해당 구성 또는 속성으로 인한 물질의 새로운 용도를 특허의 대상으로 한다는 등의 특별한 사정이 없는 한 공지된 물건에 원래부터 존재하였던 내재된 구성 또는 속성을 발견한 것에 불과하므로 신규성이 부정된다. 이는 그 발명이 속하는 기술분야에서 통상의 지식을 가진 사람이 출원 당시에 그 구성이나 속성을 인식할 수 없었던 경우에도 마찬가지이다. 또한 공지된 물건의 내재된 구성 또는 속성을 파악하기 위하여 출원일 이후 공지된 자료를 증거로 사용할 수 있다."
-    },
-    {
-      "id": "3",
-      "title": "확대된 선출원주의에서의 동일성 판단",
-      "content":
-          "확대된 선출원에 관한 제29조 제3항에서 규정하는 발명의 동일성은 발명의 진보성과는 구별되는 것으로서 두 발명의 기술적 구성이 동일한가 여부에 의하되 발명의 효과도 참작하여 판단할 것인데, 기술적 구성에 차이가 있더라도 그 차이가 과제해결을 위한 구체적 수단에서 주지·관용기술의 부가·삭제·변경 등에 지나지 아니하여 새로운 효과가 발생하지 않는 정도의 미세한 차이에 불과하다면 두 발명은 서로 실질적으로 동일하다고 할 것이나, 두 발명의 기술적 구성의 차이가 위와 같은 정도를 벗어난다면 설사 그 차이가 해당 발명이 속하는 기술분야에서 통상의 지식을 가진 사람이 쉽게 도출할 수 있는 범위 내라고 하더라도 두 발명을 동일하다고 할 수 없다."
-    },
-    {
-      "id": "4",
-      "title": "진보성 판단 방법",
-      "content":
-          "출원발명의 진보성을 판단할 때에는, 먼저 출원발명의 청구범위와 기술사상, 선행발명의 범위와 기술내용을 확정하고, 출원발명과 가장 가까운 선행발명[이하 ‘주(주)선행발명’이라 한다]을 선택한 다음, 출원발명을 주선행발명과 대비하여 공통점과 차이점을 확인하고, 그 발명이 속하는 기술분야에서 통상의 지식을 가진 사람이 특허출원 당시의 기술수준에 비추어 이와 같은 차이점을 극복하고 출원발명을 쉽게 발명할 수 있는지를 심리한다."
-    },
-    {
-      "id": "5",
-      "title": "결합발명의 진보성 판단",
-      "content":
-          "어느 특허발명의 특허청구범위에 기재된 청구항이 복수의 구성요소로 되어 있는 경우에는 각 구성요소가 유기적으로 결합한 전체로서의 기술사상이 진보성 판단의 대상이 되는 것이지 각 구성요소가 독립하여 진보성 판단의 대상이 되는 것은 아니므로, 그 특허발명의 진보성 여부를 판단함에 있어서는 청구항에 기재된 복수의 구성을 분해한 후 각각 분해된 개별 구성요소들이 공지된 것인지 여부만을 따져서는 안 되고, 특유의 과제 해결원리에 기초하여 유기적으로 결합된 전체로서의 구성의 곤란성을 따져 보아야 할 것이며, 이 때 결합된 전체 구성으로서의 발명이 갖는 특유한 효과도 함께 고려하여야 한다."
-    },
-    {
-      "id": "6",
-      "title": "결합발명 진보성 판단 중 선행문헌 결합요건",
-      "content":
-          "여러 선행기술문헌을 인용하여 특허발명의 진보성을 판단함에 있어서는 그 인용되는 기술을 조합 또는 결합하면 당해 특허발명에 이를 수 있다는 암시·동기 등이 선행기술문헌에 제시되어 있거나, 그렇지 않더라도 당해 특허발명의 출원 당시의 기술수준, 기술상식, 해당 기술분야의 기본적 과제, 발전경향, 해당 업계의 요구 등에 비추어 보아 그 기술분야에 통상의 지식을 가진 자가 용이하게 그와 같은 결합에 이를 수 있다고 인정할 수 있는 경우에는 당해 특허발명의 진보성은 부정된다."
-    },
-    {
-      "id": "7",
-      "title": "균등론의 만족 요건",
-      "content":
-          "특허발명과 대비되는 확인대상 발명이 특허발명의 권리범위에 속한다고 하기 위해서는 특허발명의 특허청구범위에 기재된 각 구성요소와 그 구성요소 간의 유기적 결합관계가 확인대상 발명에 그대로 포함되어 있어야 한다. 확인대상 발명에 특허발명의 특허청구범위에 기재된 구성 중 변경된 부분이 있는 경우에도 특허발명과 과제 해결원리가 동일하고, 특허발명에서와 실질적으로 동일한 작용효과를 나타내며, 그와 같이 변경하는 것이 그 발명이 속하는 기술분야에서 통상의 지식을 가진 사람이라면 누구나 쉽게 생각해 낼 수 있는 정도라면, 특별한 사정이 없는 한 확인대상 발명은 특허발명의 특허청구범위에 기재된 구성과 균등한 것으로서 여전히 특허발명의 권리범위에 속한다고 보아야 한다."
-    },
-    {
-      "id": "8",
-      "title": "자유기술의 항변",
-      "content":
-          "어느 발명이 특허발명의 권리범위에 속하는지를 판단함에 있어서 특허발명과 대비되는 발명이 공지의 기술만으로 이루어지거나 그 기술분야에서 통상의 지식을 가진 자(당업자)가 공지기술로부터 용이하게 실시할 수 있는 경우에는 특허발명과 대비할 필요 없이 특허발명의 권리범 위에 속하지 않게 된다."
-    },
-    {
-      "id": "9",
-      "title": "간접침해의 전용성",
-      "content":
-          "특허 물건의 생산에만 사용하는 물건’에 해당하기 위하여는 사회통념상 통용되고 승인될 수 있는 경제적, 상업적 내지 실용적인 다른 용도가 없어야 하고, 이와 달리 단순히 특허 물건 이외의 물건에 사용될 이론적, 실험적 또는 일시적인 사용가능성이 있는 정도에 불과한 경우에는 간접침해의 성립을 부정할 만한 다른 용도가 있다고 할 수 없다."
-    },
-    {
-      "id": "10",
-      "title": "이용관계의 의미",
-      "content":
-          "이용관계에 있는 경우에는 후 발명은 선 특허발명의 권리범위에 속하게 되고, 이러한 이용관계는 후 발명이 선 특허발명의 기술적 구성에 새로운 기술적 요소를 부가하는 것으로서 후 발명이 선 특허발명의 요지를 전부 포함하고 이를 그대로 이용하되, 후 발명 내에 선 특허발명이 발명으로서의 일체성을 유지하는 경우에 성립하는 것이며, 이는 선 특허발명과 동일한 발명뿐만 아니라 균등한 발명을 이용하는 경우도 마찬가지이다."
-    },
-  ];
+class NoteListScreen extends StatefulWidget {
+  const NoteListScreen();
 
-  NoteListScreen();
+  @override
+  State<NoteListScreen> createState() => _NoteListScreenState();
+}
+
+class _NoteListScreenState extends State<NoteListScreen> {
+  late Future noteList;
+
+  @override
+  void initState() {
+    super.initState();
+    noteList = NoteAPi.fetchNoteList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-        padding: const EdgeInsets.only(top: 16, bottom: 80),
-        children: noteList
-            .map((e) => ListTile(
-                  title: Text(
-                    e["title"],
-                    style: CustomTheme.themeData.textTheme.titleSmall,
-                  ),
-                  subtitle: Text(
-                    e["content"],
-                    maxLines: 2,
-                  ),
-                  trailing: const Icon(Icons.add),
-                  onTap: () {
-                    // 해당 노트 화면으로 이동
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => NoteScreen(
-                                  noteId: e["id"],
-                                ))));
-                  },
-                ))
-            .toList());
+    return FutureBuilder(
+        future: noteList,
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+                padding: const EdgeInsets.only(top: 16, bottom: 80),
+                children: snapshot.data
+                    .map<Widget>((item) => ListTile(
+                          title: Text(
+                            item["title"],
+                            style: CustomTheme.themeData.textTheme.titleSmall,
+                          ),
+                          subtitle: Text(
+                            item["content"],
+                            maxLines: 2,
+                          ),
+                          trailing: const Icon(Icons.add),
+                          onTap: () {
+                            // 해당 노트 화면으로 이동
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => NoteScreen(
+                                          noteId: item["id"],
+                                        ))));
+                          },
+                        ))
+                    .toList());
+          } else {
+            return Loading();
+          }
+        }));
   }
 }
