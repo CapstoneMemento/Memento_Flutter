@@ -26,40 +26,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     searchList = SearchAPI.fetchSearchList(widget.query);
   }
 
-  // DB에서 불러온 검색 결과
-  List<Map<String, dynamic>> result = [
-    {
-      "id": "1",
-      "title": "특허법원 2018. 5. 18. 선고 2017나2271 판결 [특허·실용신안권 침해금지 등]",
-      "content":
-          "송금의뢰인이 착오송금임을 이유로 거래은행을 통하여 혹은 수취은행에 직접 송금액의 반환을 요청하고, 수취인도 송금의뢰인의 착오송금에 의하여 수취인의 계좌에 금원이 입금된 사실을 인정하여 수취은행에 그 반환을 승낙하고 있는 경우, 수취은행이 수취인에 대한 대출채권 등을 자동채권으로 하여 수취인의 계좌에 착오로 입금된 금원 상당의 예금채권과 상계하는 것은 수취은행이 선의인 상태에서 수취인의 예금채권을 담보로 대출을 하여 그 자동채권을 취득한 것이라거나 그 예금채권이 이미 제3자에 의하여 압류되었다는 등의 특별한 사정이 없는 한, 공공성을 지닌 자금이체시스템의 운영자가 그 이용자인 송금의뢰인의 실수를 기화로 그의 희생하에 당초 기대하지 않았던 채권회수의 이익을 취하는 행위로서 상계제도의 목적이나 기능을 일탈하고 법적으로 보호받을 만한 가치가 없으므로, 송금의뢰인에 대한 관계에서 신의칙에 반하거나 상계에 관한 권리를 남용하는 것이다."
-    },
-    {
-      "id": "2",
-      "title": "특허법원 2018. 5. 18. 선고 2017나2271 판결 [특허·실용신안권 침해금지 등]",
-      "content":
-          "송금의뢰인이 착오송금임을 이유로 거래은행을 통하여 혹은 수취은행에 직접 송금액의 반환을 요청하고, 수취인도 송금의뢰인의 착오송금에 의하여 수취인의 계좌에 금원이 입금된 사실을 인정하여 수취은행에 그 반환을 승낙하고 있는 경우, 수취은행이 수취인에 대한 대출채권 등을 자동채권으로 하여 수취인의 계좌에 착오로 입금된 금원 상당의 예금채권과 상계하는 것은 수취은행이 선의인 상태에서 수취인의 예금채권을 담보로 대출을 하여 그 자동채권을 취득한 것이라거나 그 예금채권이 이미 제3자에 의하여 압류되었다는 등의 특별한 사정이 없는 한, 공공성을 지닌 자금이체시스템의 운영자가 그 이용자인 송금의뢰인의 실수를 기화로 그의 희생하에 당초 기대하지 않았던 채권회수의 이익을 취하는 행위로서 상계제도의 목적이나 기능을 일탈하고 법적으로 보호받을 만한 가치가 없으므로, 송금의뢰인에 대한 관계에서 신의칙에 반하거나 상계에 관한 권리를 남용하는 것이다."
-    },
-    {
-      "id": "3",
-      "title": "특허법원 2018. 5. 18. 선고 2017나2271 판결 [특허·실용신안권 침해금지 등]",
-      "content":
-          "송금의뢰인이 착오송금임을 이유로 거래은행을 통하여 혹은 수취은행에 직접 송금액의 반환을 요청하고, 수취인도 송금의뢰인의 착오송금에 의하여 수취인의 계좌에 금원이 입금된 사실을 인정하여 수취은행에 그 반환을 승낙하고 있는 경우, 수취은행이 수취인에 대한 대출채권 등을 자동채권으로 하여 수취인의 계좌에 착오로 입금된 금원 상당의 예금채권과 상계하는 것은 수취은행이 선의인 상태에서 수취인의 예금채권을 담보로 대출을 하여 그 자동채권을 취득한 것이라거나 그 예금채권이 이미 제3자에 의하여 압류되었다는 등의 특별한 사정이 없는 한, 공공성을 지닌 자금이체시스템의 운영자가 그 이용자인 송금의뢰인의 실수를 기화로 그의 희생하에 당초 기대하지 않았던 채권회수의 이익을 취하는 행위로서 상계제도의 목적이나 기능을 일탈하고 법적으로 보호받을 만한 가치가 없으므로, 송금의뢰인에 대한 관계에서 신의칙에 반하거나 상계에 관한 권리를 남용하는 것이다."
-    },
-    {
-      "id": "4",
-      "title": "특허법원 2018. 5. 18. 선고 2017나2271 판결 [특허·실용신안권 침해금지 등]",
-      "content":
-          "송금의뢰인이 착오송금임을 이유로 거래은행을 통하여 혹은 수취은행에 직접 송금액의 반환을 요청하고, 수취인도 송금의뢰인의 착오송금에 의하여 수취인의 계좌에 금원이 입금된 사실을 인정하여 수취은행에 그 반환을 승낙하고 있는 경우, 수취은행이 수취인에 대한 대출채권 등을 자동채권으로 하여 수취인의 계좌에 착오로 입금된 금원 상당의 예금채권과 상계하는 것은 수취은행이 선의인 상태에서 수취인의 예금채권을 담보로 대출을 하여 그 자동채권을 취득한 것이라거나 그 예금채권이 이미 제3자에 의하여 압류되었다는 등의 특별한 사정이 없는 한, 공공성을 지닌 자금이체시스템의 운영자가 그 이용자인 송금의뢰인의 실수를 기화로 그의 희생하에 당초 기대하지 않았던 채권회수의 이익을 취하는 행위로서 상계제도의 목적이나 기능을 일탈하고 법적으로 보호받을 만한 가치가 없으므로, 송금의뢰인에 대한 관계에서 신의칙에 반하거나 상계에 관한 권리를 남용하는 것이다."
-    },
-    {
-      "id": "5",
-      "title": "특허법원 2018. 5. 18. 선고 2017나2271 판결 [특허·실용신안권 침해금지 등]",
-      "content":
-          "송금의뢰인이 착오송금임을 이유로 거래은행을 통하여 혹은 수취은행에 직접 송금액의 반환을 요청하고, 수취인도 송금의뢰인의 착오송금에 의하여 수취인의 계좌에 금원이 입금된 사실을 인정하여 수취은행에 그 반환을 승낙하고 있는 경우, 수취은행이 수취인에 대한 대출채권 등을 자동채권으로 하여 수취인의 계좌에 착오로 입금된 금원 상당의 예금채권과 상계하는 것은 수취은행이 선의인 상태에서 수취인의 예금채권을 담보로 대출을 하여 그 자동채권을 취득한 것이라거나 그 예금채권이 이미 제3자에 의하여 압류되었다는 등의 특별한 사정이 없는 한, 공공성을 지닌 자금이체시스템의 운영자가 그 이용자인 송금의뢰인의 실수를 기화로 그의 희생하에 당초 기대하지 않았던 채권회수의 이익을 취하는 행위로서 상계제도의 목적이나 기능을 일탈하고 법적으로 보호받을 만한 가치가 없으므로, 송금의뢰인에 대한 관계에서 신의칙에 반하거나 상계에 관한 권리를 남용하는 것이다."
-    }
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,11 +137,6 @@ class ResultList extends StatelessWidget {
                       number: item["number"],
                       name: item["name"],
                       casenum: item["casenum"],
-                      onTap: () {
-                        // 해당 판례 화면으로 이동
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: ((context) => SearchNoteScreen())));
-                      },
                     ),
                   ),
                 ))
@@ -189,43 +150,48 @@ class SearchListItem extends StatelessWidget {
   final String casenum;
   final String name;
   final int number;
-  final void onTap;
 
   const SearchListItem({
     super.key,
     required this.name,
     required this.casenum,
     required this.number,
-    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '$number',
-              style: TextStyle(
-                  fontSize: 12, color: CustomTheme.themeData.primaryColor),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              name,
-              style: CustomTheme.themeData.textTheme.titleSmall,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              casenum,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            )
-          ],
-        ));
+    return GestureDetector(
+      onTap: () {
+        // 해당 판례 화면으로 이동
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: ((context) => SearchNoteScreen())));
+      },
+      child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$number',
+                style: TextStyle(
+                    fontSize: 12, color: CustomTheme.themeData.primaryColor),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                name,
+                style: CustomTheme.themeData.textTheme.titleSmall,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                casenum,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              )
+            ],
+          )),
+    );
   }
 }
