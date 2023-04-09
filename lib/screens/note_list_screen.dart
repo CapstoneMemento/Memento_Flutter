@@ -72,7 +72,7 @@ class NoteListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.only(top: 16, bottom: 80),
         children: noteList
             .map((e) => ListTile(
                   title: Text(
