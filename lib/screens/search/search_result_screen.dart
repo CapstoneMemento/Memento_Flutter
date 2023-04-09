@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/api/serach_api.dart';
+import 'package:memento_flutter/api/search_api.dart';
 import 'package:memento_flutter/screens/search/search_note_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
