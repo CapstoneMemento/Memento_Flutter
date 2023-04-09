@@ -21,7 +21,7 @@ class ModalBottomSheet extends StatefulWidget {
 
 class _ModalBottomSheetState extends State<ModalBottomSheet> {
   final List<Map<String, dynamic>> modalItems = [
-    {"id": "edit", "icon": Icons.edit, "text": "직접 입력하기"},
+    // {"id": "edit", "icon": Icons.edit, "text": "직접 입력하기"},
     {"id": "camera", "icon": Icons.camera_alt, "text": "사진 촬영하기"},
     {"id": "photo", "icon": Icons.photo, "text": "앨범에서 가져오기"},
   ];
@@ -112,26 +112,23 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   context: context,
                   builder: (BuildContext context) {
                     return SizedBox(
-                      height: 180,
+                      height: 120,
                       child: (Column(
                           children: modalItems
-                              .map((e) => Flexible(
+                              .map((item) => Flexible(
                                     fit: FlexFit.tight,
                                     child: GestureDetector(
                                       onTap: () async {
                                         WidgetsFlutterBinding
                                             .ensureInitialized();
-
-                                        // 직접 입력하기
-                                        if (e["id"] == "edit") {}
                                         // 앨범에서 가져오기
-                                        if (e["id"] == "photo") {
+                                        if (item["id"] == "photo") {
                                           openImageScanner(context,
                                               source:
                                                   ScannerFileSource.GALLERY);
                                         }
                                         // 사진 촬영하기
-                                        if (e["id"] == "camera") {
+                                        if (item["id"] == "camera") {
                                           openImageScanner(context,
                                               source: ScannerFileSource.CAMERA);
                                         }
@@ -149,12 +146,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                                           padding: const EdgeInsets.all(16),
                                           child: Row(
                                             children: [
-                                              Icon(e["icon"]),
+                                              Icon(item["icon"]),
                                               const SizedBox(
                                                 width: 10,
                                               ),
                                               Text(
-                                                e["text"],
+                                                item["text"],
                                                 style: CustomTheme.themeData
                                                     .textTheme.bodyMedium,
                                               )
