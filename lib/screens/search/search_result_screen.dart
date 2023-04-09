@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/serach_api.dart';
 import 'package:memento_flutter/screens/search/search_note_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
+import 'package:memento_flutter/widgets/loading.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String query;
@@ -16,6 +18,14 @@ class SearchResultScreen extends StatefulWidget {
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
+  late Future searchList;
+
+  @override
+  void initState() {
+    super.initState();
+    searchList = SearchAPI.fetchSearchList(widget.query);
+  }
+
   // DB에서 불러온 검색 결과
   List<Map<String, dynamic>> result = [
     {
@@ -57,28 +67,38 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         leading: const BackIconButton(),
         title: SearchBar(initialValue: widget.query),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          RichText(
-              text: TextSpan(
-            style: CustomTheme.themeData.textTheme.bodyMedium,
-            text: "검색 결과 ",
-            children: <TextSpan>[
-              TextSpan(
-                  text: "${widget.count}",
-                  style: TextStyle(
-                      color: CustomTheme.themeData.primaryColor,
-                      fontWeight: FontWeight.w700)),
-              const TextSpan(text: '개'),
-            ],
-          )),
-          const SizedBox(
-            height: 12,
-          ),
-          ResultList(result: result)
-        ]),
-      ),
+      body: FutureBuilder(
+          future: searchList,
+          builder: ((context, snapshot) {
+            if (snapshot.hasData) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                        style: CustomTheme.themeData.textTheme.bodyMedium,
+                        text: "검색 결과 ",
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "${snapshot.data.length}",
+                              style: TextStyle(
+                                  color: CustomTheme.themeData.primaryColor,
+                                  fontWeight: FontWeight.w700)),
+                          const TextSpan(text: '개'),
+                        ],
+                      )),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      ResultList(result: snapshot.data)
+                    ]),
+              );
+            } else {
+              return Loading();
+            }
+          })),
     );
   }
 }
@@ -134,7 +154,7 @@ class ResultList extends StatelessWidget {
     required this.result,
   });
 
-  final List<Map<String, dynamic>> result;
+  final List<dynamic> result;
 
   @override
   Widget build(BuildContext context) {
@@ -147,28 +167,65 @@ class ResultList extends StatelessWidget {
                           top: BorderSide(width: 1, color: Colors.black26))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTileTheme(
-                      contentPadding: EdgeInsets.zero,
-                      child: ListTile(
-                        title: Text(
-                          item["title"],
-                          style: CustomTheme.themeData.textTheme.titleSmall,
-                        ),
-                        subtitle: Text(
-                          item["content"],
-                          maxLines: 2,
-                        ),
-                        onTap: () {
-                          // 해당 판례 화면으로 이동
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: ((context) => SearchNoteScreen())));
-                        },
-                      ),
+                    child: SearchListItem(
+                      number: item["number"],
+                      name: item["name"],
+                      casenum: item["casenum"],
+                      onTap: () {
+                        // 해당 판례 화면으로 이동
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: ((context) => SearchNoteScreen())));
+                      },
                     ),
                   ),
                 ))
             .toList(),
       ),
     );
+  }
+}
+
+class SearchListItem extends StatelessWidget {
+  final String casenum;
+  final String name;
+  final int number;
+  final void onTap;
+
+  const SearchListItem({
+    super.key,
+    required this.name,
+    required this.casenum,
+    required this.number,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '$number',
+              style: TextStyle(
+                  fontSize: 12, color: CustomTheme.themeData.primaryColor),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              name,
+              style: CustomTheme.themeData.textTheme.titleSmall,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              casenum,
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            )
+          ],
+        ));
   }
 }
