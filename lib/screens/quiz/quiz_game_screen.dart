@@ -59,7 +59,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   Timer setMementoTimer() {
     return Timer.periodic(const Duration(seconds: 30), (timer) {
       quizAPI.setAnswer(isAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
-      mementoWord = answer; // 메멘토 키워드 획득
+      mementoWord = answer; // 메멘토 키워드 획득 (키워드 표시)
       getNextQuiz();
     });
   }
@@ -74,7 +74,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
           ((route) => false));
     }
 
-    title = quizAPI.getTitle();
+    title = quizAPI.getTitle(); // (한 문제를 다 풀었으면) 다음 판례 제목 가져오기
     setState(() {});
   }
 
@@ -84,9 +84,26 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
     super.dispose();
   }
 
+  // 메멘토 타이머 초기화
   void timerReset() {
     _timer?.cancel();
     _timer = setMementoTimer();
+  }
+
+  void _onSubmitted(value) {
+    if (value == answer) {
+      inputBorderStyle = Border.all(color: CustomTheme.themeData.primaryColor);
+      userWord = value; // 사용자 키워드
+      quizAPI.setAnswer(isAnswer: true); // 사용자 정답 처리
+      userController.clear();
+      getNextQuiz();
+      timerReset(); // 시간 초기화
+    } else {
+      // 틀렸음을 표시하는 TextField border 스타일
+      setState(() {
+        inputBorderStyle = Border.all(color: Colors.red);
+      });
+    }
   }
 
   @override
@@ -175,22 +192,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(border: InputBorder.none),
                     style: CustomTheme.themeData.textTheme.bodyMedium,
-                    onSubmitted: (value) {
-                      if (value == answer) {
-                        inputBorderStyle = Border.all(
-                            color: CustomTheme.themeData.primaryColor);
-                        userWord = value; // 사용자 키워드
-                        quizAPI.setAnswer(isAnswer: true); // 사용자 정답 처리
-                        userController.clear();
-                        getNextQuiz();
-                        timerReset(); // 시간 초기화
-                      } else {
-                        // 틀렸음을 표시하는 TextField border 스타일
-                        setState(() {
-                          inputBorderStyle = Border.all(color: Colors.red);
-                        });
-                      }
-                    },
+                    onSubmitted: _onSubmitted,
                   ),
                 ),
               ),
