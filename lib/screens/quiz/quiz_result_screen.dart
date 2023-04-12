@@ -37,7 +37,7 @@ class QuizResultScreen extends StatelessWidget {
             SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: const Text(
-                  "획득한 단어를 확인해보세요. 제가 이겼네요!",
+                  "결과를 확인해보세요. 몇 개의 단어를 획득했나요?",
                   textAlign: TextAlign.center,
                 )),
             const SizedBox(
