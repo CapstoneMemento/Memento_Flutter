@@ -5,46 +5,12 @@ import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class QuizResultScreen extends StatelessWidget {
-  QuizResultScreen();
+  final List answerList;
+
+  QuizResultScreen({required this.answerList});
 
   final Widget logoHappy = SvgPicture.asset('assets/images/logo_happy.svg',
       semanticsLabel: '기뻐하는 메멘토 캐릭터 로고');
-
-  List<Map<String, dynamic>> results = [
-    {
-      "title": "발명의 완성",
-      "keywords": <Map<String, dynamic>>[
-        {"value": "특허권침해소송", "answer": true},
-        {"value": "발명의완성", "answer": false},
-        {"value": "작용효과", "answer": true},
-        {"value": "침해제품", "answer": false},
-        {"value": "통상의 지식", "answer": true},
-        {"value": "작용효과", "answer": true},
-      ]
-    },
-    {
-      "title": "발명의 완성",
-      "keywords": <Map<String, dynamic>>[
-        {"value": "특허권침해소송", "answer": true},
-        {"value": "발명의완성", "answer": false},
-        {"value": "작용효과", "answer": true},
-        {"value": "침해제품", "answer": false},
-        {"value": "통상의 지식", "answer": true},
-        {"value": "작용효과", "answer": true},
-      ]
-    },
-    {
-      "title": "발명의 완성",
-      "keywords": <Map<String, dynamic>>[
-        {"value": "특허권침해소송", "answer": true},
-        {"value": "발명의완성", "answer": false},
-        {"value": "작용효과", "answer": true},
-        {"value": "침해제품", "answer": false},
-        {"value": "통상의 지식", "answer": true},
-        {"value": "작용효과", "answer": true},
-      ]
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +43,8 @@ class QuizResultScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ...results
-                .map((result) => Padding(
+            ...answerList
+                .map((answer) => Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +52,7 @@ class QuizResultScreen extends StatelessWidget {
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Text(
-                              result["title"],
+                              answer["title"],
                               style: CustomTheme.themeData.textTheme.titleSmall,
                             ),
                           ),
@@ -96,10 +62,10 @@ class QuizResultScreen extends StatelessWidget {
                           Wrap(
                             spacing: 10,
                             runSpacing: 10,
-                            children: result["keywords"]
+                            children: answer["keywords"]
                                 .map<Widget>((keyword) => Container(
                                       decoration: BoxDecoration(
-                                          color: keyword["answer"]
+                                          color: keyword["isAnswer"]
                                               ? const Color(0xFFA6DAFB)
                                               : const Color(0xFFD9D9D9),
                                           borderRadius: const BorderRadius.all(
@@ -107,7 +73,7 @@ class QuizResultScreen extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 14, vertical: 7),
-                                        child: Text(keyword["value"]),
+                                        child: Text(keyword["text"]),
                                       ),
                                     ))
                                 .toList(),

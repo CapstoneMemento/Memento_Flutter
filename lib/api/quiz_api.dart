@@ -20,6 +20,18 @@ class QuizAPI {
           "기여하지 않은 경우",
           "무권리자 출원"
         ]
+      },
+      {
+        "title": "두번째문제",
+        "keywords": [
+          "모인대상발명",
+          "통상의 기술자",
+          "발명의 작용효과",
+          "특별한 차이",
+          "기술적 사상의 창작",
+          "기여하지 않은 경우",
+          "무권리자 출원"
+        ]
       }
     ];
 
@@ -58,7 +70,7 @@ class QuizAPI {
       // 키워드 인덱스 0으로 초기화
       currentKeywordIndex = 0;
       // 퀴즈 인덱스 증가 (다음 퀴즈로 이동)
-      return quizList[++currentQuizIndex]["keywords"][currentKeywordIndex];
+      return quizList[++currentQuizIndex]["keywords"][currentKeywordIndex++];
     }
 
     // 퀴즈를 모두 풀었으면
@@ -68,6 +80,9 @@ class QuizAPI {
   void setAnswer({required isAnswer}) {
     answerList[currentQuizIndex]["keywords"][currentKeywordIndex - 1]
         ["isAnswer"] = isAnswer;
-    print(answerList);
+  }
+
+  List getAnswerList() {
+    return answerList;
   }
 }

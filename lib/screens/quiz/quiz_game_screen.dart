@@ -25,22 +25,6 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   Timer? _timer;
   QuizAPI quizAPI = QuizAPI();
 
-  // DB에서 불러오기
-  final questionList = [
-    {
-      "title": "모인대상발명",
-      "keywords": [
-        "모인대상발명",
-        "통상의 기술자",
-        "발명의 작용효과",
-        "특별한 차이",
-        "기술적 사상의 창작",
-        "기여하지 않은 경우",
-        "무권리자 출원"
-      ]
-    }
-  ];
-
   final TextEditingController mementoController = TextEditingController();
   final TextEditingController userController = TextEditingController();
 
@@ -57,7 +41,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   }
 
   Timer setMementoTimer() {
-    return Timer.periodic(const Duration(seconds: 30), (timer) {
+    return Timer.periodic(const Duration(seconds: 5), (timer) {
       quizAPI.setAnswer(isAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
       mementoWord = answer; // 메멘토 키워드 획득 (키워드 표시)
       getNextQuiz();
@@ -70,7 +54,9 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
       // 퀴즈를 모두 풀었으면 결과 화면으로 이동
       // _timer를 취소하기 위해 RemoveUntil로 페이지 삭제
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => QuizResultScreen()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  QuizResultScreen(answerList: quizAPI.getAnswerList())),
           ((route) => false));
     }
 
