@@ -23,6 +23,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   String answer = "";
   String title = "";
   Timer? _timer;
+  QuizAPI quizAPI = QuizAPI();
 
   // DB에서 불러오기
   final questionList = [
@@ -40,39 +41,52 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
     }
   ];
 
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController mementoController = TextEditingController();
+  final TextEditingController userController = TextEditingController();
+
+  var inputBorderStyle = Border.all(color: CustomTheme.themeData.primaryColor);
 
   @override
   void initState() {
     super.initState();
-    QuizAPI quizAPI = QuizAPI();
     quizAPI.fetchQuizList();
-    _controller.text = '. . .'; // Set the initial value
+    mementoController.text = '. . .'; // Set the initial value
     answer = quizAPI.getKeyword(); // 첫 번째 정답
     title = quizAPI.getTitle(); // 첫 번째 제목
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      print("메멘토 승");
-      quizAPI.setAnswer(isAnswer: true);
-      mementoWord = answer; // 메멘토 키워드 획득
-      answer = quizAPI.getKeyword();
+    _timer = setMementoTimer();
+  }
 
+  Timer setMementoTimer() {
+    return Timer.periodic(const Duration(seconds: 30), (timer) {
+      quizAPI.setAnswer(isAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
+      mementoWord = answer; // 메멘토 키워드 획득
+      getNextQuiz();
+    });
+  }
+
+  void getNextQuiz() {
+    answer = quizAPI.getKeyword();
+    if (answer == "") {
       // 퀴즈를 모두 풀었으면 결과 화면으로 이동
       // _timer를 취소하기 위해 RemoveUntil로 페이지 삭제
-      if (answer == "") {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => QuizResultScreen()),
-            ((route) => false));
-      }
-      title = quizAPI.getTitle();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => QuizResultScreen()),
+          ((route) => false));
+    }
 
-      setState(() {});
-    });
+    title = quizAPI.getTitle();
+    setState(() {});
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  void timerReset() {
+    _timer?.cancel();
+    _timer = setMementoTimer();
   }
 
   @override
@@ -111,7 +125,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
                               const BorderRadius.all(Radius.circular(10.0))),
                       child: TextField(
                         textAlign: TextAlign.center,
-                        controller: _controller,
+                        controller: mementoController,
                         readOnly: true,
                         decoration:
                             const InputDecoration(border: InputBorder.none),
@@ -153,14 +167,30 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
                 child: Container(
                   height: 36,
                   decoration: BoxDecoration(
-                      border:
-                          Border.all(color: CustomTheme.themeData.primaryColor),
+                      border: inputBorderStyle,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10.0))),
                   child: TextField(
+                    controller: userController,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(border: InputBorder.none),
                     style: CustomTheme.themeData.textTheme.bodyMedium,
+                    onSubmitted: (value) {
+                      if (value == answer) {
+                        inputBorderStyle = Border.all(
+                            color: CustomTheme.themeData.primaryColor);
+                        userWord = value; // 사용자 키워드
+                        quizAPI.setAnswer(isAnswer: true); // 사용자 정답 처리
+                        userController.clear();
+                        getNextQuiz();
+                        timerReset(); // 시간 초기화
+                      } else {
+                        // 틀렸음을 표시하는 TextField border 스타일
+                        setState(() {
+                          inputBorderStyle = Border.all(color: Colors.red);
+                        });
+                      }
+                    },
                   ),
                 ),
               ),
