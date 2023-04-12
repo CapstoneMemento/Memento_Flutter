@@ -6,6 +6,7 @@ import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/file_api.dart';
 import 'package:memento_flutter/config/constants.dart';
 import 'package:memento_flutter/screens/ocr_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
@@ -26,13 +27,27 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     {"id": "photo", "icon": Icons.photo, "text": "앨범에서 가져오기"},
   ];
 
-  String imageDownloadURL = ""; // 저장한 이미지 URL
+  late File imageFile; // 로컬 이미지 Path
   String extractedText = ""; // 추출한 텍스트
   bool isLoading = false;
 
   /* Firebase storage 초기화 */
   final storageRef = FirebaseStorage.instance.ref();
   late final scannedImageRef = storageRef.child("scannedImage.jpg");
+
+  void _onTap(item) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    // 앨범에서 가져오기
+    if (item["id"] == "photo") {
+      openImageScanner(context, source: ScannerFileSource.GALLERY);
+    }
+    // 사진 촬영하기
+    if (item["id"] == "camera") {
+      openImageScanner(context, source: ScannerFileSource.CAMERA);
+    }
+    // modalBottomSheet 닫기
+    Navigator.of(context).pop();
+  }
 
   /* 이미지 스캐너 실행 */
   void openImageScanner(BuildContext context,
@@ -42,24 +57,15 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     if (image != null) {
       setState(() {
         isLoading = true;
+        imageFile = image;
       });
-      saveImageToStorage(image);
-      getImageURL();
+
+      final imageDownloadURL =
+          await FileAPI.uploadFile(imageFile: image); // 저장소에 사진 저장
       await runOCR(imageDownloadURL);
       // 결과 화면으로 이동
       navigateToOCRResult();
     }
-  }
-
-  /* 저장소에 사진 저장 */
-  saveImageToStorage(File image) {
-    // storage에 이미지 저장
-  }
-
-  /* 저장소 이미지 URL 가져오기 */
-  getImageURL() {
-    imageDownloadURL =
-        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FGEVuv%2Fbtr4w5DtzIJ%2F5RtHFUfCcfrPUggN2hP0O0%2Fimg.png";
   }
 
   /* 입력한 이미지 URL로 네이버 OCR 실행 */
@@ -96,8 +102,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
 
   void navigateToOCRResult() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => OCRResultScreen(
-          imageURL: imageDownloadURL, extractedText: extractedText),
+      builder: (context) =>
+          OCRResultScreen(imageFile: imageFile, extractedText: extractedText),
     ));
   }
 
@@ -118,22 +124,8 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                               .map((item) => Flexible(
                                     fit: FlexFit.tight,
                                     child: GestureDetector(
-                                      onTap: () async {
-                                        WidgetsFlutterBinding
-                                            .ensureInitialized();
-                                        // 앨범에서 가져오기
-                                        if (item["id"] == "photo") {
-                                          openImageScanner(context,
-                                              source:
-                                                  ScannerFileSource.GALLERY);
-                                        }
-                                        // 사진 촬영하기
-                                        if (item["id"] == "camera") {
-                                          openImageScanner(context,
-                                              source: ScannerFileSource.CAMERA);
-                                        }
-                                        // modalBottomSheet 닫기
-                                        Navigator.of(context).pop();
+                                      onTap: () {
+                                        _onTap(item);
                                       },
                                       child: Container(
                                         decoration: const BoxDecoration(

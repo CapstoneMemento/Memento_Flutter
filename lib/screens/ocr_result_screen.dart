@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
@@ -7,10 +9,10 @@ import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class OCRResultScreen extends StatefulWidget {
-  final String imageURL; // 스캔한 이미지
+  final File imageFile; // 스캔한 이미지
   String extractedText; // 추출한 텍스트
 
-  OCRResultScreen({required this.imageURL, required this.extractedText});
+  OCRResultScreen({required this.imageFile, required this.extractedText});
 
   @override
   State<OCRResultScreen> createState() => _OCRResultScreenState();
@@ -66,11 +68,9 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
             child: Container(
               width: deviceWidth,
               decoration: const BoxDecoration(color: Colors.black),
-              child: ExtendedImage.network(
-                widget.imageURL,
+              child: ExtendedImage.file(
+                widget.imageFile,
                 fit: BoxFit.fitHeight,
-                cache: true,
-                compressionRatio: 0.5,
               ),
             ),
           ),
