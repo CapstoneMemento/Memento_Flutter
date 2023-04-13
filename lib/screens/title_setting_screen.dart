@@ -8,7 +8,7 @@ import 'package:memento_flutter/widgets/close_icon_button.dart';
 import 'package:memento_flutter/widgets/keyword_text.dart';
 
 class TitleSettingScreen extends StatelessWidget {
-  final String noteId;
+  final int noteId;
   final List<Map<String, dynamic>> selectedText;
 
   TitleSettingScreen({required this.noteId, required this.selectedText});

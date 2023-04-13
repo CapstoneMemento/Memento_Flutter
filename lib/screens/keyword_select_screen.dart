@@ -8,7 +8,7 @@ import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class KeywordSelectScreen extends StatefulWidget {
-  final String noteId;
+  final int noteId;
   final String extractedText;
 
   const KeywordSelectScreen(
@@ -63,6 +63,8 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
   /* 사용자가 키워드를 선택하면 index 저장 */
   void _onSelectionChanged(selection, cause) {
+    print(selection);
+    print(cause);
     if (cause == SelectionChangedCause.longPress ||
         cause == SelectionChangedCause.drag) {
       saveIndex(selection.baseOffset, selection.extentOffset);
@@ -84,7 +86,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     for (var i = 0; i < selectedIndex.length; i++) {
       final start = selectedIndex[i]["start"]; // 시작 인덱스
       final end = selectedIndex[i]["end"]; // 끝 인덱스
-      final pressAgain = newStartIndex >= start && newEndIndex <= end;
+      final pressAgain = newStartIndex >= start && newEndIndex < end;
       final isDragging = newStartIndex == start;
       final include = newStartIndex < start && newEndIndex > start;
 
@@ -154,7 +156,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           ),
           TextSelectionTheme(
             data: TextSelectionThemeData(
-              selectionColor: Colors.yellow.withOpacity(0),
+              selectionColor: Colors.yellow.withOpacity(0.5),
             ),
             child: SelectableText.rich(
               TextSpan(children: getSpanList()),

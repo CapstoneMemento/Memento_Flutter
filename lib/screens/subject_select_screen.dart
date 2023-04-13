@@ -8,7 +8,7 @@ import 'package:memento_flutter/widgets/close_icon_button.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class SubjectSelectScreen extends StatefulWidget {
-  String noteId;
+  int noteId;
 
   SubjectSelectScreen({required this.noteId});
 
