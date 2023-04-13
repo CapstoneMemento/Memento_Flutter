@@ -3,9 +3,27 @@ import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
 
 class NoteAPi {
+  static final basicHeaders = {
+    "Authorization": "Bearer ${Constants.accessToken}",
+    "Content-Type": "application/json"
+  };
+
   static Future<List<dynamic>> fetchNoteList() async {
     final response = await http.get(Uri.parse('${Constants.baseURL}/note/list'),
         headers: {"Authorization": "Bearer ${Constants.accessToken}"});
+
+    if (response.statusCode == 200) {
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      print('Error code: ${response.statusCode}');
+      throw Exception('노트를 불러오지 못했습니다.');
+    }
+  }
+
+  static Future<Map> fetchNote({required int noteId}) async {
+    final response = await http.get(
+        Uri.parse('${Constants.baseURL}/note/$noteId'),
+        headers: basicHeaders);
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -24,10 +42,7 @@ class NoteAPi {
     };
     final response = await http.post(
       Uri.parse('${Constants.baseURL}/note/add'),
-      headers: {
-        "Authorization": "Bearer ${Constants.accessToken}",
-        "Content-Type": "application/json"
-      },
+      headers: basicHeaders,
       body: json.encode(data),
     );
 
@@ -44,10 +59,7 @@ class NoteAPi {
     final data = {"content": content, "title": title};
     final response = await http.put(
       Uri.parse('${Constants.baseURL}/note/$noteId/edit'),
-      headers: {
-        "Authorization": "Bearer ${Constants.accessToken}",
-        "Content-Type": "application/json"
-      },
+      headers: basicHeaders,
       body: json.encode(data),
     );
 
@@ -55,7 +67,7 @@ class NoteAPi {
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       print('Error code: ${response.statusCode}');
-      throw Exception('노트를 저장하지 못했습니다.');
+      throw Exception('노트를 수정하지 못했습니다.');
     }
   }
 }
