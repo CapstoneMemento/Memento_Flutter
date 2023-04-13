@@ -19,6 +19,9 @@ class OCRResultScreen extends StatefulWidget {
 }
 
 class _OCRResultScreenState extends State<OCRResultScreen> {
+  int imageWidth = 0;
+  int imageHeight = 0;
+
   /* Dialog에 표시할 아이템 */
   final List<Map<String, dynamic>> dialogItems = [
     {"id": "sentence", "title": "통문장"},
@@ -31,6 +34,19 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
       "title": "두문자",
     }
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final result = getFileWidthAndHeight(widget.imageFile).then((result) => {
+          setState(
+            () {
+              imageWidth = result["width"];
+              imageHeight = result["height"];
+            },
+          )
+        });
+  }
 
   void goEditText() async {
     // 텍스트 편집 화면에서 수정한 노트 받아오기
@@ -47,6 +63,16 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         widget.extractedText = editedText;
       });
     }
+  }
+
+  Future<Map> getFileWidthAndHeight(File imageFile) async {
+    // 파일을 바이너리 형태로 읽어들임
+    final bytes = await imageFile.readAsBytes();
+    // 이미지 객체로 변환
+    final image = await decodeImageFromList(bytes);
+
+    // 이미지 객체에서 너비 값을 반환
+    return {"width": image.width, "height": image.height};
   }
 
   @override
@@ -70,7 +96,9 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
               decoration: const BoxDecoration(color: Colors.black),
               child: ExtendedImage.file(
                 widget.imageFile,
-                fit: BoxFit.fitHeight,
+                fit: imageWidth > imageHeight
+                    ? BoxFit.fitWidth
+                    : BoxFit.fitHeight,
               ),
             ),
           ),
