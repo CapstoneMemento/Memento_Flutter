@@ -70,4 +70,18 @@ class NoteAPi {
       throw Exception('노트를 수정하지 못했습니다.');
     }
   }
+
+  static Future deleteNote({required int noteId}) async {
+    final response = await http.delete(
+      Uri.parse('${Constants.baseURL}/note/$noteId/delete'),
+      headers: {"Authorization": "Bearer ${Constants.accessToken}"},
+    );
+
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      print('Error code: ${response.statusCode}');
+      throw Exception('노트를 삭제하지 못했습니다.');
+    }
+  }
 }

@@ -21,6 +21,7 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   void initState() {
     super.initState();
+    // 노트 불러오기
     final response = NoteAPi.fetchNote(noteId: widget.noteId).then((result) => {
           setState(
             () {
@@ -50,10 +51,33 @@ class _NoteScreenState extends State<NoteScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              // 노트 삭제 dialog
-              // 삭제 시 노트 리스트로 이동
-            },
+            onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                      content: const Text("이 노트를 삭제할까요?"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('취소'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: const Text('확인'),
+                          onPressed: () async {
+                            // 노트 삭제
+                            await NoteAPi.deleteNote(noteId: widget.noteId);
+
+                            if (mounted) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => NavigationBarWidget(
+                                            selectedIndex: 0,
+                                          )),
+                                  (route) => false);
+                            }
+                          },
+                        ),
+                      ],
+                    )),
             child: const Text("삭제"),
           )
         ],
