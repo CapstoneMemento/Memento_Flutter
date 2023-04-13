@@ -38,4 +38,24 @@ class NoteAPi {
       throw Exception('노트를 저장하지 못했습니다.');
     }
   }
+
+  static Future editNote(
+      {required int noteId, required String content, String title = ""}) async {
+    final data = {"content": content, "title": title};
+    final response = await http.put(
+      Uri.parse('${Constants.baseURL}/note/$noteId/edit'),
+      headers: {
+        "Authorization": "Bearer ${Constants.accessToken}",
+        "Content-Type": "application/json"
+      },
+      body: json.encode(data),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      print('Error code: ${response.statusCode}');
+      throw Exception('노트를 저장하지 못했습니다.');
+    }
+  }
 }

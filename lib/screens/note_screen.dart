@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screens/note_list_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
-import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 
 class NoteScreen extends StatelessWidget {
@@ -16,7 +16,16 @@ class NoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-        leading: const BackIconButton(),
+        leading: IconButton(
+          color: Colors.black,
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            // 내 암기장으로 이동
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const NoteListScreen()),
+                (route) => false);
+          },
+        ),
         actions: [
           TextButton(
             onPressed: () {

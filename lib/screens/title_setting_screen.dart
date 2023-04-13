@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
-
-import 'package:memento_flutter/screens/subject_select_screen.dart';
+import 'package:memento_flutter/api/note_api.dart';
+import 'package:memento_flutter/screens/note_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 import 'package:memento_flutter/widgets/keyword_text.dart';
 
-class TitleSettingScreen extends StatelessWidget {
+class TitleSettingScreen extends StatefulWidget {
   final int noteId;
+  final String content;
   final List<Map<String, dynamic>> selectedText;
 
-  TitleSettingScreen({required this.noteId, required this.selectedText});
+  const TitleSettingScreen(
+      {required this.noteId,
+      required this.selectedText,
+      required this.content});
 
-  late String title; // 판례 제목
-  // 선택한 문자 text style
+  @override
+  State<TitleSettingScreen> createState() => _TitleSettingScreenState();
+}
+
+class _TitleSettingScreenState extends State<TitleSettingScreen> {
+  String title = "";
+  // 판례 제목
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
 
@@ -26,7 +35,7 @@ class TitleSettingScreen extends StatelessWidget {
         actions: [CloseIconButton()],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           TextField(
             decoration: const InputDecoration(
@@ -52,21 +61,26 @@ class TitleSettingScreen extends StatelessWidget {
           ),
           Expanded(
               child: SingleChildScrollView(
-                  child: KeywordText(selectedText: selectedText)))
+                  child: KeywordText(selectedText: widget.selectedText)))
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // noteId로 title 저장
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SubjectSelectScreen(
-                        noteId: noteId,
-                      )));
-        },
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
+        onPressed: () async {
+          // noteId로 title 저장
+          await NoteAPi.editNote(
+              noteId: widget.noteId, content: widget.content, title: title);
+
+          if (mounted) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => NoteScreen(
+                          noteId: widget.noteId,
+                        )),
+                (route) => false);
+          }
+        },
       ),
     );
   }

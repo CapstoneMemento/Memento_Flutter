@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:memento_flutter/api/keyword_api.dart';
 import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
-
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class KeywordSelectScreen extends StatefulWidget {
@@ -45,8 +44,8 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     int prevEndIndex = 0; // 이전 end index
 
     for (final index in selectedIndex) {
-      final start = index["start"];
-      final end = index["end"];
+      final start = index["first"];
+      final end = index["last"];
 
       result.add({
         "text": totalText.substring(prevEndIndex, start),
@@ -84,8 +83,8 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     }
 
     for (var i = 0; i < selectedIndex.length; i++) {
-      final start = selectedIndex[i]["start"]; // 시작 인덱스
-      final end = selectedIndex[i]["end"]; // 끝 인덱스
+      final start = selectedIndex[i]["first"]; // 시작 인덱스
+      final end = selectedIndex[i]["last"]; // 끝 인덱스
       final pressAgain = newStartIndex >= start && newEndIndex < end;
       final isDragging = newStartIndex == start;
       final include = newStartIndex < start && newEndIndex > start;
@@ -101,7 +100,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       // 사용자가 밑줄 긋는 중이면
       if (isDragging) {
         // 기존 끝 인덱스 갱신
-        selectedIndex[i]["end"] = newEndIndex;
+        selectedIndex[i]["last"] = newEndIndex;
         isSaveNew = false;
       }
 
@@ -115,9 +114,9 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     /* 새 인덱스 저장 */
     if (isSaveNew) {
       selectedIndex.add({
-        "start": newStartIndex,
-        "end": newEndIndex,
-        "noteId": widget.noteId
+        "first": newStartIndex,
+        "last": newEndIndex,
+        "noteid": widget.noteId
       });
     }
   }
@@ -125,10 +124,10 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   /* 오름차순 정렬 */
   void sortIndex(List<Map<String, dynamic>> index) {
     selectedIndex.sort((a, b) {
-      if (a["start"] == b["start"]) {
-        return a["end"].compareTo(b["end"]);
+      if (a["first"] == b["first"]) {
+        return a["last"].compareTo(b["last"]);
       }
-      return a["start"].compareTo(b["start"]);
+      return a["first"].compareTo(b["first"]);
     });
   }
 
@@ -167,15 +166,21 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // selectedIndex 키워드 DB에 저장
-          // 판례 제목 지정으로 이동
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TitleSettingScreen(
-                  noteId: widget.noteId, selectedText: selectedText)));
-        },
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
+        onPressed: () async {
+          // selectedIndex 키워드 DB에 저장
+          await KeywordAPI.saveKeyword(selectedIndex);
+
+          if (mounted) {
+            // 판례 제목 지정으로 이동
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => TitleSettingScreen(
+                    noteId: widget.noteId,
+                    selectedText: selectedText,
+                    content: widget.extractedText)));
+          }
+        },
       ),
     );
   }
