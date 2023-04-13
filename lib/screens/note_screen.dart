@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/note_list_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class NoteScreen extends StatelessWidget {
   final int noteId; // id로 노트 내용 불러오기
@@ -22,7 +22,10 @@ class NoteScreen extends StatelessWidget {
           onPressed: () {
             // 내 암기장으로 이동
             Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const NoteListScreen()),
+                MaterialPageRoute(
+                    builder: (context) => NavigationBarWidget(
+                          selectedIndex: 0,
+                        )),
                 (route) => false);
           },
         ),
