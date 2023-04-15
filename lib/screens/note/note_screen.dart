@@ -17,12 +17,15 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   String content = "";
   String title = "";
+  bool isEditing = false;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     // 노트 불러오기
-    final response = NoteAPi.fetchNote(noteId: widget.noteId).then((result) => {
+    NoteAPI.fetchNote(noteId: widget.noteId).then((result) => {
           setState(
             () {
               title = result["title"];
@@ -40,68 +43,137 @@ class _NoteScreenState extends State<NoteScreen> {
           color: Colors.black,
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            // 내 암기장으로 이동
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => NavigationBarWidget(
-                          selectedIndex: 0,
-                        )),
-                (route) => false);
+            // 노트 수정 중이면 수정 취소
+            if (isEditing) {
+              setState(() {
+                isEditing = false;
+              });
+            } else {
+              // 노트 조회 중이면 내 암기장으로 이동
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NavigationBarWidget(
+                            selectedIndex: 0,
+                          )),
+                  (route) => false);
+            }
           },
         ),
-        actions: [
-          TextButton(child: Text("수정"), onPressed: () {
-            // 키워드 수정 화면으로 이동
-          },) ,
-          TextButton(
-            child: const Text("삭제"),
-            onPressed: () => showDialog(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  content: const Text("이 노트를 삭제할까요?"),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('취소'),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    TextButton(
-                      child: const Text('확인'),
-                      onPressed: () async {
-                        // 노트 삭제
-                        await NoteAPi.deleteNote(noteId: widget.noteId);
-
-                        if (mounted) {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => NavigationBarWidget(
-                                    selectedIndex: 0,
-                                  )),
-                                  (route) => false);
-                        }
-                      },
-                    ),
-                  ],
-                )),
-          )
-        ],
+        actions: getActionWidget(context),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            title,
-            style: CustomTheme.themeData.textTheme.titleMedium,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(
-            content,
-          )
-          // 실제로 사용할 위젯은 아래
-          // KeywordText(selectedText: selectedText)
-        ]),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: getBodyWidget(context)),
+        ),
       ),
     );
+  }
+
+  List<Widget> getBodyWidget(BuildContext context) {
+    return isEditing
+        ? [
+            TextField(
+              controller: titleController,
+              style: CustomTheme.themeData.textTheme.titleSmall,
+              decoration: const InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+                border: OutlineInputBorder(),
+                hintText: "판례 제목을 입력하세요",
+                hintStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            TextField(
+              maxLines: 100,
+              style: CustomTheme.themeData.textTheme.bodyMedium,
+              controller: contentController,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "판례를 입력하세요",
+                hintStyle: TextStyle(fontSize: 14),
+              ),
+            )
+          ]
+        : [
+            Text(
+              title,
+              style: CustomTheme.themeData.textTheme.titleMedium,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              content,
+            )
+          ];
+  }
+
+  List<Widget> getActionWidget(BuildContext context) {
+    final saveButton = TextButton(
+      child: const Text("저장"),
+      onPressed: () async {
+        final editedTitle = titleController.text;
+        final editedContent = contentController.text;
+        // 노트 수정 DB에 반영
+        await NoteAPI.editNote(
+            noteId: widget.noteId, content: editedContent, title: editedTitle);
+        setState(() {
+          title = editedTitle;
+          content = editedContent;
+          isEditing = false;
+        });
+      },
+    );
+
+    final editButton = TextButton(
+      child: const Text("수정"),
+      onPressed: () {
+        // 키워드 수정 모드
+        setState(() {
+          titleController.text = title;
+          contentController.text = content;
+          isEditing = true;
+        });
+      },
+    );
+
+    final deleteButton = TextButton(
+      child: const Text("삭제"),
+      onPressed: () => showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                content: const Text("이 노트를 삭제할까요?"),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('취소'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  TextButton(
+                    child: const Text('확인'),
+                    onPressed: () async {
+                      // 노트 삭제
+                      await NoteAPI.deleteNote(noteId: widget.noteId);
+
+                      if (mounted) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => NavigationBarWidget(
+                                      selectedIndex: 0,
+                                    )),
+                            (route) => false);
+                      }
+                    },
+                  ),
+                ],
+              )),
+    );
+
+    return isEditing ? [saveButton] : [editButton, deleteButton];
   }
 }

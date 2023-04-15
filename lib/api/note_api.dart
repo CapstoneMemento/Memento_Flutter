@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
 
-class NoteAPi {
+class NoteAPI {
   static final basicHeaders = {
     "Authorization": "Bearer ${Constants.accessToken}",
     "Content-Type": "application/json"
@@ -64,7 +64,7 @@ class NoteAPi {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(utf8.decode(response.bodyBytes));
+      return response;
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('노트를 수정하지 못했습니다.');

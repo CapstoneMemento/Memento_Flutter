@@ -4,7 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
-import 'package:memento_flutter/screens/note/note_edit_screen.dart';
+import 'package:memento_flutter/screens/ocr_note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
@@ -54,8 +54,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
     final editedText = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              NoteEditScreen(extractedText: widget.extractedText),
+          builder: (context) => NoteEditScreen(content: widget.extractedText),
         ));
 
     // 시용자가 텍스트를 수정했으면 갱신
@@ -119,7 +118,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         child: const Text("다음"),
         onPressed: () async {
           // 노트 저장하고 id 받아오기
-          int noteId = await NoteAPi.addNote(content: widget.extractedText);
+          int noteId = await NoteAPI.addNote(content: widget.extractedText);
           if (mounted) {
             Navigator.push(
                 context,

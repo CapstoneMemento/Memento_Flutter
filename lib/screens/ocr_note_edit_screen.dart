@@ -4,16 +4,17 @@ import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 
 class NoteEditScreen extends StatefulWidget {
-  final String extractedText;
+  final String content;
 
-  const NoteEditScreen({required this.extractedText});
+  const NoteEditScreen({required this.content});
 
   @override
   State<NoteEditScreen> createState() => _NoteEditScreenState();
 }
 
 class _NoteEditScreenState extends State<NoteEditScreen> {
-  late String editedText = widget.extractedText;
+  late String editedText = widget.content;
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Form(
           child: TextFormField(
-            initialValue: widget.extractedText,
+            initialValue: widget.content,
             maxLines: 100,
             keyboardType: TextInputType.multiline,
             decoration: const InputDecoration(

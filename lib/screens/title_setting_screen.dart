@@ -69,7 +69,7 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
         child: const Text("다음"),
         onPressed: () async {
           // noteId로 title 저장
-          await NoteAPi.editNote(
+          await NoteAPI.editNote(
               noteId: widget.noteId, content: widget.content, title: title);
 
           if (mounted) {
