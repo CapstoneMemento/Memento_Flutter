@@ -9,6 +9,7 @@ import 'package:memento_flutter/api/file_api.dart';
 import 'package:memento_flutter/config/constants.dart';
 import 'package:memento_flutter/screens/ocr_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/widgets/list_button.dart';
 import 'package:memento_flutter/widgets/loading.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -30,14 +31,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   String extractedText = ""; // 추출한 텍스트
   bool isLoading = false;
 
-  void _onTap(item) async {
+  void _onTap(itemId) async {
     WidgetsFlutterBinding.ensureInitialized();
     // 앨범에서 가져오기
-    if (item["id"] == "photo") {
+    if (itemId == "photo") {
       openImageScanner(context, source: ScannerFileSource.GALLERY);
     }
     // 사진 촬영하기
-    if (item["id"] == "camera") {
+    if (itemId == "camera") {
       openImageScanner(context, source: ScannerFileSource.CAMERA);
     }
     // modalBottomSheet 닫기
@@ -117,37 +118,12 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                       child: (Column(
                           children: modalItems
                               .map((item) => Flexible(
-                                    fit: FlexFit.tight,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _onTap(item);
-                                      },
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                          width: 1,
-                                          color: Colors.black26,
-                                        ))),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Row(
-                                            children: [
-                                              Icon(item["icon"]),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                item["text"],
-                                                style: CustomTheme.themeData
-                                                    .textTheme.bodyMedium,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ))
+                                  fit: FlexFit.tight,
+                                  child: ListButton(
+                                    icon: Icon(item["icon"]),
+                                    text: item["text"],
+                                    onTap: () => _onTap(item["id"]),
+                                  )))
                               .toList())),
                     );
                   });

@@ -3,6 +3,7 @@ import 'package:memento_flutter/api/note_api.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
+import 'package:memento_flutter/widgets/list_button.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class NoteScreen extends StatefulWidget {
@@ -138,66 +139,14 @@ class _NoteScreenState extends State<NoteScreen> {
         builder: (BuildContext context) => AlertDialog(
           contentPadding: EdgeInsets.zero,
           content: Column(mainAxisSize: MainAxisSize.min, children: [
-            GestureDetector(
-              onTap: () async {
-                // 키워드 수정 모드
-                setState(() {
-                  titleController.text = title;
-                  contentController.text = content;
-                  isEditing = true;
-                });
-                // Dialog 닫기
-                Navigator.of(context).pop();
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                    width: 1,
-                    color: Colors.black26,
-                  )),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.notes),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "노트 수정",
-                        style: CustomTheme.themeData.textTheme.bodyMedium,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                  width: 1,
-                  color: Colors.black26,
-                )),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    const Icon(Icons.abc),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "키워드 수정",
-                      style: CustomTheme.themeData.textTheme.bodyMedium,
-                    )
-                  ],
-                ),
-              ),
-            ),
+            ListButton(
+                icon: const Icon(Icons.notes),
+                text: "노트 수정",
+                onTap: onTapEditNote),
+            ListButton(
+                icon: const Icon(Icons.abc),
+                text: "키워드 수정",
+                onTap: onTapEditKeyword)
           ]),
         ),
       ),
@@ -235,5 +184,20 @@ class _NoteScreenState extends State<NoteScreen> {
     );
 
     return isEditing ? [saveButton] : [editButton, deleteButton];
+  }
+
+  void onTapEditNote() async {
+    // 노트 수정 모드
+    setState(() {
+      titleController.text = title;
+      contentController.text = content;
+      isEditing = true;
+    });
+    // Dialog 닫기
+    Navigator.of(context).pop();
+  }
+
+  void onTapEditKeyword() async {
+    // 키워드 수정으로 이동
   }
 }
