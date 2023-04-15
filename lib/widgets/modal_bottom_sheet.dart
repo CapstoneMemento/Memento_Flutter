@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 import 'package:document_scanner_flutter/configs/configs.dart';
 import 'package:document_scanner_flutter/document_scanner_flutter.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/file_api.dart';
 import 'package:memento_flutter/config/constants.dart';
@@ -30,10 +29,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   late File imageFile; // 로컬 이미지 Path
   String extractedText = ""; // 추출한 텍스트
   bool isLoading = false;
-
-  /* Firebase storage 초기화 */
-  final storageRef = FirebaseStorage.instance.ref();
-  late final scannedImageRef = storageRef.child("scannedImage.jpg");
 
   void _onTap(item) async {
     WidgetsFlutterBinding.ensureInitialized();
