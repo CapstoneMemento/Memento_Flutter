@@ -46,7 +46,6 @@ dependencies:
   extended_image: ^6.4.1
   percent_indicator: ^4.2.3
   flutter_svg: ^1.1.6
-  animated_svg: ^1.1.2
 
 dev_dependencies:
   flutter_test:

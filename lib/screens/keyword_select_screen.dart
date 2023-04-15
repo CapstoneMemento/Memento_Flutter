@@ -4,7 +4,7 @@ import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
-import 'package:memento_flutter/widgets/close_icon_button.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class KeywordSelectScreen extends StatefulWidget {
   final int noteId;
@@ -18,6 +18,7 @@ class KeywordSelectScreen extends StatefulWidget {
 }
 
 class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
+  int prevStartIndex = -1;
   // 선택한 문자의 인덱스 {start, end, noteId}
   List<Map<String, dynamic>> selectedIndex = [];
   // 선택한 문자 {text, isKeyword}
@@ -62,14 +63,21 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
   /* 사용자가 키워드를 선택하면 index 저장 */
   void _onSelectionChanged(selection, cause) {
-    print(selection);
-    print(cause);
+    final startIndex = selection.baseOffset;
+    final endIndex = selection.extentOffset;
+
+    // 드래그 중 화면 새로고침 횟수 줄이기
+    if (prevStartIndex != startIndex) {
+      setState(() {});
+    }
+    prevStartIndex = startIndex;
+
     if (cause == SelectionChangedCause.longPress ||
         cause == SelectionChangedCause.drag) {
-      saveIndex(selection.baseOffset, selection.extentOffset);
+      print('startIndex: $startIndex, endIndex: $endIndex');
+      saveIndex(startIndex, endIndex);
       // 오름차순 정렬 (사용자가 순서대로 밑줄을 긋지 않을 경우에 대비)
       sortIndex(selectedIndex);
-      setState(() {});
     }
   }
 
@@ -85,7 +93,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     for (var i = 0; i < selectedIndex.length; i++) {
       final start = selectedIndex[i]["first"]; // 시작 인덱스
       final end = selectedIndex[i]["last"]; // 끝 인덱스
-      final pressAgain = newStartIndex >= start && newEndIndex < end;
+      final pressAgain = newStartIndex >= start && newEndIndex <= end;
       final isDragging = newStartIndex == start;
       final include = newStartIndex < start && newEndIndex > start;
 
@@ -137,7 +145,19 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
       appBar: MainAppBar(
         leading: const BackIconButton(),
         actions: [
-          CloseIconButton(),
+          IconButton(
+            icon: const Icon(Icons.close),
+            color: Colors.black,
+            onPressed: () {
+              // 미리 저장한 노트 삭제
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NavigationBarWidget(
+                            selectedIndex: 0,
+                          )),
+                  (route) => false);
+            },
+          ),
         ],
       ),
       body: Padding(
@@ -155,14 +175,14 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           ),
           TextSelectionTheme(
             data: TextSelectionThemeData(
-              selectionColor: Colors.yellow.withOpacity(0.5),
+              selectionColor: Colors.blue.withOpacity(0.5),
             ),
             child: SelectableText.rich(
               TextSpan(children: getSpanList()),
               toolbarOptions: const ToolbarOptions(selectAll: false),
               onSelectionChanged: _onSelectionChanged,
             ),
-          )
+          ),
         ]),
       ),
       floatingActionButton: FloatingActionButton(

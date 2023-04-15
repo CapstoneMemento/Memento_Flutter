@@ -10,7 +10,7 @@ import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 class NavigationBarWidget extends StatefulWidget {
   int selectedIndex;
 
-  NavigationBarWidget({this.selectedIndex = 2});
+  NavigationBarWidget({this.selectedIndex = 0});
 
   @override
   State<NavigationBarWidget> createState() => _NavigationBarWidgetState();

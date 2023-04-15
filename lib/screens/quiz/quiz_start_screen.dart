@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memento_flutter/screens/quiz/quiz_game_screen.dart';
-import 'package:memento_flutter/screens/quiz/quiz_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class QuizStartScreen extends StatelessWidget {
   QuizStartScreen();
 
   final Widget logoBasic = SvgPicture.asset('assets/images/logo_basic.svg',
-      width: 150, semanticsLabel: '메멘토 캐릭터 로고');
+      width: 100, semanticsLabel: '메멘토 캐릭터 로고');
 
   @override
   Widget build(BuildContext context) {
