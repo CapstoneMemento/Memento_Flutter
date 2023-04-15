@@ -133,14 +133,74 @@ class _NoteScreenState extends State<NoteScreen> {
 
     final editButton = TextButton(
       child: const Text("수정"),
-      onPressed: () {
-        // 키워드 수정 모드
-        setState(() {
-          titleController.text = title;
-          contentController.text = content;
-          isEditing = true;
-        });
-      },
+      onPressed: () => showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            GestureDetector(
+              onTap: () async {
+                // 키워드 수정 모드
+                setState(() {
+                  titleController.text = title;
+                  contentController.text = content;
+                  isEditing = true;
+                });
+                // Dialog 닫기
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                    width: 1,
+                    color: Colors.black26,
+                  )),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.notes),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "노트 수정",
+                        style: CustomTheme.themeData.textTheme.bodyMedium,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                  width: 1,
+                  color: Colors.black26,
+                )),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    const Icon(Icons.abc),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "키워드 수정",
+                      style: CustomTheme.themeData.textTheme.bodyMedium,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ]),
+        ),
+      ),
     );
 
     final deleteButton = TextButton(
