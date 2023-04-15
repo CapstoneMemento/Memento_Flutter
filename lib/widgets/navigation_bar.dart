@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:memento_flutter/screens/note_list_screen.dart';
+import 'package:memento_flutter/screens/note/note_list_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_start_screen.dart';
 import 'package:memento_flutter/screens/search/search_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
