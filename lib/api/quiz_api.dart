@@ -77,9 +77,9 @@ class QuizAPI {
     return "";
   }
 
-  void setAnswer({required isAnswer}) {
+  void setAnswer({required isUserAnswer}) {
     answerList[currentQuizIndex]["keywords"][currentKeywordIndex - 1]
-        ["isAnswer"] = isAnswer;
+        ["isUserAnswer"] = isUserAnswer;
   }
 
   List getAnswerList() {

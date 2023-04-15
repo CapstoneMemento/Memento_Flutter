@@ -42,24 +42,37 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
 
   Timer setMementoTimer() {
     return Timer.periodic(const Duration(seconds: 5), (timer) {
-      quizAPI.setAnswer(isAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
-      showMementoWord(); // textField와 mementoWord 표시
+      quizAPI.setAnswer(isUserAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
+      mementoWord = answer;
+      delayMemento(isUserAnswer: false); // textField와 mementoWord 표시
       getNextQuiz();
     });
   }
 
-  void showMementoWord() {
-    mementoWord = answer;
-    // 메멘토 TextField에 정답 1초 동안 표시
-    mementoController.text = answer;
-    mementoImage = SvgPicture.asset('assets/images/logo_happy.svg',
-        semanticsLabel: '기뻐하는 메멘토 캐릭터 로고');
-    Future.delayed(const Duration(seconds: 1), () {
-      mementoController.text = ". . .";
-      mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
-          semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
-      setState(() {});
-    });
+  void delayMemento({required bool isUserAnswer}) {
+    // 사용자가 정답이면
+    // 1초 동안 고민하는 메멘토 이미지 표시
+    if (isUserAnswer) {
+      mementoImage = SvgPicture.asset('assets/images/logo_think.svg',
+          semanticsLabel: '고민하는 메멘토 캐릭터 로고');
+      Future.delayed(const Duration(seconds: 1), () {
+        mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
+            semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
+        setState(() {});
+      });
+    } else {
+      // 1초 동안 기뻐하는 메멘토 이미지 보이기
+      // 1초 동안 TextField에 메멘토 정답 표시
+      mementoController.text = answer;
+      mementoImage = SvgPicture.asset('assets/images/logo_happy.svg',
+          semanticsLabel: '기뻐하는 메멘토 캐릭터 로고');
+      Future.delayed(const Duration(seconds: 1), () {
+        mementoController.text = ". . .";
+        mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
+            semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
+        setState(() {});
+      });
+    }
   }
 
   void getNextQuiz() {
@@ -92,9 +105,10 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
 
   void _onSubmitted(value) {
     if (value == answer) {
+      delayMemento(isUserAnswer: true);
       inputBorderStyle = Border.all(color: CustomTheme.themeData.primaryColor);
       userWord = value; // 사용자 키워드
-      quizAPI.setAnswer(isAnswer: true); // 사용자 정답 처리
+      quizAPI.setAnswer(isUserAnswer: true); // 사용자 정답 처리
       userController.clear();
       getNextQuiz();
       timerReset(); // 시간 초기화
