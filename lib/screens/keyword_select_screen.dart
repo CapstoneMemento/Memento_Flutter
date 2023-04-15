@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/keyword_api.dart';
+import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
@@ -18,7 +19,7 @@ class KeywordSelectScreen extends StatefulWidget {
 }
 
 class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
-  int prevStartIndex = -1;
+  int prevStartIndex = -1; // 이전 키워드 시작 인덱스
   // 선택한 문자의 인덱스 {start, end, noteId}
   List<Map<String, dynamic>> selectedIndex = [];
   // 선택한 문자 {text, isKeyword}
@@ -147,14 +148,18 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           IconButton(
             icon: const Icon(Icons.close),
             color: Colors.black,
-            onPressed: () {
+            onPressed: () async {
               // 미리 저장한 노트 삭제
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => NavigationBarWidget(
-                            selectedIndex: 0,
-                          )),
-                  (route) => false);
+              await NoteAPI.deleteNote(noteId: widget.noteId);
+
+              if (mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => NavigationBarWidget(
+                              selectedIndex: 0,
+                            )),
+                    (route) => false);
+              }
             },
           ),
         ],
