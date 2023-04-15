@@ -10,14 +10,14 @@ class SearchScreen extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(
-          height: 32,
+          height: 16,
         ),
         Image.asset(
-          "assets/images/logo.png",
+          "assets/images/logo_no_back.png",
           width: 120,
         ),
         const SizedBox(
-          height: 32,
+          height: 16,
         ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
