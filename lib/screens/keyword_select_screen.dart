@@ -74,7 +74,6 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
     if (cause == SelectionChangedCause.longPress ||
         cause == SelectionChangedCause.drag) {
-      print('startIndex: $startIndex, endIndex: $endIndex');
       saveIndex(startIndex, endIndex);
       // 오름차순 정렬 (사용자가 순서대로 밑줄을 긋지 않을 경우에 대비)
       sortIndex(selectedIndex);
@@ -175,7 +174,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           ),
           TextSelectionTheme(
             data: TextSelectionThemeData(
-              selectionColor: Colors.blue.withOpacity(0.5),
+              selectionColor: Colors.yellow.withOpacity(0.5),
             ),
             child: SelectableText.rich(
               TextSpan(children: getSpanList()),
