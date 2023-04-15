@@ -16,10 +16,10 @@ class QuizGameScreen extends StatefulWidget {
 }
 
 class _QuizGameScreenState extends State<QuizGameScreen> {
-  final Widget logoDown = SvgPicture.asset('assets/images/logo_down.svg',
+  Widget mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
       semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
-  String mementoWord = "";
-  String userWord = "";
+  String mementoWord = ""; // 메멘토가 최근에 획득한 키워드
+  String userWord = ""; // 사용자가 최근에 획득한 키워드
   String answer = "";
   String title = "";
   Timer? _timer;
@@ -43,8 +43,22 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   Timer setMementoTimer() {
     return Timer.periodic(const Duration(seconds: 5), (timer) {
       quizAPI.setAnswer(isAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
-      mementoWord = answer; // 메멘토 키워드 획득 (키워드 표시)
+      showMementoWord(); // textField와 mementoWord 표시
       getNextQuiz();
+    });
+  }
+
+  void showMementoWord() {
+    mementoWord = answer;
+    // 메멘토 TextField에 정답 1초 동안 표시
+    mementoController.text = answer;
+    mementoImage = SvgPicture.asset('assets/images/logo_happy.svg',
+        semanticsLabel: '기뻐하는 메멘토 캐릭터 로고');
+    Future.delayed(const Duration(seconds: 1), () {
+      mementoController.text = ". . .";
+      mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
+          semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
+      setState(() {});
     });
   }
 
@@ -114,7 +128,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(children: [
-                  logoDown,
+                  mementoImage,
                   const SizedBox(
                     width: 20,
                   ),
