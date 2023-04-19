@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/keyword_api.dart';
 import 'package:memento_flutter/api/note_api.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
+import 'package:memento_flutter/widgets/keyword_text.dart';
 import 'package:memento_flutter/widgets/list_button.dart';
+import 'package:memento_flutter/widgets/loading.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class NoteScreen extends StatefulWidget {
@@ -16,9 +19,11 @@ class NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<NoteScreen> {
+  late List selectedText;
   String content = "";
   String title = "";
   bool isEditing = false;
+  bool isLoading = true;
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
@@ -27,50 +32,55 @@ class _NoteScreenState extends State<NoteScreen> {
     super.initState();
     // 노트 불러오기
     NoteAPI.fetchNote(noteId: widget.noteId).then((result) => {
-          setState(
-            () {
-              title = result["title"];
-              content = result["content"];
-            },
-          )
+          setState(() {
+            title = result["title"];
+            content = result["content"];
+          })
+        });
+    KeywordAPI.getKeywordList(widget.noteId).then((result) => {
+          setState(() {
+            selectedText = result;
+            isLoading = false;
+          })
         });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        leading: IconButton(
-          color: Colors.black,
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            // 노트 수정 중이면 수정 취소
-            if (isEditing) {
-              setState(() {
-                isEditing = false;
-              });
-            } else {
-              // 노트 조회 중이면 내 암기장으로 이동
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => NavigationBarWidget(
-                            selectedIndex: 0,
-                          )),
-                  (route) => false);
-            }
-          },
+        appBar: BaseAppBar(
+          leading: IconButton(
+            color: Colors.black,
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              // 노트 수정 중이면 수정 취소
+              if (isEditing) {
+                setState(() {
+                  isEditing = false;
+                });
+              } else {
+                // 노트 조회 중이면 내 암기장으로 이동
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => NavigationBarWidget(
+                              selectedIndex: 0,
+                            )),
+                    (route) => false);
+              }
+            },
+          ),
+          actions: getActionWidget(context),
         ),
-        actions: getActionWidget(context),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: getBodyWidget(context)),
-        ),
-      ),
-    );
+        body: isLoading
+            ? Loading()
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: getBodyWidget(context)),
+                ),
+              ));
   }
 
   List<Widget> getBodyWidget(BuildContext context) {
@@ -109,9 +119,7 @@ class _NoteScreenState extends State<NoteScreen> {
             const SizedBox(
               height: 16,
             ),
-            Text(
-              content,
-            )
+            KeywordText(selectedText: selectedText)
           ];
   }
 

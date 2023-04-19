@@ -10,7 +10,7 @@ import 'package:memento_flutter/widgets/keyword_text.dart';
 class TitleSettingScreen extends StatefulWidget {
   final int noteId;
   final String content;
-  final List<Map<String, dynamic>> selectedText;
+  final List selectedText;
 
   const TitleSettingScreen(
       {required this.noteId,

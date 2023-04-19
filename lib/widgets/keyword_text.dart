@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class KeywordText extends StatelessWidget {
-  final List<Map<String, dynamic>> selectedText;
+  final List selectedText;
 
   KeywordText({required this.selectedText});
 
