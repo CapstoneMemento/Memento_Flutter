@@ -16,14 +16,14 @@ class KeywordSelectScreen extends StatefulWidget {
   KeywordSelectScreen(
       {required this.noteId,
       required this.extractedText,
-      this.selectedIndex = const []});
+      this.selectedIndex = const [-1]});
 
   @override
   State<KeywordSelectScreen> createState() => _KeywordSelectScreenState();
 }
 
 class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
-  bool isNewNote = true;
+  bool isNewNote = false;
   int prevStartIndex = -1; // 이전 키워드 시작 인덱스
   // 선택한 문자의 인덱스 {first, last, noteId}
   List selectedIndex = [];
@@ -35,10 +35,11 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
   @override
   void initState() {
-    selectedIndex = widget.selectedIndex;
-    // 키워드를 수정하는 경우 inNewNote = false
-    if (selectedIndex != []) {
-      isNewNote = false;
+    // 새 노트에서 키워드를 지정하는 경우 isNewNote = true
+    if (widget.selectedIndex == [-1]) {
+      isNewNote = true;
+    } else {
+      selectedIndex = widget.selectedIndex;
     }
   }
 
