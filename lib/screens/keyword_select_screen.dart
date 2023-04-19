@@ -23,13 +23,14 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   // 선택한 문자의 인덱스 {start, end, noteId}
   List<Map<String, dynamic>> selectedIndex = [];
   // 선택한 문자 {text, isKeyword}
-  List<Map<String, dynamic>> selectedText = [];
+  List selectedText = [];
   // 선택한 문자 TextStyle
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
 
   List<InlineSpan> getSpanList() {
-    sliceText(widget.extractedText, selectedIndex);
+    selectedText = KeywordAPI.sliceText(
+        totalText: widget.extractedText, selectedIndex: selectedIndex);
 
     final result = selectedText
         .map((e) => TextSpan(
@@ -40,48 +41,29 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     return result;
   }
 
-  /* 선택한 문자와 그러지 않은 문자를 나눠서 selectedText에 저장 */
-  void sliceText(String totalText, List<Map<String, dynamic>> selectedIndex) {
-    List<Map<String, dynamic>> result = []; // 선택한 문자 {text, isKeyword}
-    int prevEndIndex = 0; // 이전 end index
-
-    for (final index in selectedIndex) {
-      final start = index["first"];
-      final end = index["last"];
-
-      result.add({
-        "text": totalText.substring(prevEndIndex, start),
-        "isKeyword": false
-      });
-      result.add({"text": totalText.substring(start, end), "isKeyword": true});
-      prevEndIndex = end; // 이전 end index 저장
-    }
-    // 마지막 문자 저장
-    result.add({"text": totalText.substring(prevEndIndex), "isKeyword": false});
-
-    selectedText = result;
-  }
-
   /* 사용자가 키워드를 선택하면 index 저장 */
   void _onSelectionChanged(selection, cause) {
     final startIndex = selection.baseOffset;
     final endIndex = selection.extentOffset;
 
+    if (cause == SelectionChangedCause.longPress ||
+        cause == SelectionChangedCause.drag) {
+      saveIndex(newStartIndex: startIndex, newEndIndex: endIndex, cause: cause);
+      // 오름차순 정렬 (사용자가 순서대로 밑줄을 긋지 않을 경우에 대비)
+      sortIndex(index: selectedIndex);
+    }
+
     // 드래그 중 화면 새로고침 횟수 줄이기
-    if (prevStartIndex != startIndex) {
+    if (prevStartIndex != startIndex || cause == SelectionChangedCause.tap) {
       setState(() {});
     }
     prevStartIndex = startIndex;
-
-    if (cause == SelectionChangedCause.longPress ||
-        cause == SelectionChangedCause.drag) {
-      saveIndex(startIndex, endIndex);
-      // 오름차순 정렬 (사용자가 순서대로 밑줄을 긋지 않을 경우에 대비)
-      sortIndex(selectedIndex);
-    }
   }
 
-  void saveIndex(int newStartIndex, int newEndIndex) {
+  void saveIndex(
+      {required int newStartIndex,
+      required int newEndIndex,
+      required SelectionChangedCause cause}) {
     var isSaveNew = true; // 인덱스 새로 저장
     final isReverse = newStartIndex >= newEndIndex;
 
@@ -93,7 +75,9 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     for (var i = 0; i < selectedIndex.length; i++) {
       final start = selectedIndex[i]["first"]; // 시작 인덱스
       final end = selectedIndex[i]["last"]; // 끝 인덱스
-      final pressAgain = newStartIndex >= start && newEndIndex <= end;
+      final pressAgain = (cause == SelectionChangedCause.longPress) &&
+          newStartIndex >= start &&
+          newEndIndex <= end;
       final isDragging = newStartIndex == start;
       final include = newStartIndex < start && newEndIndex > start;
 
@@ -130,7 +114,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   }
 
   /* 오름차순 정렬 */
-  void sortIndex(List<Map<String, dynamic>> index) {
+  void sortIndex({required List<Map<String, dynamic>> index}) {
     selectedIndex.sort((a, b) {
       if (a["first"] == b["first"]) {
         return a["last"].compareTo(b["last"]);
