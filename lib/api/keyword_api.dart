@@ -21,7 +21,7 @@ class KeywordAPI {
     }
   }
 
-  static Future<List<dynamic>> getKeywordList(int noteId) async {
+  static Future<List<dynamic>> getIndexList(int noteId) async {
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/$noteId'),
       headers: {
@@ -30,14 +30,17 @@ class KeywordAPI {
     );
 
     if (response.statusCode == 200) {
-      final selectedIndex = jsonDecode(utf8.decode(response.bodyBytes));
-      final note = await NoteAPI.fetchNote(noteId: noteId);
-      return sliceText(
-          totalText: note["content"], selectedIndex: selectedIndex);
+      return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('키워드를 가져오지 못했습니다.');
     }
+  }
+
+  static Future<List<dynamic>> getKeywordList(int noteId) async {
+    final indexList = await getIndexList(noteId);
+    final note = await NoteAPI.fetchNote(noteId: noteId);
+    return sliceText(totalText: note["content"], selectedIndex: indexList);
   }
 
   /* 선택한 문자와 그러지 않은 문자를 나눠서 selectedText에 저장 */
