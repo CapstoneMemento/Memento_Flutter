@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/keyword_api.dart';
 import 'package:memento_flutter/api/note_api.dart';
+import 'package:memento_flutter/screens/note/note_screen.dart';
 import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
@@ -9,24 +10,37 @@ import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class KeywordSelectScreen extends StatefulWidget {
   final int noteId;
-  final String extractedText;
+  final String extractedText; // 노트 본문
+  List selectedIndex; // 키워드 선택 인덱스
 
-  const KeywordSelectScreen(
-      {required this.noteId, required this.extractedText});
+  KeywordSelectScreen(
+      {required this.noteId,
+      required this.extractedText,
+      this.selectedIndex = const []});
 
   @override
   State<KeywordSelectScreen> createState() => _KeywordSelectScreenState();
 }
 
 class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
+  bool isNewNote = true;
   int prevStartIndex = -1; // 이전 키워드 시작 인덱스
-  // 선택한 문자의 인덱스 {start, end, noteId}
-  List<Map<String, dynamic>> selectedIndex = [];
+  // 선택한 문자의 인덱스 {first, last, noteId}
+  List selectedIndex = [];
   // 선택한 문자 {text, isKeyword}
   List selectedText = [];
   // 선택한 문자 TextStyle
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
+
+  @override
+  void initState() {
+    selectedIndex = widget.selectedIndex;
+    // 키워드를 수정하는 경우 inNewNote = false
+    if (selectedIndex != []) {
+      isNewNote = false;
+    }
+  }
 
   List<InlineSpan> getSpanList() {
     selectedText = KeywordAPI.sliceText(
@@ -114,7 +128,7 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   }
 
   /* 오름차순 정렬 */
-  void sortIndex({required List<Map<String, dynamic>> index}) {
+  void sortIndex({required List index}) {
     selectedIndex.sort((a, b) {
       if (a["first"] == b["first"]) {
         return a["last"].compareTo(b["last"]);
@@ -128,25 +142,49 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     return Scaffold(
       appBar: MainAppBar(
         leading: const BackIconButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            color: Colors.black,
-            onPressed: () async {
-              // 미리 저장한 노트 삭제
-              await NoteAPI.deleteNote(noteId: widget.noteId);
+        actions: isNewNote
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  color: Colors.black,
+                  onPressed: () async {
+                    // 미리 저장한 노트 삭제
+                    await NoteAPI.deleteNote(noteId: widget.noteId);
 
-              if (mounted) {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => NavigationBarWidget(
-                              selectedIndex: 0,
-                            )),
-                    (route) => false);
-              }
-            },
-          ),
-        ],
+                    if (mounted) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => NavigationBarWidget(
+                                    selectedIndex: 0,
+                                  )),
+                          (route) => false);
+                    }
+                  },
+                ),
+              ]
+            : [
+                TextButton(
+                    onPressed: () async {
+                      // 키워드 수정
+                      await KeywordAPI.editKeyword(indexList: selectedIndex);
+
+                      if (mounted) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => NavigationBarWidget(
+                                      selectedIndex: 0,
+                                    )),
+                            (route) => false);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => NoteScreen(
+                                    noteId: widget.noteId,
+                                  )),
+                        );
+                      }
+                    },
+                    child: const Text("저장"))
+              ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -173,23 +211,25 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
           ),
         ]),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: CustomTheme.themeData.primaryColor,
-        child: const Text("다음"),
-        onPressed: () async {
-          // selectedIndex 키워드 DB에 저장
-          await KeywordAPI.saveKeyword(selectedIndex);
+      floatingActionButton: isNewNote
+          ? FloatingActionButton(
+              backgroundColor: CustomTheme.themeData.primaryColor,
+              child: const Text("다음"),
+              onPressed: () async {
+                // selectedIndex 키워드 DB에 저장
+                await KeywordAPI.saveKeyword(selectedIndex);
 
-          if (mounted) {
-            // 판례 제목 지정으로 이동
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => TitleSettingScreen(
-                    noteId: widget.noteId,
-                    selectedText: selectedText,
-                    content: widget.extractedText)));
-          }
-        },
-      ),
+                if (mounted) {
+                  // 판례 제목 지정으로 이동
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => TitleSettingScreen(
+                          noteId: widget.noteId,
+                          selectedText: selectedText,
+                          content: widget.extractedText)));
+                }
+              },
+            )
+          : Container(),
     );
   }
 }

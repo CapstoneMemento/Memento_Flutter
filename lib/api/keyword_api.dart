@@ -21,6 +21,23 @@ class KeywordAPI {
     }
   }
 
+  static Future editKeyword({required List indexList}) async {
+    final response =
+        await http.post(Uri.parse('${Constants.baseURL}/keyword/edit'),
+            headers: {
+              "Authorization": "Bearer ${Constants.accessToken}",
+              "Content-Type": "application/json"
+            },
+            body: json.encode(indexList));
+
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      print('Error code: ${response.statusCode}');
+      throw Exception('키워드를 가져오지 못했습니다.');
+    }
+  }
+
   static Future<List<dynamic>> getIndexList(int noteId) async {
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/$noteId'),
