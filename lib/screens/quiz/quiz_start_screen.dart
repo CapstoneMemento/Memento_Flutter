@@ -13,8 +13,6 @@ class QuizStartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.of(context)
-        //     .push(MaterialPageRoute(builder: (context) => QuizGameScreen()));
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const QuizGameScreen()));
       },
@@ -29,6 +27,21 @@ class QuizStartScreen extends StatelessWidget {
             Text(
               "저랑 암기 상태를 확인해봐요",
               style: CustomTheme.themeData.textTheme.titleSmall,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "메멘토를 상대로 퀴즈가 진행됩니다.",
+              style: CustomTheme.themeData.textTheme.bodySmall,
+            ),
+            Text(
+              "판례 제목이 주어지면, 관련 키워드를",
+              style: CustomTheme.themeData.textTheme.bodySmall,
+            ),
+            Text(
+              "문장 순서대로 입력하세요.",
+              style: CustomTheme.themeData.textTheme.bodySmall,
             ),
             const SizedBox(
               height: 100,

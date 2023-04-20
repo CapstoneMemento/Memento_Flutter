@@ -4,16 +4,16 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screens/keyword_select_screen.dart';
-import 'package:memento_flutter/screens/ocr_note_edit_screen.dart';
+import 'package:memento_flutter/screens/ocr/ocr_note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
 class OCRResultScreen extends StatefulWidget {
   File imageFile; // 스캔한 이미지
-  String extractedText; // 추출한 텍스트
+  String content; // 추출한 텍스트
 
-  OCRResultScreen({required this.imageFile, required this.extractedText});
+  OCRResultScreen({required this.imageFile, required this.content});
 
   @override
   State<OCRResultScreen> createState() => _OCRResultScreenState();
@@ -39,7 +39,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
   @override
   void initState() {
     super.initState();
-    final result = getFileWidthAndHeight(widget.imageFile).then((result) => {
+    getFileWidthAndHeight(widget.imageFile).then((result) => {
           setState(
             () {
               imageWidth = result["width"];
@@ -54,13 +54,13 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
     final editedText = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NoteEditScreen(content: widget.extractedText),
+          builder: (context) => NoteEditScreen(content: widget.content),
         ));
 
     // 시용자가 텍스트를 수정했으면 갱신
     if (editedText != null) {
       setState(() {
-        widget.extractedText = editedText;
+        widget.content = editedText;
       });
     }
   }
@@ -107,7 +107,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
                 onTap: goEditText,
-                child: Text(widget.extractedText),
+                child: Text(widget.content),
               ),
             ),
           ),
@@ -118,14 +118,14 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         child: const Text("다음"),
         onPressed: () async {
           // 노트 저장하고 id 받아오기
-          int noteId = await NoteAPI.addNote(content: widget.extractedText);
+          int noteId = await NoteAPI.addNote(content: widget.content);
           if (mounted) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => KeywordSelectScreen(
                           noteId: noteId,
-                          extractedText: widget.extractedText,
+                          content: widget.content,
                         )));
           }
         },

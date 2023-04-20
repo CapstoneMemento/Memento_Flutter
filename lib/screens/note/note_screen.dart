@@ -213,9 +213,9 @@ class _NoteScreenState extends State<NoteScreen> {
     if (mounted) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => KeywordSelectScreen(
-              noteId: widget.noteId,
-              extractedText: content,
-              selectedIndex: selectedIndex)));
+                noteId: widget.noteId,
+                content: content,
+              )));
     }
   }
 }

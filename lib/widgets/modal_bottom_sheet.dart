@@ -7,7 +7,7 @@ import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/file_api.dart';
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/screens/ocr_result_screen.dart';
+import 'package:memento_flutter/screens/ocr/ocr_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/list_button.dart';
 import 'package:memento_flutter/widgets/loading.dart';
@@ -99,7 +99,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   void navigateToOCRResult() {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) =>
-          OCRResultScreen(imageFile: imageFile, extractedText: extractedText),
+          OCRResultScreen(imageFile: imageFile, content: extractedText),
     ));
   }
 
