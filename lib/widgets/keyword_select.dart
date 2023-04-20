@@ -106,7 +106,7 @@ class _KeywordSelectState extends State<KeywordSelect> {
 
   List<InlineSpan> getSpanList() {
     final selectedText = KeywordAPI.sliceText(
-        totalText: widget.content, selectedIndex: widget.selectedIndex);
+        content: widget.content, selectedIndex: widget.selectedIndex);
 
     final result = selectedText
         .map((e) => TextSpan(

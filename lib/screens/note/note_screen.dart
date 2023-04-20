@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/keyword_api.dart';
 import 'package:memento_flutter/api/note_api.dart';
-import 'package:memento_flutter/screens/keyword_select_screen.dart';
+import 'package:memento_flutter/screens/note/keyword_edit_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
@@ -206,16 +206,14 @@ class _NoteScreenState extends State<NoteScreen> {
     Navigator.of(context).pop();
   }
 
-  void onTapEditKeyword() async {
+  void onTapEditKeyword() {
     // 키워드 수정으로 이동
-    final selectedIndex = await KeywordAPI.getIndexList(widget.noteId);
-
-    if (mounted) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => KeywordSelectScreen(
-                noteId: widget.noteId,
-                content: content,
-              )));
-    }
+    final selectedIndex = KeywordAPI.getIndexList(widget.noteId)
+        .then((result) => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => KeywordEditScreen(
+                  noteId: widget.noteId,
+                  content: content,
+                  selectedIndex: result,
+                ))));
   }
 }

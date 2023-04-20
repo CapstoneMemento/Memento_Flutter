@@ -4,7 +4,6 @@ import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screens/title_setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
-import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/keyword_select.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
@@ -30,22 +29,32 @@ class KeywordSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MainAppBar(leading: const BackIconButton(), actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            color: Colors.black,
-            onPressed: () {
-              // 미리 저장한 노트 삭제
-              NoteAPI.deleteNote(noteId: noteId)
-                  .then((_) => Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => NavigationBarWidget(
-                                selectedIndex: 0,
-                              )),
-                      (route) => false));
-            },
-          ),
-        ]),
+        appBar: MainAppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              color: Colors.black,
+              onPressed: () {
+                // 미리 저장한 노트 삭제
+                NoteAPI.deleteNote(noteId: noteId)
+                    .then((_) => Navigator.of(context).pop());
+              },
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.close),
+                color: Colors.black,
+                onPressed: () {
+                  // 미리 저장한 노트 삭제
+                  NoteAPI.deleteNote(noteId: noteId)
+                      .then((_) => Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => NavigationBarWidget(
+                                    selectedIndex: 0,
+                                  )),
+                          (route) => false));
+                },
+              ),
+            ]),
         body: KeywordSelect(
             selectedIndex: selectedIndex, noteId: noteId, content: content),
         floatingActionButton: FloatingActionButton(
@@ -57,7 +66,8 @@ class KeywordSelectScreen extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TitleSettingScreen(
                         noteId: noteId,
-                        selectedText: selectedText,
+                        selectedText: KeywordAPI.sliceText(
+                            content: content, selectedIndex: selectedIndex),
                         content: content))));
           },
         ));
