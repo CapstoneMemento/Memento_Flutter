@@ -9,7 +9,7 @@ import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class QuizGameScreen extends StatefulWidget {
-  const QuizGameScreen({super.key});
+  const QuizGameScreen();
 
   @override
   State<QuizGameScreen> createState() => _QuizGameScreenState();
@@ -22,7 +22,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   String userWord = ""; // 사용자가 최근에 획득한 키워드
   String answer = "";
   String title = "";
-  Timer? _timer;
+  late Timer _timer;
   QuizAPI quizAPI = QuizAPI();
 
   final TextEditingController mementoController = TextEditingController();
@@ -33,11 +33,13 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   @override
   void initState() {
     super.initState();
-    quizAPI.fetchQuizList();
     mementoController.text = '. . .'; // Set the initial value
-    answer = quizAPI.getKeyword(); // 첫 번째 정답
-    title = quizAPI.getTitle(); // 첫 번째 제목
-    _timer = setMementoTimer();
+    quizAPI.fetchQuizList().then((_) {
+      answer = quizAPI.getKeyword(); // 첫 번째 정답
+      title = quizAPI.getTitle(); // 첫 번째 제목
+      _timer = setMementoTimer();
+      setState(() {});
+    });
   }
 
   Timer setMementoTimer() {
@@ -58,8 +60,8 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
       Future.delayed(const Duration(seconds: 1), () {
         mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
             semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
-        setState(() {});
       });
+      setState(() {});
     } else {
       // 1초 동안 기뻐하는 메멘토 이미지 보이기
       // 1초 동안 TextField에 메멘토 정답 표시
@@ -70,8 +72,8 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
         mementoController.text = ". . .";
         mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
             semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
-        setState(() {});
       });
+      setState(() {});
     }
   }
 
@@ -85,22 +87,11 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
               builder: (context) =>
                   QuizResultScreen(answerList: quizAPI.getAnswerList())),
           ((route) => false));
+    } else {
+      setState(() {
+        title = quizAPI.getTitle(); // (한 문제를 다 풀었으면) 다음 판례 제목 가져오기
+      });
     }
-
-    title = quizAPI.getTitle(); // (한 문제를 다 풀었으면) 다음 판례 제목 가져오기
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  // 메멘토 타이머 초기화
-  void timerReset() {
-    _timer?.cancel();
-    _timer = setMementoTimer();
   }
 
   void _onSubmitted(value) {
@@ -111,13 +102,25 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
       quizAPI.setAnswer(isUserAnswer: true); // 사용자 정답 처리
       userController.clear();
       getNextQuiz();
-      timerReset(); // 시간 초기화
+      resetTimer(); // 시간 초기화
     } else {
       // 틀렸음을 표시하는 TextField border 스타일
       setState(() {
         inputBorderStyle = Border.all(color: Colors.red);
       });
     }
+  }
+
+  // 메멘토 타이머 초기화
+  void resetTimer() {
+    _timer.cancel();
+    _timer = setMementoTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   @override

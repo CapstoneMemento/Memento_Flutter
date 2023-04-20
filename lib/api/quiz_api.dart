@@ -1,49 +1,42 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:memento_flutter/config/constants.dart';
+
 class QuizAPI {
   String mementoWord = "";
   String userWord = "";
   int currentQuizIndex = 0;
   int currentKeywordIndex = 0;
-  late List answerList;
-  late List quizList;
+  List answerList = [];
+  List quizList = [];
 
-  void fetchQuizList() {
-    // DB에서 불러오기
-    quizList = [
-      {
-        "title": "모인대상발명",
-        "keywords": [
-          "모인대상발명",
-          "통상의 기술자",
-          "발명의 작용효과",
-          "특별한 차이",
-          "기술적 사상의 창작",
-          "기여하지 않은 경우",
-          "무권리자 출원"
-        ]
-      },
-      {
-        "title": "두번째문제",
-        "keywords": [
-          "모인대상발명",
-          "통상의 기술자",
-          "발명의 작용효과",
-          "특별한 차이",
-          "기술적 사상의 창작",
-          "기여하지 않은 경우",
-          "무권리자 출원"
-        ]
+  Future<List> fetchQuizList() async {
+    final response = await http.get(
+      Uri.parse('${Constants.baseURL}/quiz/0'),
+      headers: {"Authorization": "Bearer ${Constants.accessToken}"},
+    );
+
+    if (response.statusCode == 200) {
+      quizList = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (quizList.isNotEmpty) {
+        // answerlist 초기화
+        answerList = quizList
+            .map((quiz) => {
+                  "title": quiz["title"],
+                  "keywords": quiz["keywords"]
+                      .map((e) => {"text": e, "isAnswer": false})
+                      .toList()
+                })
+            .toList();
       }
-    ];
 
-    // answerlist 초기화
-    answerList = quizList
-        .map((quiz) => {
-              "title": quiz["title"],
-              "keywords": quiz["keywords"]
-                  .map((e) => {"text": e, "isAnswer": false})
-                  .toList()
-            })
-        .toList();
+      return quizList;
+    } else {
+      print('Error code: ${response.statusCode}');
+      throw Exception('퀴즈를 불러오지 못했습니다.');
+    }
   }
 
   String getAnswer() {
