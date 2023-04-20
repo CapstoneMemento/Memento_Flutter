@@ -1,20 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:memento_flutter/api/quiz_api.dart';
 import 'package:memento_flutter/screens/quiz/quiz_game_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
-class QuizStartScreen extends StatelessWidget {
-  QuizStartScreen();
+class QuizStartScreen extends StatefulWidget {
+  const QuizStartScreen();
+
+  @override
+  State<QuizStartScreen> createState() => _QuizStartScreenState();
+}
+
+class _QuizStartScreenState extends State<QuizStartScreen> {
+  QuizAPI quizAPI = QuizAPI();
+  bool hasQuiz = true;
 
   final Widget logoBasic = SvgPicture.asset('assets/images/logo_basic.svg',
       width: 100, semanticsLabel: '메멘토 캐릭터 로고');
 
   @override
+  void initState() {
+    super.initState();
+    quizAPI.fetchQuizList().then((result) => {
+          if (result.isEmpty)
+            {
+              setState(
+                () {
+                  hasQuiz = false;
+                },
+              )
+            }
+        });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const QuizGameScreen()));
+        if (hasQuiz) {
+          // 퀴즈 게임 화면으로 이동
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const QuizGameScreen()));
+        }
       },
       child: Center(
         child: Column(
@@ -47,7 +74,7 @@ class QuizStartScreen extends StatelessWidget {
               height: 100,
             ),
             Text(
-              "터치하여 시작",
+              hasQuiz ? "터치하여 시작" : "아직 저장한 판례가 없어요",
               style: TextStyle(color: CustomTheme.themeData.primaryColor),
             )
           ],
