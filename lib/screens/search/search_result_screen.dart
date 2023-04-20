@@ -9,9 +9,8 @@ import 'package:memento_flutter/widgets/loading.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String query;
-  int count = 5; // 검색 결과 개수
 
-  SearchResultScreen({required this.query});
+  const SearchResultScreen({required this.query});
 
   @override
   State<SearchResultScreen> createState() => _SearchResultScreenState();
@@ -127,16 +126,24 @@ class ResultList extends StatelessWidget {
     return Expanded(
       child: ListView(
         children: result
-            .map((item) => Container(
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          top: BorderSide(width: 1, color: Colors.black26))),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: SearchListItem(
-                      number: item["number"],
-                      name: item["name"],
-                      casenum: item["casenum"],
+            .map((item) => GestureDetector(
+                  onTap: () {
+                    // 판례 본문 화면으로 이동
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            SearchNoteScreen(caseInfo: item)));
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            top: BorderSide(width: 1, color: Colors.black26))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: SearchListItem(
+                        casenum: item["casenum"],
+                        name: item["name"],
+                        type: item["type"],
+                      ),
                     ),
                   ),
                 ))
@@ -149,49 +156,42 @@ class ResultList extends StatelessWidget {
 class SearchListItem extends StatelessWidget {
   final String casenum;
   final String name;
-  final int number;
+  final String type;
 
   const SearchListItem({
     super.key,
     required this.name,
     required this.casenum,
-    required this.number,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // 해당 판례 화면으로 이동
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: ((context) => SearchNoteScreen())));
-      },
-      child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '$number',
-                style: TextStyle(
-                    fontSize: 12, color: CustomTheme.themeData.primaryColor),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                name,
-                style: CustomTheme.themeData.textTheme.titleSmall,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                casenum,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              )
-            ],
-          )),
-    );
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              casenum,
+              style: TextStyle(
+                  fontSize: 12, color: CustomTheme.themeData.primaryColor),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              name,
+              style: CustomTheme.themeData.textTheme.titleSmall,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              type,
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            )
+          ],
+        ));
   }
 }
