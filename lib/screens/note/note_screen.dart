@@ -80,6 +80,37 @@ class _NoteScreenState extends State<NoteScreen> {
                   ]),
                 ),
               ),
+            ),
+            TextButton(
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        content: const Text("이 노트를 삭제할까요?"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('취소'),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          TextButton(
+                            child: const Text('확인'),
+                            onPressed: () async {
+                              // 노트 삭제
+                              await NoteAPI.deleteNote(noteId: widget.noteId);
+
+                              if (mounted) {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            NavigationBarWidget(
+                                              selectedIndex: 0,
+                                            )),
+                                    (route) => false);
+                              }
+                            },
+                          ),
+                        ],
+                      )),
+              child: const Text("삭제"),
             )
           ],
         ),
