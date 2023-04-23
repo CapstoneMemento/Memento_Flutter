@@ -21,7 +21,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   static List<Widget> bodyOptions = [
     const NoteListScreen(),
     const SearchScreen(),
-    QuizStartScreen()
+    const QuizStartScreen()
   ];
   static const List<Widget> floatingButtonOptions = [
     ModalBottomSheet(),
@@ -45,6 +45,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
         floatingActionButton:
             floatingButtonOptions.elementAt(widget.selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
           currentIndex: widget.selectedIndex,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.book), label: "내암기장"),

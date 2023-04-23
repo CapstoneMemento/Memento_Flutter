@@ -26,7 +26,6 @@ class SearchAPI {
 
     var uri = Uri.parse("${Constants.baseURL}/search/content");
     uri = uri.replace(queryParameters: caseInfo);
-    print(uri);
 
     final response = await http.get(
       uri,

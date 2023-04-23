@@ -7,6 +7,7 @@ import 'package:document_scanner_flutter/document_scanner_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/file_api.dart';
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/screens/login_screen.dart';
 import 'package:memento_flutter/screens/ocr/ocr_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/list_button.dart';
@@ -110,23 +111,25 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         : FloatingActionButton(
             backgroundColor: CustomTheme.themeData.primaryColor,
             onPressed: () {
-              showMaterialModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SizedBox(
-                      height: 120,
-                      child: (Column(
-                          children: modalItems
-                              .map((item) => Flexible(
-                                  fit: FlexFit.tight,
-                                  child: ListButton(
-                                    icon: Icon(item["icon"]),
-                                    text: item["text"],
-                                    onTap: () => _onTap(item["id"]),
-                                  )))
-                              .toList())),
-                    );
-                  });
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+              // showMaterialModalBottomSheet(
+              //     context: context,
+              //     builder: (BuildContext context) {
+              //       return SizedBox(
+              //         height: 120,
+              //         child: (Column(
+              //             children: modalItems
+              //                 .map((item) => Flexible(
+              //                     fit: FlexFit.tight,
+              //                     child: ListButton(
+              //                       icon: Icon(item["icon"]),
+              //                       text: item["text"],
+              //                       onTap: () => _onTap(item["id"]),
+              //                     )))
+              //                 .toList())),
+              //       );
+              //     });
             },
             child: const Icon(Icons.add),
           );
