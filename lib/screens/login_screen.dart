@@ -26,19 +26,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // 비동기로 flutter secure storage 정보 불러오기
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      asyncFn();
+      getUserInfo();
     });
   }
 
-  void asyncFn() async {
+  void getUserInfo() async {
     // 사용자 정보 불러오기
     final userInfo = await storage.read(key: 'userInfo');
 
     if (userInfo != null) {
-      // 로그인한 사용자이면 홈으로 이동
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => NavigationBarWidget()),
-          (route) => false);
+      if (mounted) {
+        // 로그인한 사용자이면 홈으로 이동
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => NavigationBarWidget()),
+            (route) => false);
+      }
     }
   }
 

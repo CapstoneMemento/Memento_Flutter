@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/screens/note/note_list_screen.dart';
 import 'package:memento_flutter/screens/quiz/quiz_start_screen.dart';
 import 'package:memento_flutter/screens/search/search_screen.dart';
+import 'package:memento_flutter/screens/setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
@@ -17,14 +18,16 @@ class NavigationBarWidget extends StatefulWidget {
 }
 
 class _NavigationBarWidgetState extends State<NavigationBarWidget> {
-  static const List<String> appBarTitle = ["내 암기장", "판례 검색", "퀴즈"];
+  static const List<String> appBarTitle = ["내 암기장", "판례 검색", "퀴즈", "설정"];
   static List<Widget> bodyOptions = [
     const NoteListScreen(),
     const SearchScreen(),
-    const QuizStartScreen()
+    const QuizStartScreen(),
+    const SettingScreen()
   ];
   static const List<Widget> floatingButtonOptions = [
     ModalBottomSheet(),
+    SizedBox.shrink(),
     SizedBox.shrink(),
     SizedBox.shrink()
   ];
@@ -47,10 +50,12 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           currentIndex: widget.selectedIndex,
+          unselectedItemColor: Colors.grey,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.book), label: "내암기장"),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: "판례검색"),
             BottomNavigationBarItem(icon: Icon(Icons.quiz), label: "퀴즈"),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정"),
           ],
           fixedColor: CustomTheme.themeData.primaryColor,
           onTap: _onTap,
