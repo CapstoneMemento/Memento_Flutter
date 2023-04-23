@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/user_api.dart';
+import 'package:memento_flutter/screens/login_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen();
@@ -7,7 +9,10 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // 로그아웃
+        // 로그아웃 후 로그인 화면으로 이동
+        UserAPI.logout().then((_) => Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false));
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

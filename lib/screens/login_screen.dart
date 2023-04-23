@@ -15,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   var idController = TextEditingController();
   var passwordController = TextEditingController();
