@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memento_flutter/api/user_api.dart';
+import 'package:memento_flutter/model/user.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
@@ -15,8 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final storage = const FlutterSecureStorage();
-
+  User user = User();
   var idController = TextEditingController();
   var passwordController = TextEditingController();
 
@@ -32,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void getUserInfo() async {
     // 사용자 정보 불러오기
-    final userInfo = await storage.read(key: 'userInfo');
+    final userInfo = await user.getUserInfo();
 
     if (userInfo != null) {
       if (mounted) {
@@ -86,10 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         password: passwordController.text);
 
                     // 사용자 정보를 storage에 저장
-                    await storage.write(
-                      key: 'userInfo',
-                      value: jsonEncode(response),
-                    );
+                    await user.writeUserInfo(jsonEncode(response));
+
                     // 홈으로 이동
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(

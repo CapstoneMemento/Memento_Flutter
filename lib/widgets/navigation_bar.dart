@@ -8,6 +8,8 @@ import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 
+// storage에 userInfo가 없으면 LoginScreen으로 이동
+
 class NavigationBarWidget extends StatefulWidget {
   int selectedIndex;
 

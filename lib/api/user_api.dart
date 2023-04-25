@@ -22,7 +22,7 @@ class UserAPI {
     }
   }
 
-  static Future reIssue() async {
+  static Future refreshToken() async {
     final userInfo = await storage.read(key: "userInfo");
     final refreshToken = jsonDecode(userInfo!)["refreshToken"];
     final accessToken = jsonDecode(userInfo)["accessToken"];
@@ -53,7 +53,7 @@ class UserAPI {
     final accessToken = jsonDecode(userInfo)["accessToken"];
 
     final response = await http
-        .delete(Uri.parse('${Constants.baseURL}/users/reissue'), headers: {
+        .delete(Uri.parse('${Constants.baseURL}/users/refreshToken'), headers: {
       "Authorization": "Bearer $accessToken",
       "RefreshToken": "Bearer $refreshToken"
     });
@@ -64,7 +64,7 @@ class UserAPI {
 
       return response;
     } else if (response.statusCode == 401) {
-      await reIssue();
+      await refreshToken();
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('로그아웃 실패');
