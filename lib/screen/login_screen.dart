@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/user_api.dart';
+import 'package:memento_flutter/provider/user_provider.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/utility/storage.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
+import 'package:provider/provider.dart';
 
 const USERINFO = "userInfo";
 
@@ -34,8 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // 로그인한 사용자이면
     if (userInfo != null) {
-      // 홈으로 이동
       if (mounted) {
+        // state 설정
+        context.read<UserProvider>().setUser(userInfo);
+        // 홈으로 이동
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => NavigationBarWidget()),
             (route) => false);
@@ -89,6 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // 홈으로 이동
                     if (mounted) {
+                      // state 설정
+                      context.read<UserProvider>().setUser(response);
+
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => NavigationBarWidget()),

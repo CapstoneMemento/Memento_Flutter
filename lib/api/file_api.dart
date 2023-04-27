@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/model/user.dart';
+import 'package:memento_flutter/utility/storage.dart';
 
 class FileAPI {
-  final user = User();
-
   static Future<String> uploadFile({required File imageFile}) async {
+    final userInfo = await Storage.readData(key: "userInfo");
+    final accessToken = userInfo["accessToken"];
+
     final uri = Uri.parse('${Constants.baseURL}/file/upload');
     final request = http.MultipartRequest("POST", uri);
     request.files
         .add(await http.MultipartFile.fromPath("file", imageFile.path));
-    request.headers['Authorization'] =
-        "Bearer ${storage.read(key: "userInfo")}";
+    request.headers['Authorization'] = "Bearer $accessToken";
 
     final response = await request.send();
 

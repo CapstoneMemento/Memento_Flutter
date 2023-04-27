@@ -16,4 +16,8 @@ class Storage {
   static void writeString({required String key, required String value}) async {
     await storage.write(key: "userInfo", value: value);
   }
+
+  static void deleteData({required String key}) async {
+    await storage.delete(key: key);
+  }
 }
