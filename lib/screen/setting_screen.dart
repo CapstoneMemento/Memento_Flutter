@@ -12,7 +12,8 @@ class SettingScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // state 삭제
-        context.read<UserProvider>().deleteUser();
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.deleteUser();
         // 로그아웃 후 로그인 화면으로 이동
         UserAPI.logout().then((_) => Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),

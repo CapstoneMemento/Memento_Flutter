@@ -11,15 +11,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<UserProvider>(create: (_) => UserProvider()),
-      ],
-      child: MaterialApp(
-        title: 'My Notes',
-        theme: CustomTheme.themeData,
-        home: const LoginScreen(),
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (_) => UserProvider(),
+        child: MaterialApp(
+          title: 'My Notes',
+          theme: CustomTheme.themeData,
+          home: const LoginScreen(),
+        ));
   }
 }

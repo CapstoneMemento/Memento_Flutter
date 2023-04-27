@@ -37,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
     // 로그인한 사용자이면
     if (userInfo != null) {
       if (mounted) {
-        // state 설정
-        context.read<UserProvider>().setUser(userInfo);
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userInfo);
         // 홈으로 이동
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => NavigationBarWidget()),
@@ -94,7 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     // 홈으로 이동
                     if (mounted) {
                       // state 설정
-                      context.read<UserProvider>().setUser(response);
+                      final userProvider =
+                          Provider.of<UserProvider>(context, listen: false);
+                      userProvider.setUser(response);
 
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(

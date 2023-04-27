@@ -6,7 +6,13 @@ class Storage {
   static const storage = FlutterSecureStorage();
 
   static Future readData({required String key}) async {
-    return await storage.read(key: "userInfo");
+    final data = await storage.read(key: "userInfo");
+
+    if (data == null) {
+      return data;
+    }
+
+    return jsonDecode(data);
   }
 
   static void writeJson({required String key, required Map json}) async {
