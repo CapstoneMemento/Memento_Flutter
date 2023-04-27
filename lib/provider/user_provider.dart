@@ -13,4 +13,8 @@ class UserProvider extends ChangeNotifier {
   void setUser(Map json) {
     _currentUser = User.fromJson(json);
   }
+
+  void deleteUser() {
+    _currentUser = null;
+  }
 }
