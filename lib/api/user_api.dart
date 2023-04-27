@@ -64,6 +64,7 @@ class UserAPI {
       return response;
     } else if (response.statusCode == 401) {
       await refreshToken();
+      await logout();
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('로그아웃 실패');
