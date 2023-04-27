@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memento_flutter/api/quiz_api.dart';
-import 'package:memento_flutter/screens/quiz/quiz_game_screen.dart';
+import 'package:memento_flutter/screen/quiz/quiz_game_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class QuizStartScreen extends StatefulWidget {

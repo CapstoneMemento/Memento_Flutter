@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:memento_flutter/screens/note/note_list_screen.dart';
-import 'package:memento_flutter/screens/quiz/quiz_start_screen.dart';
-import 'package:memento_flutter/screens/search/search_screen.dart';
-import 'package:memento_flutter/screens/setting_screen.dart';
+import 'package:memento_flutter/screen/note/note_list_screen.dart';
+import 'package:memento_flutter/screen/quiz/quiz_start_screen.dart';
+import 'package:memento_flutter/screen/search/search_screen.dart';
+import 'package:memento_flutter/screen/setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';

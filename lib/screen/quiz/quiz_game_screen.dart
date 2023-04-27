@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:memento_flutter/api/quiz_api.dart';
-import 'package:memento_flutter/screens/quiz/quiz_result_screen.dart';
+import 'package:memento_flutter/screen/quiz/quiz_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';

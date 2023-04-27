@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/keyword_api.dart';
 import 'package:memento_flutter/api/note_api.dart';
-import 'package:memento_flutter/screens/note/keyword_edit_screen.dart';
-import 'package:memento_flutter/screens/note/note_edit_screen.dart';
+import 'package:memento_flutter/screen/note/keyword_edit_screen.dart';
+import 'package:memento_flutter/screen/note/note_edit_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';

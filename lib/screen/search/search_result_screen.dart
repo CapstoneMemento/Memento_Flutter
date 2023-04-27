@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/search_api.dart';
-import 'package:memento_flutter/screens/search/search_note_screen.dart';
+import 'package:memento_flutter/screen/search/search_note_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';

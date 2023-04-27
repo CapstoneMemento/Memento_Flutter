@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/login_screen.dart';
-import 'package:memento_flutter/widgets/navigation_bar.dart';
+import 'package:memento_flutter/screen/login_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 void main() async {

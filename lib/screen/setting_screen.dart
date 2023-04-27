@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/user_api.dart';
-import 'package:memento_flutter/screens/login_screen.dart';
+import 'package:memento_flutter/screen/login_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/note/category_list_screen.dart';
+import 'package:memento_flutter/screen/note/category_list_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/search/search_result_screen.dart';
+import 'package:memento_flutter/screen/search/search_result_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 
 class SearchScreen extends StatelessWidget {

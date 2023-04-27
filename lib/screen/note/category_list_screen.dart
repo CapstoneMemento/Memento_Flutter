@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/screens/note/note_list_screen.dart';
+import 'package:memento_flutter/screen/note/note_list_screen.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 
@@ -38,7 +38,8 @@ class CategoryListScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NoteListScreen()));
+                                    builder: (context) =>
+                                        const NoteListScreen()));
                           },
                         ),
                       ))

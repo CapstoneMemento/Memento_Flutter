@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/model/user.dart';
 
 class FileAPI {
-  static const storage = FlutterSecureStorage();
+  final user = User();
 
   static Future<String> uploadFile({required File imageFile}) async {
     final uri = Uri.parse('${Constants.baseURL}/file/upload');
