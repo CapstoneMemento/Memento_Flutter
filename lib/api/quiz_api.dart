@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/storage.dart';
 
 class QuizAPI {
   String mementoWord = "";
@@ -12,9 +13,10 @@ class QuizAPI {
   List quizList = [];
 
   Future<List> fetchQuizList() async {
+    final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/quiz/0'),
-      headers: {"Authorization": "Bearer ${Constants.accessToken}"},
+      headers: {"Authorization": "Bearer $accessToken"},
     );
 
     if (response.statusCode == 200) {

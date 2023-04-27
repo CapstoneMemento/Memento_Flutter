@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/storage.dart';
 
 class KeywordAPI {
   static Future<List<dynamic>> saveKeyword(List keywordList) async {
-    final response =
-        await http.post(Uri.parse('${Constants.baseURL}/keyword/save'),
-            headers: {
-              "Authorization": "Bearer ${Constants.accessToken}",
-              "Content-Type": "application/json"
-            },
-            body: json.encode(keywordList));
+    final accessToken = await Storage.getAccessToken();
+    final response = await http.post(
+        Uri.parse('${Constants.baseURL}/keyword/save'),
+        headers: {
+          "Authorization": "Bearer $accessToken",
+          "Content-Type": "application/json"
+        },
+        body: json.encode(keywordList));
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -22,13 +24,14 @@ class KeywordAPI {
   }
 
   static Future editKeyword({required List indexList}) async {
-    final response =
-        await http.post(Uri.parse('${Constants.baseURL}/keyword/edit'),
-            headers: {
-              "Authorization": "Bearer ${Constants.accessToken}",
-              "Content-Type": "application/json"
-            },
-            body: json.encode(indexList));
+    final accessToken = await Storage.getAccessToken();
+    final response = await http.post(
+        Uri.parse('${Constants.baseURL}/keyword/edit'),
+        headers: {
+          "Authorization": "Bearer $accessToken",
+          "Content-Type": "application/json"
+        },
+        body: json.encode(indexList));
 
     if (response.statusCode == 200) {
       return response;
@@ -39,10 +42,11 @@ class KeywordAPI {
   }
 
   static Future<List<dynamic>> getIndexList(int noteId) async {
+    final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/$noteId'),
       headers: {
-        "Authorization": "Bearer ${Constants.accessToken}",
+        "Authorization": "Bearer $accessToken",
       },
     );
 
@@ -82,10 +86,11 @@ class KeywordAPI {
   }
 
   static Future deleteKeyword({required int noteId}) async {
+    final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/deleteBynoteid/$noteId'),
       headers: {
-        "Authorization": "Bearer ${Constants.accessToken}",
+        "Authorization": "Bearer $accessToken",
       },
     );
 

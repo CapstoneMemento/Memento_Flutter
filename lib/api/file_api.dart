@@ -6,8 +6,7 @@ import 'package:memento_flutter/utility/storage.dart';
 
 class FileAPI {
   static Future<String> uploadFile({required File imageFile}) async {
-    final userInfo = await Storage.readData(key: "userInfo");
-    final accessToken = userInfo["accessToken"];
+    final accessToken = await Storage.getAccessToken();
 
     final uri = Uri.parse('${Constants.baseURL}/file/upload');
     final request = http.MultipartRequest("POST", uri);

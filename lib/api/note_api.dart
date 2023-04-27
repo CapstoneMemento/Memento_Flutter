@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/storage.dart';
 
 class NoteAPI {
-  static final basicHeaders = {
-    "Authorization": "Bearer ${Constants.accessToken}",
-    "Content-Type": "application/json"
-  };
-
   static Future<List<dynamic>> fetchNoteList() async {
+    final accessToken = await Storage.getAccessToken();
     final response = await http.get(Uri.parse('${Constants.baseURL}/note/list'),
-        headers: {"Authorization": "Bearer ${Constants.accessToken}"});
+        headers: {"Authorization": "Bearer $accessToken"});
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -21,9 +18,12 @@ class NoteAPI {
   }
 
   static Future<Map> fetchNote({required int noteId}) async {
-    final response = await http.get(
-        Uri.parse('${Constants.baseURL}/note/$noteId'),
-        headers: basicHeaders);
+    final accessToken = await Storage.getAccessToken();
+    final response = await http
+        .get(Uri.parse('${Constants.baseURL}/note/$noteId'), headers: {
+      "Authorization": "Bearer $accessToken",
+      "Content-Type": "application/json"
+    });
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -34,6 +34,7 @@ class NoteAPI {
   }
 
   static Future addNote({required String content, String title = ""}) async {
+    final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,
       "content": content,
@@ -42,7 +43,10 @@ class NoteAPI {
     };
     final response = await http.post(
       Uri.parse('${Constants.baseURL}/note/add'),
-      headers: basicHeaders,
+      headers: {
+        "Authorization": "Bearer $accessToken",
+        "Content-Type": "application/json"
+      },
       body: json.encode(data),
     );
 
@@ -56,10 +60,14 @@ class NoteAPI {
 
   static Future editNote(
       {required int noteId, required String content, String title = ""}) async {
+    final accessToken = await Storage.getAccessToken();
     final data = {"content": content, "title": title};
     final response = await http.put(
       Uri.parse('${Constants.baseURL}/note/$noteId/edit'),
-      headers: basicHeaders,
+      headers: {
+        "Authorization": "Bearer $accessToken",
+        "Content-Type": "application/json"
+      },
       body: json.encode(data),
     );
 
@@ -72,9 +80,10 @@ class NoteAPI {
   }
 
   static Future deleteNote({required int noteId}) async {
+    final accessToken = await Storage.getAccessToken();
     final response = await http.delete(
       Uri.parse('${Constants.baseURL}/note/$noteId/delete'),
-      headers: {"Authorization": "Bearer ${Constants.accessToken}"},
+      headers: {"Authorization": "Bearer $accessToken"},
     );
 
     if (response.statusCode == 200) {

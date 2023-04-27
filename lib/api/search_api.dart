@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:memento_flutter/config/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:memento_flutter/utility/storage.dart';
 
 class SearchAPI {
   static Future<List<dynamic>> fetchSearchList(query) async {
+    final accessToken = await Storage.getAccessToken();
     final response = await http.get(
         Uri.parse('${Constants.baseURL}/search/find?query=$query'),
-        headers: {"Authorization": "Bearer ${Constants.accessToken}"});
+        headers: {"Authorization": "Bearer $accessToken"});
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -19,6 +21,7 @@ class SearchAPI {
 
   static Future<Map> fetchContent(
       {required Map<String, dynamic> caseInfo}) async {
+    final accessToken = await Storage.getAccessToken();
     // value를 String으로 변환
     for (final key in caseInfo.keys) {
       caseInfo[key] = '${caseInfo[key]}';
@@ -30,7 +33,7 @@ class SearchAPI {
     final response = await http.get(
       uri,
       headers: {
-        "Authorization": "Bearer ${Constants.accessToken}",
+        "Authorization": "Bearer $accessToken",
         "Content-Type": "application/json"
       },
     );

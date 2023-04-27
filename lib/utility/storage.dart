@@ -20,4 +20,11 @@ class Storage {
   static void deleteData({required String key}) async {
     await storage.delete(key: key);
   }
+
+  static Future getAccessToken() async {
+    final userInfo = await Storage.readData(key: "userInfo");
+    final accessToken = userInfo["accessToken"];
+
+    return accessToken;
+  }
 }
