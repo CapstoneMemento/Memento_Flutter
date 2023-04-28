@@ -23,21 +23,13 @@ class SearchAPI {
     }
   }
 
-  static Future fetchContent({required Map<String, dynamic> caseInfo}) async {
+  static Future fetchContent({required int caseId}) async {
     final accessToken = await Storage.getAccessToken();
-    // value를 String으로 변환
-    for (final key in caseInfo.keys) {
-      caseInfo[key] = '${caseInfo[key]}';
-    }
-
-    var uri = Uri.parse("${Constants.baseURL}/search/content");
-    uri = uri.replace(queryParameters: caseInfo);
 
     final response = await http.get(
-      uri,
+      Uri.parse("${Constants.baseURL}/search/content?caseid=$caseId"),
       headers: {
         "Authorization": "Bearer $accessToken",
-        "Content-Type": "application/json"
       },
     );
 
@@ -45,7 +37,7 @@ class SearchAPI {
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 401) {
       await UserAPI.refreshToken();
-      await fetchContent(caseInfo: caseInfo);
+      await fetchContent(caseId: caseId);
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('판례를 가져오는데 실패했습니다.');
