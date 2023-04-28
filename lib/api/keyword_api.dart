@@ -14,7 +14,7 @@ class KeywordAPI {
           "Authorization": "Bearer $accessToken",
           "Content-Type": "application/json"
         },
-        body: json.encode(keywordList));
+        body: jsonEncode(keywordList));
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -35,7 +35,7 @@ class KeywordAPI {
           "Authorization": "Bearer $accessToken",
           "Content-Type": "application/json"
         },
-        body: json.encode(indexList));
+        body: jsonEncode(indexList));
 
     if (response.statusCode == 200) {
       return response;
@@ -44,7 +44,7 @@ class KeywordAPI {
       await editKeyword(indexList: indexList);
     } else {
       print('Error code: ${response.statusCode}');
-      throw Exception('키워드를 가져오지 못했습니다.');
+      throw Exception('키워드를 수정하지 못했습니다.');
     }
   }
 
@@ -71,6 +71,7 @@ class KeywordAPI {
   static Future<List<dynamic>> getKeywordList(int noteId) async {
     final indexList = await getIndexList(noteId);
     final note = await NoteAPI.fetchNote(noteId: noteId);
+
     return sliceText(content: note["content"], selectedIndex: indexList);
   }
 

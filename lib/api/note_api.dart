@@ -54,7 +54,7 @@ class NoteAPI {
         "Authorization": "Bearer $accessToken",
         "Content-Type": "application/json"
       },
-      body: json.encode(data),
+      body: jsonEncode(data),
     );
 
     if (response.statusCode == 200) {
@@ -78,7 +78,7 @@ class NoteAPI {
         "Authorization": "Bearer $accessToken",
         "Content-Type": "application/json"
       },
-      body: json.encode(data),
+      body: jsonEncode(data),
     );
 
     if (response.statusCode == 200) {

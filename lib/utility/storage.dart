@@ -29,8 +29,11 @@ class Storage {
 
   static Future getAccessToken() async {
     final userInfo = await Storage.readData(key: "userInfo");
-    final accessToken = userInfo["accessToken"];
 
-    return accessToken;
+    if (userInfo == null) {
+      return null;
+    }
+
+    return userInfo["accessToken"];
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/gpt_api.dart';
 import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screen/keyword_select_screen.dart';
 import 'package:memento_flutter/screen/ocr/ocr_note_edit_screen.dart';
@@ -119,6 +120,8 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         onPressed: () async {
           // 노트 저장하고 id 받아오기
           int noteId = await NoteAPI.addNote(content: widget.content);
+          final recommended =
+              await GptAPI.recommentKeyword(content: widget.content);
           if (mounted) {
             Navigator.push(
                 context,
