@@ -7,10 +7,11 @@ class KeywordSelect extends StatefulWidget {
   final int noteId;
   final String content;
 
-  KeywordSelect(
-      {required this.selectedIndex,
-      required this.noteId,
-      required this.content});
+  KeywordSelect({
+    required this.selectedIndex,
+    required this.noteId,
+    required this.content,
+  });
 
   @override
   State<KeywordSelect> createState() => _KeywordSelectState();

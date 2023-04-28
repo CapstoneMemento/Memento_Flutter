@@ -122,6 +122,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
           int noteId = await NoteAPI.addNote(content: widget.content);
           final recommended =
               await GptAPI.recommentKeyword(content: widget.content);
+
           if (mounted) {
             Navigator.push(
                 context,
@@ -129,6 +130,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                     builder: (context) => KeywordSelectScreen(
                           noteId: noteId,
                           content: widget.content,
+                          recommended: recommended,
                         )));
           }
         },

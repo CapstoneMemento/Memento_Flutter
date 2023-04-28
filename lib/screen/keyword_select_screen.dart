@@ -7,15 +7,19 @@ import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/keyword_select.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 
-class KeywordSelectScreen extends StatelessWidget {
+class KeywordSelectScreen extends StatefulWidget {
   final int noteId;
   final String content; // 노트 본문
+  final List recommended;
 
-  KeywordSelectScreen({
-    required this.noteId,
-    required this.content,
-  });
+  const KeywordSelectScreen(
+      {required this.noteId, required this.content, required this.recommended});
 
+  @override
+  State<KeywordSelectScreen> createState() => _KeywordSelectScreenState();
+}
+
+class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   // 선택한 문자의 인덱스 {first, last, noteId}
   List selectedIndex = [];
 
@@ -27,6 +31,30 @@ class KeywordSelectScreen extends StatelessWidget {
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
 
   @override
+  void initState() {
+    super.initState();
+    getKeywordIndexList(wordList: widget.recommended, sentence: widget.content);
+  }
+
+  // 추천 키워드 인덱스 저장하기
+  void getKeywordIndexList({required List wordList, required String sentence}) {
+    var index = 0;
+    for (final word in wordList) {
+      while (true) {
+        index = sentence.indexOf(word);
+        // 해당 키워드가 없으면 중단
+        if (index == -1) break;
+
+        selectedIndex.add({
+          "first": index,
+          "last": index + word.length,
+          "noteid": widget.noteId,
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MainAppBar(
@@ -35,7 +63,7 @@ class KeywordSelectScreen extends StatelessWidget {
               color: Colors.black,
               onPressed: () {
                 // 미리 저장한 노트 삭제
-                NoteAPI.deleteNote(noteId: noteId)
+                NoteAPI.deleteNote(noteId: widget.noteId)
                     .then((_) => Navigator.of(context).pop());
               },
             ),
@@ -45,7 +73,7 @@ class KeywordSelectScreen extends StatelessWidget {
                 color: Colors.black,
                 onPressed: () {
                   // 미리 저장한 노트 삭제
-                  NoteAPI.deleteNote(noteId: noteId)
+                  NoteAPI.deleteNote(noteId: widget.noteId)
                       .then((_) => Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => NavigationBarWidget(
@@ -56,7 +84,9 @@ class KeywordSelectScreen extends StatelessWidget {
               ),
             ]),
         body: KeywordSelect(
-            selectedIndex: selectedIndex, noteId: noteId, content: content),
+            selectedIndex: selectedIndex,
+            noteId: widget.noteId,
+            content: widget.content),
         floatingActionButton: FloatingActionButton(
           backgroundColor: CustomTheme.themeData.primaryColor,
           child: const Text("다음"),
@@ -65,10 +95,11 @@ class KeywordSelectScreen extends StatelessWidget {
             KeywordAPI.saveKeyword(selectedIndex).then((_) =>
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TitleSettingScreen(
-                        noteId: noteId,
+                        noteId: widget.noteId,
                         selectedText: KeywordAPI.sliceText(
-                            content: content, selectedIndex: selectedIndex),
-                        content: content))));
+                            content: widget.content,
+                            selectedIndex: selectedIndex),
+                        content: widget.content))));
           },
         ));
   }

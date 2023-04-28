@@ -23,7 +23,6 @@ class GptAPI {
         body: jsonEncode(data));
 
     if (response.statusCode == 200) {
-      print(jsonDecode(utf8.decode(response.bodyBytes)));
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 401) {
       await UserAPI.refreshToken();
