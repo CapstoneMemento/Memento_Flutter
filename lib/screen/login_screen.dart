@@ -7,8 +7,6 @@ import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/navigation_bar.dart';
 import 'package:provider/provider.dart';
 
-const USERINFO = "userInfo";
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen();
 
@@ -32,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void checkLogin() async {
     // 로그인 사용자 정보 불러오기
-    final userInfo = await Storage.readData(key: USERINFO);
+    final userInfo = await Storage.readData(key: "userInfo");
 
     // 로그인한 사용자이면
     if (userInfo != null) {
@@ -99,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           .add(const Duration(minutes: 28))
                           .toString()
                     };
-                    Storage.writeJson(key: USERINFO, json: value);
+                    Storage.writeJson(key: "userInfo", json: value);
 
                     // 홈으로 이동
                     if (mounted) {
