@@ -36,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
     // 로그인한 사용자이면
     if (userInfo != null) {
       if (mounted) {
-        print(userInfo);
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.setUser(userInfo);
         // 홈으로 이동

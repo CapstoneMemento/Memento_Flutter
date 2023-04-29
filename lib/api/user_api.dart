@@ -33,11 +33,7 @@ class UserAPI {
     });
 
     if (response.statusCode == 200) {
-      final json = jsonDecode(utf8.decode(response.bodyBytes));
-      // storage 사용자 정보 업데이트
-      Storage.writeJson(key: "userInfo", json: json as Map);
-
-      return json;
+      return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('토큰을 재발급하지 못했습니다.');
