@@ -58,8 +58,7 @@ class NoteAPI {
     );
 
     if (response.statusCode == 200) {
-      print("response: $response");
-      return response;
+      return response.body;
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('노트를 저장하지 못했습니다.');

@@ -119,7 +119,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         child: const Text("다음"),
         onPressed: () async {
           // 노트 저장하고 id 받아오기
-          int noteId = await NoteAPI.addNote(content: widget.content);
+          final noteId = await NoteAPI.addNote(content: widget.content);
           final recommended =
               await GptAPI.recommentKeyword(content: widget.content);
 
@@ -128,7 +128,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => KeywordSelectScreen(
-                          noteId: noteId,
+                          noteId: int.parse(noteId),
                           content: widget.content,
                           recommended: recommended,
                         )));
