@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/user_api.dart';
+import 'package:memento_flutter/model/user.dart';
 import 'package:memento_flutter/provider/user_provider.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/utility/storage.dart';
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // 로그인한 사용자이면
     if (userInfo != null) {
       if (mounted) {
+        print(userInfo);
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.setUser(userInfo);
         // 홈으로 이동
@@ -87,24 +89,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         password: passwordController.text);
 
                     // 사용자 정보를 storage에 저장
-                    // jsonEncode는 DateTime을 인코딩할 수 없으므로 String으로 바꾸기
-                    final value = {
-                      "userId": response["userid"],
-                      "nickname": response["nickname"],
-                      "accessToken": response["accessToken"],
-                      "refreshToken": response["refreshToken"],
-                      "expiration": DateTime.now()
-                          .add(const Duration(minutes: 28))
-                          .toString()
-                    };
-                    Storage.writeJson(key: "userInfo", json: value);
+                    final userJson = User.fromJson(response).toJson();
+                    Storage.writeJson(key: "userInfo", json: userJson);
 
                     // 홈으로 이동
                     if (mounted) {
                       // state 설정
                       final userProvider =
                           Provider.of<UserProvider>(context, listen: false);
-                      userProvider.setUser(response);
+                      userProvider.setUser(userJson);
 
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
