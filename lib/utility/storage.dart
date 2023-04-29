@@ -16,11 +16,11 @@ class Storage {
   }
 
   static void writeJson({required String key, required Map json}) async {
-    await storage.write(key: "userInfo", value: jsonEncode(json));
+    await storage.write(key: key, value: jsonEncode(json));
   }
 
   static void writeString({required String key, required String value}) async {
-    await storage.write(key: "userInfo", value: value);
+    await storage.write(key: key, value: value);
   }
 
   static void deleteData({required String key}) async {
