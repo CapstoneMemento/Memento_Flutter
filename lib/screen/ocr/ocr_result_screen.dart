@@ -8,6 +8,7 @@ import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/utility/keyword.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
+import 'package:memento_flutter/widgets/loading.dart';
 
 class OCRResultScreen extends StatefulWidget {
   File imageFile; // 스캔한 이미지
@@ -22,6 +23,7 @@ class OCRResultScreen extends StatefulWidget {
 class _OCRResultScreenState extends State<OCRResultScreen> {
   int imageWidth = 0;
   int imageHeight = 0;
+  bool isLoading = false;
 
   /* Dialog에 표시할 아이템 */
   final List<Map<String, dynamic>> dialogItems = [
@@ -87,36 +89,41 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         ),
         actions: [CloseIconButton()],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Container(
-              width: deviceWidth,
-              decoration: const BoxDecoration(color: Colors.black),
-              child: ExtendedImage.file(
-                widget.imageFile,
-                fit: imageWidth > imageHeight
-                    ? BoxFit.fitWidth
-                    : BoxFit.fitHeight,
-              ),
+      body: isLoading
+          ? Loading()
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    width: deviceWidth,
+                    decoration: const BoxDecoration(color: Colors.black),
+                    child: ExtendedImage.file(
+                      widget.imageFile,
+                      fit: imageWidth > imageHeight
+                          ? BoxFit.fitWidth
+                          : BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16.0),
+                    child: GestureDetector(
+                      onTap: goEditText,
+                      child: Text(widget.content),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: GestureDetector(
-                onTap: goEditText,
-                child: Text(widget.content),
-              ),
-            ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
         onPressed: () async {
+          setState(() {
+            isLoading = true;
+          });
           // 노트 저장하고 키워드 인덱스 받아오기
           final result =
               await Keyword.getKeywordIndexFromNote(content: widget.content);
@@ -131,6 +138,9 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                           selectedIndex: result["indexList"],
                         )));
           }
+          setState(() {
+            isLoading = false;
+          });
         },
       ),
     );
