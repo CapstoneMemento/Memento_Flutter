@@ -12,18 +12,15 @@ class NoteListScreen extends StatefulWidget {
 }
 
 class _NoteListScreenState extends State<NoteListScreen> {
-  late Future noteList;
-
   @override
   void initState() {
     super.initState();
-    noteList = NoteAPI.fetchNoteList();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: noteList,
+        future: NoteAPI.fetchNoteList(),
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
             return ListView(
