@@ -41,7 +41,7 @@ class UserAPI {
   }
 
   static Future logout() async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final userInfo = await Storage.readData(key: "userInfo");
     final accessToken = userInfo["accessToken"];

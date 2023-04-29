@@ -14,7 +14,7 @@ class QuizAPI {
   List quizList = [];
 
   Future fetchQuizList() async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(

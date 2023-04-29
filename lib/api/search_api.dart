@@ -7,7 +7,7 @@ import 'package:memento_flutter/utility/storage.dart';
 
 class SearchAPI {
   static Future fetchSearchList(query) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
@@ -23,7 +23,7 @@ class SearchAPI {
   }
 
   static Future fetchContent({required int caseId}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
 

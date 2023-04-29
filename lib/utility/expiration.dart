@@ -4,7 +4,7 @@ import 'package:memento_flutter/provider/user_provider.dart';
 import 'package:memento_flutter/utility/storage.dart';
 
 class Expiration {
-  static void checkExpiration() async {
+  static Future checkExpiration() async {
     final userInfo = await Storage.readData(key: "userInfo");
     final now = DateTime.now().toString();
     // 토큰이 만료되면 재발급
@@ -13,7 +13,7 @@ class Expiration {
 
       // storage 사용자 정보 업데이트
       final userJson = User.fromJson(response).toJson();
-      Storage.writeJson(key: "userInfo", json: userJson);
+      await Storage.writeJson(key: "userInfo", json: userJson);
 
       // state 업데이트
       UserProvider().setUser(json: userJson);

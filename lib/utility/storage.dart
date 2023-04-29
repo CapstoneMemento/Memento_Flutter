@@ -15,15 +15,16 @@ class Storage {
     return jsonDecode(data);
   }
 
-  static void writeJson({required String key, required Map json}) async {
+  static Future writeJson({required String key, required Map json}) async {
     await storage.write(key: key, value: jsonEncode(json));
   }
 
-  static void writeString({required String key, required String value}) async {
+  static Future writeString(
+      {required String key, required String value}) async {
     await storage.write(key: key, value: value);
   }
 
-  static void deleteData({required String key}) async {
+  static Future deleteData({required String key}) async {
     await storage.delete(key: key);
   }
 

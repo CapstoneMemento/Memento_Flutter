@@ -7,8 +7,9 @@ import 'package:memento_flutter/utility/storage.dart';
 
 class FileAPI {
   static Future uploadFile({required File imageFile}) async {
-    Expiration.checkExpiration();
-    final accessToken = Storage.getAccessToken();
+    await Expiration.checkExpiration();
+
+    final accessToken = await Storage.getAccessToken();
 
     final uri = Uri.parse('${Constants.baseURL}/file/upload');
     final request = http.MultipartRequest("POST", uri);
@@ -22,7 +23,7 @@ class FileAPI {
       return response.stream.bytesToString();
     } else {
       print('Error code: ${response.statusCode}');
-      throw Exception('노트를 불러오지 못했습니다.');
+      throw Exception('이미지를 저장하지 못했습니다.');
     }
   }
 }

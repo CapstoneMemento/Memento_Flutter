@@ -6,7 +6,7 @@ import 'package:memento_flutter/utility/storage.dart';
 
 class NoteAPI {
   static Future fetchNoteList() async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(Uri.parse('${Constants.baseURL}/note/list'),
@@ -21,7 +21,7 @@ class NoteAPI {
   }
 
   static Future fetchNote({required int noteId}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http
@@ -39,7 +39,7 @@ class NoteAPI {
   }
 
   static Future addNote({required String content, String title = ""}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final data = {
@@ -58,7 +58,8 @@ class NoteAPI {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(utf8.decode(response.bodyBytes));
+      print("response: $response");
+      return response;
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('노트를 저장하지 못했습니다.');
@@ -67,7 +68,7 @@ class NoteAPI {
 
   static Future editNote(
       {required int noteId, required String content, String title = ""}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final data = {"content": content, "title": title};
@@ -89,7 +90,7 @@ class NoteAPI {
   }
 
   static Future deleteNote({required int noteId}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.delete(

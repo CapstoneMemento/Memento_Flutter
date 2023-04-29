@@ -8,7 +8,7 @@ import 'package:memento_flutter/utility/storage.dart';
 
 class KeywordAPI {
   static Future saveKeyword(List keywordList) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.post(
@@ -28,7 +28,7 @@ class KeywordAPI {
   }
 
   static Future editKeyword({required List indexList}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.post(
@@ -51,7 +51,7 @@ class KeywordAPI {
   }
 
   static Future getIndexList(int noteId) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
@@ -98,7 +98,7 @@ class KeywordAPI {
   }
 
   static Future deleteKeyword({required int noteId}) async {
-    Expiration.checkExpiration();
+    await Expiration.checkExpiration();
 
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
