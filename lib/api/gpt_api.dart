@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:memento_flutter/api/user_api.dart';
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/expiration.dart';
 import 'package:memento_flutter/utility/storage.dart';
 import 'package:http/http.dart' as http;
 
 class GptAPI {
   static Future recommentKeyword({required String content}) async {
+    Expiration.checkExpiration();
     final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,
@@ -24,9 +25,6 @@ class GptAPI {
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
-    } else if (response.statusCode == 401) {
-      await UserAPI.refreshToken();
-      await recommentKeyword(content: content);
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('키워드를 수정하지 못했습니다.');

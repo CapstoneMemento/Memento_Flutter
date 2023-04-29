@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:memento_flutter/api/user_api.dart';
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/expiration.dart';
 import 'package:memento_flutter/utility/storage.dart';
 
 class QuizAPI {
@@ -14,6 +14,8 @@ class QuizAPI {
   List quizList = [];
 
   Future fetchQuizList() async {
+    Expiration.checkExpiration();
+
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/quiz/0'),
@@ -36,9 +38,6 @@ class QuizAPI {
       }
 
       return quizList;
-    } else if (response.statusCode == 401) {
-      await UserAPI.refreshToken();
-      await fetchQuizList();
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('퀴즈를 불러오지 못했습니다.');

@@ -3,10 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/api/user_api.dart';
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/expiration.dart';
 import 'package:memento_flutter/utility/storage.dart';
 
 class KeywordAPI {
   static Future saveKeyword(List keywordList) async {
+    Expiration.checkExpiration();
+
     final accessToken = await Storage.getAccessToken();
     final response = await http.post(
         Uri.parse('${Constants.baseURL}/keyword/save'),
@@ -18,9 +21,6 @@ class KeywordAPI {
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
-    } else if (response.statusCode == 401) {
-      await UserAPI.refreshToken();
-      await saveKeyword(keywordList);
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('키워드를 저장하지 못했습니다.');
@@ -28,6 +28,8 @@ class KeywordAPI {
   }
 
   static Future editKeyword({required List indexList}) async {
+    Expiration.checkExpiration();
+
     final accessToken = await Storage.getAccessToken();
     final response = await http.post(
         Uri.parse('${Constants.baseURL}/keyword/edit'),
@@ -49,6 +51,8 @@ class KeywordAPI {
   }
 
   static Future getIndexList(int noteId) async {
+    Expiration.checkExpiration();
+
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/$noteId'),
@@ -59,9 +63,6 @@ class KeywordAPI {
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
-    } else if (response.statusCode == 401) {
-      await UserAPI.refreshToken();
-      await getIndexList(noteId);
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('키워드를 가져오지 못했습니다.');
@@ -97,6 +98,8 @@ class KeywordAPI {
   }
 
   static Future deleteKeyword({required int noteId}) async {
+    Expiration.checkExpiration();
+
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/deleteBynoteid/$noteId'),
@@ -107,9 +110,6 @@ class KeywordAPI {
 
     if (response.statusCode == 200) {
       return response;
-    } else if (response.statusCode == 401) {
-      await UserAPI.refreshToken();
-      await deleteKeyword(noteId: noteId);
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('키워드를 삭제하지 못했습니다.');

@@ -89,7 +89,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         password: passwordController.text);
 
                     // 사용자 정보를 storage에 저장
-                    Storage.writeJson(key: USERINFO, json: response);
+                    final value = {
+                      "userId": response["userid"],
+                      "nickname": response["nickname"],
+                      "accessToken": response["accessToken"],
+                      "refreshToken": response["refreshToken"],
+                      "expiration":
+                          DateTime.now().add(const Duration(minutes: 28))
+                    };
+                    Storage.writeJson(key: USERINFO, json: value);
 
                     // 홈으로 이동
                     if (mounted) {

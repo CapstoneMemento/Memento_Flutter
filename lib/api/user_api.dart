@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
+import 'package:memento_flutter/utility/expiration.dart';
 import 'package:memento_flutter/utility/storage.dart';
 
 class UserAPI {
@@ -37,9 +38,6 @@ class UserAPI {
       Storage.writeJson(key: "userInfo", json: json as Map);
 
       return json;
-    } else if (response.statusCode == 401) {
-      // storage에서 만료된 토큰 삭제
-      Storage.deleteData(key: "userInfo");
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('토큰을 재발급하지 못했습니다.');
@@ -47,6 +45,8 @@ class UserAPI {
   }
 
   static Future logout() async {
+    Expiration.checkExpiration();
+
     final userInfo = await Storage.readData(key: "userInfo");
     final accessToken = userInfo["accessToken"];
     final refreshToken = userInfo["refreshToken"];
@@ -62,9 +62,6 @@ class UserAPI {
       Storage.deleteData(key: "userInfo");
 
       return response;
-    } else if (response.statusCode == 401) {
-      await refreshToken();
-      await logout();
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('로그아웃 실패');
