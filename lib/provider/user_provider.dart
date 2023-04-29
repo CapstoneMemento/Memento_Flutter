@@ -6,7 +6,7 @@ class UserProvider extends ChangeNotifier {
 
   User? get currentUser => _currentUser;
 
-  void setUser(Map json) {
+  void setUser({required Map json}) {
     _currentUser = User.fromJson(json);
     notifyListeners();
   }
