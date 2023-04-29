@@ -89,13 +89,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         password: passwordController.text);
 
                     // 사용자 정보를 storage에 저장
+                    // jsonEncode는 DateTime을 인코딩할 수 없으므로 String으로 바꾸기
                     final value = {
                       "userId": response["userid"],
                       "nickname": response["nickname"],
                       "accessToken": response["accessToken"],
                       "refreshToken": response["refreshToken"],
-                      "expiration":
-                          DateTime.now().add(const Duration(minutes: 28))
+                      "expiration": DateTime.now()
+                          .add(const Duration(minutes: 28))
+                          .toString()
                     };
                     Storage.writeJson(key: USERINFO, json: value);
 
