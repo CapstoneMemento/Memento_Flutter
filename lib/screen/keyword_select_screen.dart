@@ -43,6 +43,10 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
     for (final word in wordList) {
       index = sentence.indexOf(word);
 
+      if (index == -1) {
+        continue;
+      }
+
       selectedIndex.add({
         "first": index,
         "last": index + word.length,

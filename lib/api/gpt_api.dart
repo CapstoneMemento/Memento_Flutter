@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 class GptAPI {
   static Future recommentKeyword({required String content}) async {
     await Expiration.checkExpiration();
+
     final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,
