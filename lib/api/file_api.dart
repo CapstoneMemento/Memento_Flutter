@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 
 class FileAPI {
   static Future uploadFile({required File imageFile}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
 
     final uri = Uri.parse('${Constants.baseURL}/file/upload');

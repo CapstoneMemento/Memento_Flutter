@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 
 class QuizAPI {
@@ -14,8 +14,6 @@ class QuizAPI {
   List quizList = [];
 
   Future fetchQuizList() async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/quiz/0'),

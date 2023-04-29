@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 
 class NoteAPI {
   static Future fetchNoteList() async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(Uri.parse('${Constants.baseURL}/note/list'),
         headers: {"Authorization": "Bearer $accessToken"});
@@ -21,8 +19,6 @@ class NoteAPI {
   }
 
   static Future fetchNote({required int noteId}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http
         .get(Uri.parse('${Constants.baseURL}/note/$noteId'), headers: {
@@ -39,8 +35,6 @@ class NoteAPI {
   }
 
   static Future addNote({required String content, String title = ""}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,
@@ -67,8 +61,6 @@ class NoteAPI {
 
   static Future editNote(
       {required int noteId, required String content, String title = ""}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final data = {"content": content, "title": title};
     final response = await http.put(
@@ -89,8 +81,6 @@ class NoteAPI {
   }
 
   static Future deleteNote({required int noteId}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.delete(
       Uri.parse('${Constants.baseURL}/note/$noteId/delete'),

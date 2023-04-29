@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 
 class UserAPI {
@@ -41,8 +41,6 @@ class UserAPI {
   }
 
   static Future logout() async {
-    await Expiration.checkExpiration();
-
     final userInfo = await Storage.readData(key: "userInfo");
     final accessToken = userInfo["accessToken"];
     final refreshToken = userInfo["refreshToken"];

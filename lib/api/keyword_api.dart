@@ -3,13 +3,11 @@ import 'package:http/http.dart' as http;
 import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/api/user_api.dart';
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 
 class KeywordAPI {
   static Future saveKeyword(List keywordList) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.post(
         Uri.parse('${Constants.baseURL}/keyword/save'),
@@ -28,8 +26,6 @@ class KeywordAPI {
   }
 
   static Future editKeyword({required List indexList}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.post(
         Uri.parse('${Constants.baseURL}/keyword/edit'),
@@ -51,8 +47,6 @@ class KeywordAPI {
   }
 
   static Future getIndexList(int noteId) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/$noteId'),
@@ -98,8 +92,6 @@ class KeywordAPI {
   }
 
   static Future deleteKeyword({required int noteId}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
       Uri.parse('${Constants.baseURL}/keyword/deleteBynoteid/$noteId'),

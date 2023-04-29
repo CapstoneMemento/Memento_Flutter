@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:memento_flutter/config/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 
 class SearchAPI {
   static Future fetchSearchList(query) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final response = await http.get(
         Uri.parse('${Constants.baseURL}/search/find?query=$query'),
@@ -23,8 +21,6 @@ class SearchAPI {
   }
 
   static Future fetchContent({required int caseId}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
 
     final response = await http.get(

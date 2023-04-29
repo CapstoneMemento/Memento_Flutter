@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:memento_flutter/config/constants.dart';
-import 'package:memento_flutter/utility/expiration.dart';
+
 import 'package:memento_flutter/utility/storage.dart';
 import 'package:http/http.dart' as http;
 
 class GptAPI {
   static Future recommentKeyword({required String content}) async {
-    await Expiration.checkExpiration();
-
     final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,
