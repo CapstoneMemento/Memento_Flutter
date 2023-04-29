@@ -108,7 +108,6 @@ class _SearchNoteScreenState extends State<SearchNoteScreen> {
             setState(() {
               isLoading = true;
             });
-
             // 노트 저장하고 추천 키워드 받아오기
             final result = await Keyword.getKeywordIndexFromNote(content: main);
 

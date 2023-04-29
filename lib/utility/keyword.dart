@@ -24,10 +24,11 @@ class Keyword {
       required String noteId}) {
     var result = [];
     var index = 0; // 단어 시작 인덱스
+    var startIndex = 0;
 
     for (final word in wordList) {
-      index = sentence.indexOf(word);
-
+      index = sentence.indexOf(word, startIndex);
+      // 해당하는 단어가 없으면 다음 단어로 이동
       if (index == -1) {
         continue;
       }
@@ -37,7 +38,10 @@ class Keyword {
         "last": index + word.length,
         "noteid": noteId,
       });
+      // 같은 단어의 인덱스가 중복되지 않도록 startIndex 지정
+      startIndex = index + word.length as int;
     }
+
     return result;
   }
 
