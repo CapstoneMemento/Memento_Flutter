@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
 class User extends ChangeNotifier {
-  final String userId, nickname, accessToken, refreshToken, expiration;
+  final String userid, nickname, accessToken, refreshToken, expiration;
 
   User({
-    required this.userId,
+    required this.userid,
     required this.nickname,
     required this.accessToken,
     required this.refreshToken,
@@ -12,9 +12,17 @@ class User extends ChangeNotifier {
   });
 
   User.fromJson(Map json)
-      : userId = json["userid"],
+      : userid = json["userid"],
         nickname = json["nickname"],
         accessToken = json["accessToken"],
         refreshToken = json["refreshToken"],
         expiration = DateTime.now().add(const Duration(minutes: 28)).toString();
+
+  Map toJson() => {
+        "userid": userid,
+        "nickname": nickname,
+        "accessToken": accessToken,
+        "refreshToken": refreshToken,
+        "expiration": expiration
+      };
 }
