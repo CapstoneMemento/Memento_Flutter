@@ -48,7 +48,7 @@ class UserAPI {
     final refreshToken = userInfo["refreshToken"];
 
     final response = await http
-        .delete(Uri.parse('${Constants.baseURL}/users/refreshToken'), headers: {
+        .delete(Uri.parse('${Constants.baseURL}/users/logout'), headers: {
       "Authorization": "Bearer $accessToken",
       "RefreshToken": "Bearer $refreshToken"
     });
