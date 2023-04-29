@@ -38,19 +38,16 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
 
   // 추천 키워드 인덱스 저장하기
   void getKeywordIndexList({required List wordList, required String sentence}) {
-    var index = 0;
-    for (final word in wordList) {
-      while (true) {
-        index = sentence.indexOf(word);
-        // 해당 키워드가 없으면 중단
-        if (index == -1) break;
+    var index = 0; // 단어 시작 인덱스
 
-        selectedIndex.add({
-          "first": index,
-          "last": index + word.length,
-          "noteid": widget.noteId,
-        });
-      }
+    for (final word in wordList) {
+      index = sentence.indexOf(word);
+
+      selectedIndex.add({
+        "first": index,
+        "last": index + word.length,
+        "noteid": widget.noteId,
+      });
     }
   }
 
