@@ -32,7 +32,7 @@ class _KeywordSelectState extends State<KeywordSelect> {
         cause == SelectionChangedCause.drag) {
       saveIndex(newStartIndex: startIndex, newEndIndex: endIndex, cause: cause);
       // 오름차순 정렬 (사용자가 순서대로 밑줄을 긋지 않을 경우에 대비)
-      sortIndex(index: widget.selectedIndex);
+      sortIndex(indexList: widget.selectedIndex);
     }
 
     // 드래그 중 화면 새로고침 횟수 줄이기
@@ -96,8 +96,8 @@ class _KeywordSelectState extends State<KeywordSelect> {
   }
 
   /* 오름차순 정렬 */
-  void sortIndex({required List index}) {
-    widget.selectedIndex.sort((a, b) {
+  void sortIndex({required List indexList}) {
+    indexList.sort((a, b) {
       if (a["first"] == b["first"]) {
         return a["last"].compareTo(b["last"]);
       }

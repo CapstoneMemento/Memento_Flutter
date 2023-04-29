@@ -170,7 +170,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
                 ]),
               ),
               if (mementoWord != "")
-                Keyword(
+                KeywordWidget(
                   content: mementoWord,
                 )
             ],
@@ -192,7 +192,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
           Column(
             children: [
               if (userWord != "")
-                Keyword(
+                KeywordWidget(
                   content: userWord,
                   boxColor: const Color(0xFFA6DAFB),
                 ),
@@ -221,11 +221,11 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   }
 }
 
-class Keyword extends StatelessWidget {
+class KeywordWidget extends StatelessWidget {
   final String content;
   final Color? boxColor;
 
-  const Keyword(
+  const KeywordWidget(
       {required this.content, this.boxColor = const Color(0xFFD9D9D9)});
 
   @override

@@ -10,10 +10,12 @@ import 'package:memento_flutter/widgets/navigation_bar.dart';
 class KeywordSelectScreen extends StatefulWidget {
   final int noteId;
   final String content; // 노트 본문
-  final List recommended;
+  List selectedIndex;
 
-  const KeywordSelectScreen(
-      {required this.noteId, required this.content, required this.recommended});
+  KeywordSelectScreen(
+      {required this.noteId,
+      required this.content,
+      required this.selectedIndex});
 
   @override
   State<KeywordSelectScreen> createState() => _KeywordSelectScreenState();
@@ -21,7 +23,6 @@ class KeywordSelectScreen extends StatefulWidget {
 
 class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   // 선택한 문자의 인덱스 {first, last, noteId}
-  List selectedIndex = [];
 
   // 선택한 문자 {text, isKeyword}
   List selectedText = [];
@@ -29,31 +30,6 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
   // 선택한 문자 TextStyle
   final highlightStyle =
       TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
-
-  @override
-  void initState() {
-    super.initState();
-    getKeywordIndexList(wordList: widget.recommended, sentence: widget.content);
-  }
-
-  // 추천 키워드 인덱스 저장하기
-  void getKeywordIndexList({required List wordList, required String sentence}) {
-    var index = 0; // 단어 시작 인덱스
-
-    for (final word in wordList) {
-      index = sentence.indexOf(word);
-
-      if (index == -1) {
-        continue;
-      }
-
-      selectedIndex.add({
-        "first": index,
-        "last": index + word.length,
-        "noteid": widget.noteId,
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +61,21 @@ class _KeywordSelectScreenState extends State<KeywordSelectScreen> {
               ),
             ]),
         body: KeywordSelect(
-            selectedIndex: selectedIndex,
+            selectedIndex: widget.selectedIndex,
             noteId: widget.noteId,
             content: widget.content),
         floatingActionButton: FloatingActionButton(
           backgroundColor: CustomTheme.themeData.primaryColor,
           child: const Text("다음"),
           onPressed: () {
-            // selectedIndex 키워드 DB에 저장
-            KeywordAPI.saveKeyword(selectedIndex).then((_) =>
+            // widget.selectedIndex 키워드 DB에 저장
+            KeywordAPI.saveKeyword(widget.selectedIndex).then((_) =>
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => TitleSettingScreen(
                         noteId: widget.noteId,
                         selectedText: KeywordAPI.sliceText(
                             content: widget.content,
-                            selectedIndex: selectedIndex),
+                            selectedIndex: widget.selectedIndex),
                         content: widget.content))));
           },
         ));

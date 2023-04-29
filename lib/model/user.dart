@@ -12,7 +12,7 @@ class User extends ChangeNotifier {
   User.fromJson(Map json)
       : accessToken = json["accessToken"],
         refreshToken = json["refreshToken"],
-        expiration = DateTime.now().add(const Duration(minutes: 28)).toString();
+        expiration = DateTime.now().add(const Duration(minutes: 30)).toString();
 
   Map toJson() => {
         "accessToken": accessToken,

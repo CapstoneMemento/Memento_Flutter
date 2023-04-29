@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/api/gpt_api.dart';
-import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screen/keyword_select_screen.dart';
 import 'package:memento_flutter/screen/ocr/ocr_note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/utility/keyword.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/close_icon_button.dart';
 
@@ -118,19 +117,18 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
         onPressed: () async {
-          // 노트 저장하고 id 받아오기
-          final noteId = await NoteAPI.addNote(content: widget.content);
-          final recommended =
-              await GptAPI.recommentKeyword(content: widget.content);
+          // 노트 저장하고 키워드 인덱스 받아오기
+          final result =
+              await Keyword.getKeywordIndexFromNote(content: widget.content);
 
           if (mounted) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => KeywordSelectScreen(
-                          noteId: int.parse(noteId),
+                          noteId: int.parse(result["noteId"]),
                           content: widget.content,
-                          recommended: recommended,
+                          selectedIndex: result["indexList"],
                         )));
           }
         },

@@ -17,7 +17,7 @@ class UserAPI {
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       print('Error code: ${response.statusCode}');
-      throw Exception('로그인 하지 못했습니다..');
+      throw Exception('로그인 하지 못했습니다.');
     }
   }
 
