@@ -24,21 +24,17 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    startTokenRefreshTimer();
-    Storage.readData(key: "userInfo").then((value) => {
-          // 사용자 정보가 있으면 (이미 로그인 한 사용자이면) 홈 화면으로 이동
-          if (value != null)
-            {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => NavigationBarWidget()),
-                  (route) => false)
-            }
-        });
+    Storage.readData(key: "userInfo").then((value) async {
+      // 사용자 정보가 있으면 (이미 로그인 한 사용자이면) 홈 화면으로 이동
+      if (value != null) {
+        // 토큰 재발급
+        await startTokenRefreshTimer();
+      }
+    });
   }
 
   // 30분마다 토큰 재발급
-  void startTokenRefreshTimer() async {
+  Future startTokenRefreshTimer() async {
     Timer.periodic(const Duration(minutes: 30), (timer) async {
       final json = await UserAPI.refreshToken();
 
@@ -47,16 +43,14 @@ class _LoginScreenState extends State<LoginScreen> {
         // storage 사용자 정보 업데이트
         final userJson = User.fromJson(json).toJson();
         await Storage.writeJson(key: "userInfo", json: userJson);
+        // 홈 화면으로 이동
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => NavigationBarWidget()),
+            (route) => false);
       } else {
         // refreshToken도 만료되면
         // Storage 사용자 정보 삭제
         await Storage.deleteData(key: "userInfo");
-        //로그인 화면으로 이동
-        if (mounted) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-              (route) => false);
-        }
       }
     });
   }
