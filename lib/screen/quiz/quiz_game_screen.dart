@@ -96,10 +96,10 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
 
   void _onSubmitted(value) {
     // 띄어쓰기 제거 후 정답 비교
-    value = value.trim().replaceAll(" ", "");
+    final trimedValue = value.trim().replaceAll(" ", "");
     final trimedAnswer = answer.trim().replaceAll(" ", "");
 
-    if (value == trimedAnswer) {
+    if (trimedValue == trimedAnswer) {
       delayMemento(isUserAnswer: true);
       inputBorderStyle = Border.all(color: CustomTheme.themeData.primaryColor);
       userWord = value; // 사용자 키워드
