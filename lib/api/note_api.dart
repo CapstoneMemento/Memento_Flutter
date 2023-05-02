@@ -38,7 +38,7 @@ class NoteAPI {
     final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,
-      "content": content,
+      "content": content.substring(0, 50),
       "title": title,
       "type": "keyword"
     };

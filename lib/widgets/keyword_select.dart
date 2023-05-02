@@ -120,30 +120,32 @@ class _KeywordSelectState extends State<KeywordSelect> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const SizedBox(
-          height: 16,
-        ),
-        Text(
-          "키워드를 선택하세요.",
-          style: CustomTheme.themeData.textTheme.titleSmall,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        TextSelectionTheme(
-          data: TextSelectionThemeData(
-            selectionColor: Colors.yellow.withOpacity(0.5),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SizedBox(
+            height: 16,
           ),
-          child: SelectableText.rich(
-            TextSpan(children: getSpanList()),
-            toolbarOptions: const ToolbarOptions(selectAll: false),
-            onSelectionChanged: _onSelectionChanged,
+          Text(
+            "키워드를 선택하세요.",
+            style: CustomTheme.themeData.textTheme.titleSmall,
           ),
-        ),
-      ]),
+          const SizedBox(
+            height: 16,
+          ),
+          TextSelectionTheme(
+            data: TextSelectionThemeData(
+              selectionColor: Colors.yellow.withOpacity(0.5),
+            ),
+            child: SelectableText.rich(
+              TextSpan(children: getSpanList()),
+              toolbarOptions: const ToolbarOptions(selectAll: false),
+              onSelectionChanged: _onSelectionChanged,
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }
