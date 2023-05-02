@@ -26,7 +26,7 @@ class GptAPI {
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       print('Error code: ${response.statusCode}');
-      throw Exception('키워드를 수정하지 못했습니다.');
+      throw Exception('키워드를 추천받지 못했습니다.');
     }
   }
 }
