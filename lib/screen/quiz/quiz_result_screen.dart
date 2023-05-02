@@ -65,7 +65,7 @@ class QuizResultScreen extends StatelessWidget {
                             children: answer["keywords"]
                                 .map<Widget>((keyword) => Container(
                                       decoration: BoxDecoration(
-                                          color: keyword["isAnswer"]
+                                          color: keyword["isUserAnswer"]
                                               ? const Color(0xFFA6DAFB)
                                               : const Color(0xFFD9D9D9),
                                           borderRadius: const BorderRadius.all(

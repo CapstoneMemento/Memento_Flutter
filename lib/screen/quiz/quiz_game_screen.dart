@@ -55,25 +55,29 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
     // 사용자가 정답이면
     // 1초 동안 고민하는 메멘토 이미지 표시
     if (isUserAnswer) {
-      mementoImage = SvgPicture.asset('assets/images/logo_think.svg',
-          semanticsLabel: '고민하는 메멘토 캐릭터 로고');
+      setState(() {
+        mementoImage = SvgPicture.asset('assets/images/logo_think.svg',
+            semanticsLabel: '고민하는 메멘토 캐릭터 로고');
+      });
       Future.delayed(const Duration(seconds: 1), () {
         mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
             semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
+        setState(() {});
       });
-      setState(() {});
     } else {
       // 1초 동안 기뻐하는 메멘토 이미지 보이기
       // 1초 동안 TextField에 메멘토 정답 표시
       mementoController.text = answer;
-      mementoImage = SvgPicture.asset('assets/images/logo_happy.svg',
-          semanticsLabel: '기뻐하는 메멘토 캐릭터 로고');
+      setState(() {
+        mementoImage = SvgPicture.asset('assets/images/logo_happy.svg',
+            semanticsLabel: '기뻐하는 메멘토 캐릭터 로고');
+      });
       Future.delayed(const Duration(seconds: 1), () {
         mementoController.text = ". . .";
         mementoImage = SvgPicture.asset('assets/images/logo_down.svg',
             semanticsLabel: '판례 제목을 쳐다보고 있는 메멘토 캐릭터 로고');
+        setState(() {});
       });
-      setState(() {});
     }
   }
 
@@ -95,7 +99,11 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   }
 
   void _onSubmitted(value) {
-    if (value == answer) {
+    // 띄어쓰기 제거 후 정답 비교
+    final trimedValue = value.trim().replaceAll(" ", "");
+    final trimedAnswer = answer.trim().replaceAll(" ", "");
+
+    if (trimedValue == trimedAnswer) {
       delayMemento(isUserAnswer: true);
       inputBorderStyle = Border.all(color: CustomTheme.themeData.primaryColor);
       userWord = value; // 사용자 키워드
