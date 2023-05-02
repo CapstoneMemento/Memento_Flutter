@@ -1,10 +1,8 @@
 import 'package:memento_flutter/api/gpt_api.dart';
-import 'package:memento_flutter/api/note_api.dart';
 
 class Keyword {
-  static Future getKeywordIndexFromNote({required String content}) async {
-    // 노트 저장하고 추천 키워드 받아오기
-    final noteId = await NoteAPI.addNote(content: content);
+  static Future getKeywordIndexFromNote(
+      {required String content, required String noteId}) async {
     final recommended = await GptAPI.recommentKeyword(content: content);
 
     // 추천 키워드 인덱스 추출

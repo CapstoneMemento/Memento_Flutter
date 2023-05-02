@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/note_api.dart';
 import 'package:memento_flutter/screen/keyword_select_screen.dart';
 import 'package:memento_flutter/screen/ocr/ocr_note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
@@ -125,8 +126,9 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
             isLoading = true;
           });
           // 노트 저장하고 키워드 인덱스 받아오기
-          final result =
-              await Keyword.getKeywordIndexFromNote(content: widget.content);
+          final noteId = await NoteAPI.addNote(content: widget.content);
+          final result = await Keyword.getKeywordIndexFromNote(
+              content: widget.content, noteId: noteId);
 
           if (mounted) {
             Navigator.push(

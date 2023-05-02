@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/search_api.dart';
-import 'package:memento_flutter/screen/keyword_select_screen.dart';
+import 'package:memento_flutter/screen/search/search_note_edit_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
-import 'package:memento_flutter/utility/keyword.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/loading.dart';
@@ -18,7 +17,7 @@ class SearchNoteScreen extends StatefulWidget {
 
 class _SearchNoteScreenState extends State<SearchNoteScreen> {
   bool isLoading = false;
-  String main = "";
+  late String main;
 
   @override
   Widget build(BuildContext context) {
@@ -105,22 +104,9 @@ class _SearchNoteScreenState extends State<SearchNoteScreen> {
           if (main.isEmpty) {
             // 저장할 판결 요지가 없습니다.
           } else {
-            setState(() {
-              isLoading = true;
-            });
-            // 노트 저장하고 추천 키워드 받아오기
-            final result = await Keyword.getKeywordIndexFromNote(content: main);
-
-            if (mounted) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => KeywordSelectScreen(
-                      noteId: int.parse(result["noteId"]),
-                      content: main,
-                      selectedIndex: result["indexList"])));
-            }
-            setState(() {
-              isLoading = false;
-            });
+            // 노트 수정 화면으로 이동
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => SearchNoteEditScreen(content: main)));
           }
         },
       ),

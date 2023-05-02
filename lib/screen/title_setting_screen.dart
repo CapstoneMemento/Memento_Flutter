@@ -29,6 +29,8 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final titleFormKey = GlobalKey<FormState>();
+
     return Scaffold(
       appBar: BaseAppBar(
         leading: IconButton(
@@ -72,7 +74,14 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          TextField(
+          TextFormField(
+            key: titleFormKey,
+            validator: (value) {
+              if (value == "") {
+                return "제목을 입력하세요";
+              }
+              return null;
+            },
             decoration: const InputDecoration(
               contentPadding:
                   EdgeInsets.symmetric(vertical: 14, horizontal: 10),
@@ -103,17 +112,20 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
         backgroundColor: CustomTheme.themeData.primaryColor,
         child: const Text("다음"),
         onPressed: () async {
-          // noteId로 title 저장
-          await NoteAPI.editNote(
-              noteId: widget.noteId, content: widget.content, title: title);
-
-          if (mounted) {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => NoteScreen(
-                          noteId: widget.noteId,
-                        )),
-                (route) => false);
+          // 제목이 있으면
+          if (title != "") {
+            // noteId로 title 저장
+            await NoteAPI.editNote(
+                noteId: widget.noteId, content: widget.content, title: title);
+            // 저장한 노트 화면으로 이동
+            if (mounted) {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NoteScreen(
+                            noteId: widget.noteId,
+                          )),
+                  (route) => false);
+            }
           }
         },
       ),
