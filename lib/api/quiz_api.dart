@@ -35,6 +35,14 @@ class QuizAPI {
                       .toList()
                 })
             .toList();
+
+        // 키워드 띄어쓰기 제거
+        for (var i = 0; i < quizList.length; i++) {
+          for (var j = 0; j < quizList[i]["keywords"].length; j++) {
+            quizList[i]["keywords"][j] =
+                quizList[i]["keywords"][j].trim().replaceAll(" ", "");
+          }
+        }
       }
 
       return quizList;
@@ -56,7 +64,7 @@ class QuizAPI {
     int keywordLength = quizList[currentQuizIndex]["keywords"].length;
     int quizLength = quizList.length;
 
-    // 키워드 인덱스를 벗어나지 않으면 (아직 남은 키워드가 있다면)
+    // 해당 퀴즈에 아직 남은 키워드가 있다면 (키워드 인덱스를 벗어나지 않으면)
     if (currentKeywordIndex < keywordLength) {
       // 키워드 반환 후 키워드 인덱스 증가
       return quizList[currentQuizIndex]["keywords"][currentKeywordIndex++];
@@ -67,7 +75,7 @@ class QuizAPI {
     if (currentQuizIndex < quizLength - 1) {
       // 키워드 인덱스 0으로 초기화
       currentKeywordIndex = 0;
-      // 퀴즈 인덱스 증가 (다음 퀴즈로 이동)
+      // 다음 퀴즈로 이동)(퀴즈 인덱스 증가)
       return quizList[++currentQuizIndex]["keywords"][currentKeywordIndex++];
     }
 

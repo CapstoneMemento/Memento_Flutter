@@ -95,6 +95,9 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   }
 
   void _onSubmitted(value) {
+    // 띄어쓰기 제거 후 정답 비교
+    value = value.trim().replaceAll(" ", "");
+
     if (value == answer) {
       delayMemento(isUserAnswer: true);
       inputBorderStyle = Border.all(color: CustomTheme.themeData.primaryColor);
