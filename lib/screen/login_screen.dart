@@ -20,6 +20,21 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    Storage.readData(key: "userInfo").then((value) => {
+          // 사용자 정보가 있으면 (이미 로그인 한 사용자이면) 홈 화면으로 이동
+          if (value)
+            {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NavigationBarWidget()),
+                  (route) => false)
+            }
+        });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BaseAppBar(),
