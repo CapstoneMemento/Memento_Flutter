@@ -35,14 +35,6 @@ class QuizAPI {
                       .toList()
                 })
             .toList();
-
-        // 키워드 띄어쓰기 제거
-        for (var i = 0; i < quizList.length; i++) {
-          for (var j = 0; j < quizList[i]["keywords"].length; j++) {
-            quizList[i]["keywords"][j] =
-                quizList[i]["keywords"][j].trim().replaceAll(" ", "");
-          }
-        }
       }
 
       return quizList;
