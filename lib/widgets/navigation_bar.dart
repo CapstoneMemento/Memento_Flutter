@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/api/user_api.dart';
+import 'package:memento_flutter/model/user.dart';
 import 'package:memento_flutter/screen/login_screen.dart';
 
 import 'package:memento_flutter/screen/note/note_list_screen.dart';
@@ -39,19 +43,31 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
   @override
   void initState() {
     super.initState();
-    checkUserInfo();
+    startTokenRefreshTimer();
   }
 
-  // 토큰이 만료되면 로그인 화면으로 이동
-  void checkUserInfo() {
-    Storage.readData(key: "userInfo").then((userInfo) => {
-          if (userInfo == null)
-            {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false)
-            }
-        });
+  // 30분마다 토큰 재발급
+  Future startTokenRefreshTimer() async {
+    Timer.periodic(const Duration(minutes: 28), (timer) async {
+      final json = await UserAPI.refreshToken();
+
+      // refreshToken이 만료되지 않았으면
+      if (json != null) {
+        // storage 사용자 정보 업데이트
+        final userJson = User.fromJson(json).toJson();
+        await Storage.writeJson(key: "userInfo", json: userJson);
+      } else {
+        // refreshToken도 만료되면
+        // Storage 사용자 정보 삭제
+        await Storage.deleteData(key: "userInfo");
+        // 로그인 화면으로 이동
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) => false);
+        }
+      }
+    });
   }
 
   void _onTap(int index) {
