@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // 30분마다 토큰 재발급
   Future startTokenRefreshTimer() async {
-    Timer.periodic(const Duration(minutes: 30), (timer) async {
+    Timer.periodic(const Duration(minutes: 28), (timer) async {
       final json = await UserAPI.refreshToken();
 
       // refreshToken이 만료되지 않았으면
