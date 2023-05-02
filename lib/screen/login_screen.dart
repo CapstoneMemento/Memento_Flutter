@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/user_api.dart';
 import 'package:memento_flutter/model/user.dart';
@@ -22,9 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    startTokenRefreshTimer();
     Storage.readData(key: "userInfo").then((value) => {
           // 사용자 정보가 있으면 (이미 로그인 한 사용자이면) 홈 화면으로 이동
-          if (value)
+          if (value != null)
             {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
@@ -32,6 +35,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   (route) => false)
             }
         });
+  }
+
+  // 30분마다 토큰 재발급
+  void startTokenRefreshTimer() async {
+    Timer.periodic(const Duration(minutes: 30), (timer) async {
+      final json = await UserAPI.refreshToken();
+
+      // refreshToken이 만료되지 않았으면
+      if (json != null) {
+        // storage 사용자 정보 업데이트
+        final userJson = User.fromJson(json).toJson();
+        await Storage.writeJson(key: "userInfo", json: userJson);
+      } else {
+        // refreshToken도 만료되면
+        // Storage 사용자 정보 삭제
+        await Storage.deleteData(key: "userInfo");
+        //로그인 화면으로 이동
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) => false);
+        }
+      }
+    });
   }
 
   @override
