@@ -20,33 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-
-    // 비동기로 flutter secure storage 정보 불러오기
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkLogin();
-    });
-  }
-
-  void checkLogin() async {
-    // 로그인 사용자 정보 불러오기
-    final userInfo = await Storage.readData(key: "userInfo");
-
-    // 로그인한 사용자이면
-    if (userInfo != null) {
-      if (mounted) {
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(json: userInfo);
-        // 홈으로 이동
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => NavigationBarWidget()),
-            (route) => false);
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BaseAppBar(),

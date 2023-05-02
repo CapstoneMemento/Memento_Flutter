@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/screen/login_screen.dart';
 
 import 'package:memento_flutter/screen/note/note_list_screen.dart';
 import 'package:memento_flutter/screen/quiz/quiz_start_screen.dart';
 import 'package:memento_flutter/screen/search/search_screen.dart';
 import 'package:memento_flutter/screen/setting_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
+import 'package:memento_flutter/utility/storage.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/modal_bottom_sheet.dart';
 
@@ -33,6 +35,24 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
     SizedBox.shrink(),
     SizedBox.shrink()
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserInfo();
+  }
+
+  // 토큰이 만료되면 로그인 화면으로 이동
+  void checkUserInfo() {
+    Storage.readData(key: "userInfo").then((userInfo) => {
+          if (userInfo == null)
+            {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (route) => false)
+            }
+        });
+  }
 
   void _onTap(int index) {
     setState(() {

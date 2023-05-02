@@ -34,6 +34,10 @@ class UserAPI {
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
+    } else if (response.statusCode == 401) {
+      // 저장소 정보 삭제하고 다시 로그인
+      await Storage.deleteData(key: "userInfo");
+      return null;
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('토큰을 재발급하지 못했습니다.');
@@ -53,7 +57,7 @@ class UserAPI {
 
     if (response.statusCode == 200) {
       // 저장소에서 사용자 정보 삭제
-      Storage.deleteData(key: "userInfo");
+      await Storage.deleteData(key: "userInfo");
 
       return response;
     } else {

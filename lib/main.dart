@@ -25,13 +25,21 @@ class _MyAppState extends State<MyApp> {
     startTokenRefreshTimer();
   }
 
+  // 30분마다 토큰 재발급
   void startTokenRefreshTimer() {
-    Timer.periodic(const Duration(minutes: 29), (timer) async {
+    Timer.periodic(const Duration(minutes: 28), (timer) async {
       final json = await UserAPI.refreshToken();
 
-      // storage 사용자 정보 업데이트
-      final userJson = User.fromJson(json).toJson();
-      await Storage.writeJson(key: "userInfo", json: userJson);
+      if (json != null) {
+        // storage 사용자 정보 업데이트
+        final userJson = User.fromJson(json).toJson();
+        await Storage.writeJson(key: "userInfo", json: userJson);
+      } else {
+        // 토큰이 만료되면 로그인 화면으로 이동
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false);
+      }
     });
   }
 
