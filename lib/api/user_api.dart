@@ -15,6 +15,9 @@ class UserAPI {
 
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
+    } else if (response.statusCode == 500) {
+// 아이디 또는 비밀번호 불일치
+      return null;
     } else {
       print('Error code: ${response.statusCode}');
       throw Exception('로그인 하지 못했습니다.');

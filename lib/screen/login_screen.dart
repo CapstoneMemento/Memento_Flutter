@@ -96,21 +96,42 @@ class _LoginScreenState extends State<LoginScreen> {
                         userId: idController.text,
                         password: passwordController.text);
 
-                    // 사용자 정보를 storage에 저장
-                    final userJson = User.fromJson(response).toJson();
-                    Storage.writeJson(key: "userInfo", json: userJson);
+                    if (response == null) {
+                      // 아이디 또는  비밀번호 불일치
+                      showDialog(
+                          context: context,
+                          builder: ((context) => AlertDialog(
+                                contentPadding: const EdgeInsets.all(16),
+                                content: const Text("아이디 또는 비밀번호가\n일치하지 않습니다.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400)),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("확인"))
+                                ],
+                              )));
+                    } else {
+                      // 사용자 정보를 storage에 저장
+                      final userJson = User.fromJson(response).toJson();
+                      Storage.writeJson(key: "userInfo", json: userJson);
 
-                    // 홈으로 이동
-                    if (mounted) {
-                      // state 설정
-                      final userProvider =
-                          Provider.of<UserProvider>(context, listen: false);
-                      userProvider.setUser(json: userJson);
+                      // 홈으로 이동
+                      if (mounted) {
+                        // state 설정
+                        final userProvider =
+                            Provider.of<UserProvider>(context, listen: false);
+                        userProvider.setUser(json: userJson);
 
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => NavigationBarWidget()),
-                          (route) => false);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => NavigationBarWidget()),
+                            (route) => false);
+                      }
                     }
                   },
                   child: Container(
