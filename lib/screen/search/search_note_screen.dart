@@ -17,7 +17,7 @@ class SearchNoteScreen extends StatefulWidget {
 
 class _SearchNoteScreenState extends State<SearchNoteScreen> {
   bool isLoading = false;
-  late String main;
+  String main = "";
 
   @override
   Widget build(BuildContext context) {

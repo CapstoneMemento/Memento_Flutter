@@ -16,19 +16,25 @@ class SearchNoteEditScreen extends StatefulWidget {
 }
 
 class _SearchNoteEditScreenState extends State<SearchNoteEditScreen> {
+  TextEditingController contentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    //  TextField 초기값 설정
+    setState(() {
+      contentController.text = widget.content;
+    });
+  }
+
+  @override
+  void dispose() {
+    contentController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController contentController = TextEditingController();
-
-    @override
-    void initState() {
-      super.initState();
-      //  TextField 초기값 설정
-      setState(() {
-        contentController.text = widget.content;
-      });
-    }
-
     return Scaffold(
       appBar: MainAppBar(
         leading: const BackIconButton(),
@@ -58,7 +64,7 @@ class _SearchNoteEditScreenState extends State<SearchNoteEditScreen> {
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
-              maxLines: (widget.content.length / 100).ceil(),
+              maxLines: (widget.content.length / 30).ceil(),
               style: CustomTheme.themeData.textTheme.bodyMedium,
               controller: contentController,
               decoration: const InputDecoration(
