@@ -15,7 +15,6 @@ class NoteEditScreen extends StatefulWidget {
 class _NoteEditScreenState extends State<NoteEditScreen> {
   late String editedText = widget.content;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +34,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
         child: Form(
           child: TextFormField(
             initialValue: widget.content,
-            maxLines: 100,
+            maxLines: (widget.content.length / 30).ceil(),
             keyboardType: TextInputType.multiline,
             decoration: const InputDecoration(
               hintText: "내용을 입력하세요.",
