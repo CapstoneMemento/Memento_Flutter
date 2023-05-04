@@ -35,7 +35,6 @@ class NoteAPI {
   }
 
   static Future addNote({required String content, String title = ""}) async {
-    print(content.length);
     final accessToken = await Storage.getAccessToken();
     final data = {
       "categories_id": 0,

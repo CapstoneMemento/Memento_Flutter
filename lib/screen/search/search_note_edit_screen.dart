@@ -5,6 +5,7 @@ import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/utility/keyword.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
+import 'package:memento_flutter/widgets/loading.dart';
 
 class SearchNoteEditScreen extends StatefulWidget {
   final String content;
@@ -17,6 +18,7 @@ class SearchNoteEditScreen extends StatefulWidget {
 
 class _SearchNoteEditScreenState extends State<SearchNoteEditScreen> {
   TextEditingController contentController = TextEditingController();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -42,6 +44,9 @@ class _SearchNoteEditScreenState extends State<SearchNoteEditScreen> {
           TextButton(
             child: const Text("저장"),
             onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
               final editedContent = contentController.text;
               // 노트 저장하고 노트 아이디 받아오기
               final noteId = await NoteAPI.addNote(content: editedContent);
@@ -56,24 +61,29 @@ class _SearchNoteEditScreenState extends State<SearchNoteEditScreen> {
                         content: editedContent,
                         selectedIndex: result["indexList"])));
               }
+              setState(() {
+                isLoading = false;
+              });
             },
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              maxLines: (widget.content.length / 30).ceil(),
-              style: CustomTheme.themeData.textTheme.bodyMedium,
-              controller: contentController,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: "판례를 입력하세요",
-                hintStyle: TextStyle(fontSize: 14),
-              ),
-            )),
-      ),
+      body: isLoading
+          ? Loading()
+          : SingleChildScrollView(
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    maxLines: (widget.content.length / 30).ceil(),
+                    style: CustomTheme.themeData.textTheme.bodyMedium,
+                    controller: contentController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "판례를 입력하세요",
+                      hintStyle: TextStyle(fontSize: 14),
+                    ),
+                  )),
+            ),
     );
   }
 }
