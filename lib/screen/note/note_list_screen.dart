@@ -35,7 +35,6 @@ class _NoteListScreenState extends State<NoteListScreen> {
                             item["content"],
                             maxLines: 2,
                           ),
-                          trailing: const Icon(Icons.add),
                           onTap: () {
                             // 해당 노트 화면으로 이동
                             Navigator.push(
