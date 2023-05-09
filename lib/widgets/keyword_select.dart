@@ -136,7 +136,7 @@ class _KeywordSelectState extends State<KeywordSelect> {
           ),
           TextSelectionTheme(
             data: TextSelectionThemeData(
-              selectionColor: Colors.yellow.withOpacity(0.5),
+              selectionColor: Colors.grey.withOpacity(0.5),
             ),
             child: SelectableText.rich(
               TextSpan(children: getSpanList()),
