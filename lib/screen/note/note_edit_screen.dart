@@ -65,7 +65,6 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             TextField(
-              maxLines: (widget.content.length / 30).ceil(),
               controller: titleController,
               style: CustomTheme.themeData.textTheme.titleSmall,
               decoration: const InputDecoration(
@@ -80,7 +79,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
               height: 16,
             ),
             TextField(
-              maxLines: 100,
+              maxLines: (widget.content.length / 30).ceil(),
               style: CustomTheme.themeData.textTheme.bodyMedium,
               controller: contentController,
               decoration: const InputDecoration(
