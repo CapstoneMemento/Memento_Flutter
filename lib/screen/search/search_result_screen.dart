@@ -3,9 +3,9 @@ import 'package:memento_flutter/api/search_api.dart';
 import 'package:memento_flutter/screen/search/search_note_screen.dart';
 
 import 'package:memento_flutter/themes/custom_theme.dart';
-import 'package:memento_flutter/widgets/back_icon_button.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
 import 'package:memento_flutter/widgets/loading.dart';
+import 'package:memento_flutter/widgets/navigation_bar.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String query;
@@ -23,7 +23,18 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-        leading: const BackIconButton(),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            // 이전 버튼 누르면 검색 화면으로 이동
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => NavigationBarWidget(
+                          selectedIndex: 1,
+                        )),
+                (route) => false);
+          },
+        ),
         title: SearchBar(initialValue: widget.query),
       ),
       body: FutureBuilder(
@@ -55,7 +66,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                     ]),
               );
             } else {
-              Future.delayed(const Duration(seconds: 5), () {
+              Future.delayed(const Duration(seconds: 7), () {
                 // 일정 로딩 후에도 데이터가 없으면 body 위젯 바꾸기
                 setState(() {
                   bodyWidget = const Padding(
