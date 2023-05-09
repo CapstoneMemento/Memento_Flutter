@@ -17,13 +17,7 @@ class SearchResultScreen extends StatefulWidget {
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
-  late Future searchList;
-
-  @override
-  void initState() {
-    super.initState();
-    searchList = SearchAPI.fetchSearchList(widget.query);
-  }
+  dynamic bodyWidget = Loading();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +27,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         title: SearchBar(initialValue: widget.query),
       ),
       body: FutureBuilder(
-          future: searchList,
+          future: SearchAPI.fetchSearchList(widget.query),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               return Padding(
@@ -61,7 +55,16 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                     ]),
               );
             } else {
-              return Loading();
+              Future.delayed(const Duration(seconds: 5), () {
+                // 일정 로딩 후에도 데이터가 없으면 body 위젯 바꾸기
+                setState(() {
+                  bodyWidget = const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text("검색 결과가 없습니다."),
+                  );
+                });
+              });
+              return bodyWidget;
             }
           })),
     );
