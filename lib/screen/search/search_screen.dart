@@ -33,6 +33,8 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController queryController = TextEditingController();
+
     return Container(
       decoration: const BoxDecoration(
           color: Color(0xFFF2F2F2),
@@ -50,6 +52,7 @@ class SearchBar extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: TextFormField(
+                controller: queryController,
                 style: CustomTheme.themeData.textTheme.bodyMedium,
                 decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -64,6 +67,8 @@ class SearchBar extends StatelessWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             SearchResultScreen(query: value)));
+
+                    queryController.text = ""; // 검색 값 초기화
                   }
                 },
               ),

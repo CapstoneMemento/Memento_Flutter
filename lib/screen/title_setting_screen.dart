@@ -78,7 +78,7 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
             key: titleFormKey,
             validator: (value) {
               if (value == "") {
-                return "제목을 입력하세요";
+                // 판례 제목 요청 dialog 띄우기
               }
               return null;
             },
