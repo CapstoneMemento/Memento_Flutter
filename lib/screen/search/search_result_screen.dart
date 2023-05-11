@@ -18,113 +18,121 @@ class SearchResultScreen extends StatefulWidget {
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
   dynamic bodyWidget = Loading();
+  bool isLoading = true;
+  List resultList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    SearchAPI.fetchSearchList(widget.query).then((value) => {
+          setState(
+            () {
+              resultList = value;
+              isLoading = false;
+            },
+          )
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            // 이전 버튼 누르면 검색 화면으로 이동
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => NavigationBarWidget(
-                          selectedIndex: 1,
-                        )),
-                (route) => false);
-          },
-        ),
-        title: SearchBar(initialValue: widget.query),
-      ),
-      body: FutureBuilder(
-          future: SearchAPI.fetchSearchList(widget.query),
-          builder: ((context, snapshot) {
-            if (snapshot.hasData) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                        style: CustomTheme.themeData.textTheme.bodyMedium,
-                        text: "검색 결과 ",
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: "${snapshot.data.length}",
-                              style: TextStyle(
-                                  color: CustomTheme.themeData.primaryColor,
-                                  fontWeight: FontWeight.w700)),
-                          const TextSpan(text: '개'),
-                        ],
-                      )),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      ResultList(result: snapshot.data)
-                    ]),
-              );
-            } else {
-              Future.delayed(const Duration(seconds: 7), () {
-                // 일정 로딩 후에도 데이터가 없으면 body 위젯 바꾸기
-                setState(() {
-                  bodyWidget = const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text("검색 결과가 없습니다."),
-                  );
-                });
-              });
-              return bodyWidget;
-            }
-          })),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  String initialValue;
-
-  SearchBar({required this.initialValue});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      decoration: const BoxDecoration(
-          color: Color(0xFFF2F2F2),
-          borderRadius: BorderRadius.all(Radius.circular(100))),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Icon(
-              Icons.search,
-              size: 24,
-              color: Color(0xFF323232),
+        appBar: BaseAppBar(
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: TextFormField(
-                initialValue: initialValue,
-                style: CustomTheme.themeData.textTheme.bodyMedium,
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "판례 번호나 내용을 입력하세요",
-                    hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400)),
-                onFieldSubmitted: (value) {
-                  // 검색 결과 가져오기
-                },
+            onPressed: () {
+              // 이전 버튼 누르면 검색 화면으로 이동
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => NavigationBarWidget(
+                            selectedIndex: 1,
+                          )),
+                  (route) => false);
+            },
+          ),
+          title: Container(
+            height: 40,
+            decoration: const BoxDecoration(
+                color: Color(0xFFF2F2F2),
+                borderRadius: BorderRadius.all(Radius.circular(100))),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Icon(
+                    Icons.search,
+                    size: 24,
+                    color: Color(0xFF323232),
+                  ),
+                  const SizedBox(width: 16),
+                  // 검색 바
+                  Expanded(
+                      child: TextFormField(
+                          initialValue: widget.query,
+                          style: CustomTheme.themeData.textTheme.bodyMedium,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "판례 번호나 내용을 입력하세요",
+                              hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400)),
+                          onFieldSubmitted: (value) async {
+                            // 검색 결과 가져오기
+                            if (value.isNotEmpty) {
+                              setState(() {
+                                isLoading = true;
+                              });
+
+                              final result =
+                                  await SearchAPI.fetchSearchList(value);
+                              print(result);
+                              setState(() {
+                                resultList = result;
+                                isLoading = false;
+                              });
+                            }
+                          })),
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    );
+        body: isLoading
+            ? Loading()
+            : resultList == []
+                ? const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text("검색 결과가 없습니다."),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                            style: CustomTheme.themeData.textTheme.bodyMedium,
+                            text: "검색 결과 ",
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: "${resultList.length}",
+                                  style: TextStyle(
+                                      color: CustomTheme.themeData.primaryColor,
+                                      fontWeight: FontWeight.w700)),
+                              const TextSpan(text: '개'),
+                            ],
+                          )),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          ResultList(result: resultList)
+                        ]),
+                  ));
   }
 }
 
