@@ -93,7 +93,7 @@ class KeywordAPI {
 
   static Future deleteKeyword({required int noteId}) async {
     final accessToken = await Storage.getAccessToken();
-    final response = await http.get(
+    final response = await http.delete(
       Uri.parse('${Constants.baseURL}/keyword/deleteBynoteid/$noteId'),
       headers: {
         "Authorization": "Bearer $accessToken",
