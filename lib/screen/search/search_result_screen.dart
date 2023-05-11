@@ -90,7 +90,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
 
                               final result =
                                   await SearchAPI.fetchSearchList(value);
-                              print(result);
                               setState(() {
                                 resultList = result;
                                 isLoading = false;
