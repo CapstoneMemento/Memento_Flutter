@@ -43,7 +43,7 @@ class _QuizGameScreenState extends State<QuizGameScreen> {
   }
 
   Timer setMementoTimer() {
-    return Timer.periodic(const Duration(seconds: 5), (timer) {
+    return Timer.periodic(const Duration(seconds: 10), (timer) {
       quizAPI.setAnswer(isUserAnswer: false); // 컴퓨터 정답 처리 (사용자 오답)
       mementoWord = answer;
       delayMemento(isUserAnswer: false); // textField와 mementoWord 표시
