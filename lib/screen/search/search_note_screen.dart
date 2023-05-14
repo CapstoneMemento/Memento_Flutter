@@ -107,10 +107,9 @@ class _SearchNoteScreenState extends State<SearchNoteScreen> {
                 context: context,
                 builder: ((context) => AlertDialog(
                       contentPadding: const EdgeInsets.all(16),
-                      content: const Text("저장할 판결요지가 없습니다.",
+                      content: Text("저장할 판결요지가 없습니다.",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w400)),
+                          style: CustomTheme.themeData.textTheme.bodyMedium),
                       actions: [
                         TextButton(
                             onPressed: () {

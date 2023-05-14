@@ -105,11 +105,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         context: context,
                         builder: ((context) => AlertDialog(
                               contentPadding: const EdgeInsets.all(16),
-                              content: const Text("회원가입이 완료되었습니다.",
+                              content: Text("회원가입이 완료되었습니다.",
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400)),
+                                  style: CustomTheme
+                                      .themeData.textTheme.bodyMedium),
                               actions: [
                                 TextButton(
                                     onPressed: () {

@@ -104,11 +104,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           context: context,
                           builder: ((context) => AlertDialog(
                                 contentPadding: const EdgeInsets.all(16),
-                                content: const Text("아이디 또는 비밀번호가\n일치하지 않습니다.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400)),
+                                content: Text(
+                                  "아이디 또는 비밀번호가\n일치하지 않습니다.",
+                                  textAlign: TextAlign.center,
+                                  style: CustomTheme
+                                      .themeData.textTheme.bodyMedium,
+                                ),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
