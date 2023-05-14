@@ -102,7 +102,23 @@ class _SearchNoteScreenState extends State<SearchNoteScreen> {
         ),
         onPressed: () async {
           if (main.isEmpty) {
-            // 저장할 판결 요지가 없습니다.
+            // 저장할 판결 요지가 없습니다 dialog
+            showDialog(
+                context: context,
+                builder: ((context) => AlertDialog(
+                      contentPadding: const EdgeInsets.all(16),
+                      content: const Text("저장할 판결요지가 없습니다.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400)),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("확인"))
+                      ],
+                    )));
           } else {
             // 노트 수정 화면으로 이동
             Navigator.of(context).push(MaterialPageRoute(
