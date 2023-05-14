@@ -35,8 +35,8 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
           child: TextFormField(
             initialValue: widget.content,
             maxLines: (widget.content.length / 30).ceil(),
-            keyboardType: TextInputType.multiline,
             decoration: const InputDecoration(
+              border: InputBorder.none,
               hintText: "내용을 입력하세요.",
               hintStyle: TextStyle(
                 color: Colors.grey,
