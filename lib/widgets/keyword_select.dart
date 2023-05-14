@@ -144,6 +144,9 @@ class _KeywordSelectState extends State<KeywordSelect> {
               onSelectionChanged: _onSelectionChanged,
             ),
           ),
+          const SizedBox(
+            height: 80,
+          )
         ]),
       ),
     );
