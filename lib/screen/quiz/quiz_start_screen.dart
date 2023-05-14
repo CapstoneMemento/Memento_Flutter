@@ -59,15 +59,11 @@ class _QuizStartScreenState extends State<QuizStartScreen> {
               height: 20,
             ),
             Text(
-              "메멘토를 상대로 퀴즈가 진행됩니다.",
+              "판례 제목이 주어지면, 제한 시간 내에",
               style: CustomTheme.themeData.textTheme.bodySmall,
             ),
             Text(
-              "판례 제목이 주어지면, 관련 키워드를",
-              style: CustomTheme.themeData.textTheme.bodySmall,
-            ),
-            Text(
-              "문장 순서대로 입력하세요.",
+              "저장한 키워드를 순서대로 입력하세요.",
               style: CustomTheme.themeData.textTheme.bodySmall,
             ),
             const SizedBox(
