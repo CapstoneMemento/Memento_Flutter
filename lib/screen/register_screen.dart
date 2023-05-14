@@ -69,9 +69,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 message,
                 style: const TextStyle(color: Colors.red),
               ),
-              const SizedBox(
-                height: 20,
-              ),
               TextButton(
                   onPressed: () async {
                     final id = idController.text;
@@ -137,7 +134,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         "회원가입",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
-                      )))
+                      ))),
+              TextButton(
+                  onPressed: () {
+                    // 로그인 화면으로 이동
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+                  },
+                  child: Text(
+                    "로그인",
+                    style: TextStyle(color: CustomTheme.themeData.primaryColor),
+                  ))
             ],
           ),
         ),
