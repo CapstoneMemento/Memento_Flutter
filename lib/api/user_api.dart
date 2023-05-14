@@ -16,7 +16,28 @@ class UserAPI {
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 500) {
-// 아이디 또는 비밀번호 불일치
+      // 아이디 또는 비밀번호 불일치
+      return null;
+    } else {
+      print('Error code: ${response.statusCode}');
+      throw Exception('로그인 하지 못했습니다.');
+    }
+  }
+
+  static Future register(
+      {required String nickname,
+      required String userId,
+      required String password}) async {
+    final data = {"nickname": nickname, "userid": userId, "password": password};
+    final response = await http.post(
+        Uri.parse('${Constants.baseURL}/users/register'),
+        body: jsonEncode(data),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      return response;
+    } else if (response.statusCode == 500) {
+      // 모든 값이 입력되지 않음
       return null;
     } else {
       print('Error code: ${response.statusCode}');

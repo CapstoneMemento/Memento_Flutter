@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:memento_flutter/api/user_api.dart';
 import 'package:memento_flutter/model/user.dart';
 import 'package:memento_flutter/provider/user_provider.dart';
+import 'package:memento_flutter/screen/register_screen.dart';
 import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/utility/storage.dart';
 import 'package:memento_flutter/widgets/app_bar/base_app_bar.dart';
@@ -145,7 +146,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         "로그인",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
-                      )))
+                      ))),
+              TextButton(
+                child: Text(
+                  "회원가입",
+                  style: TextStyle(color: CustomTheme.themeData.primaryColor),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const RegisterScreen()));
+                },
+              )
             ],
           ),
         ),
