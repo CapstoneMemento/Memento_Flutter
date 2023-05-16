@@ -21,7 +21,7 @@ class _KeywordSelectState extends State<KeywordSelect> {
   int prevStartIndex = -1;
   // 선택한 문자 TextStyle
   final highlightStyle =
-      TextStyle(backgroundColor: Colors.yellow.withOpacity(0.5));
+      TextStyle(fontSize: 16, backgroundColor: Colors.yellow.withOpacity(0.5));
 
   /* 사용자가 키워드를 선택하면 index 저장 */
   void _onSelectionChanged(selection, cause) {
@@ -112,7 +112,10 @@ class _KeywordSelectState extends State<KeywordSelect> {
     final result = selectedText
         .map((e) => TextSpan(
             text: e["text"],
-            style: e["isKeyword"] ? highlightStyle : const TextStyle()))
+            style: e["isKeyword"]
+                ? highlightStyle
+                : const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w400, height: 2)))
         .toList();
 
     return result;
@@ -136,7 +139,7 @@ class _KeywordSelectState extends State<KeywordSelect> {
           ),
           TextSelectionTheme(
             data: TextSelectionThemeData(
-              selectionColor: Colors.grey.withOpacity(0.5),
+              selectionColor: Colors.yellow.withOpacity(0.5),
             ),
             child: SelectableText.rich(
               TextSpan(children: getSpanList()),
