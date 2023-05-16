@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memento_flutter/themes/custom_theme.dart';
 import 'package:memento_flutter/widgets/app_bar/main_app_bar.dart';
 import 'package:memento_flutter/widgets/back_icon_button.dart';
 
@@ -42,7 +41,8 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
                 color: Colors.grey,
               ),
             ),
-            style: CustomTheme.themeData.textTheme.bodyMedium,
+            style: const TextStyle(
+                fontSize: 16, height: 2, fontWeight: FontWeight.w400),
             onChanged: (value) {
               setState(() {
                 editedText = value;

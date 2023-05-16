@@ -132,7 +132,7 @@ class _KeywordSelectState extends State<KeywordSelect> {
           ),
           Text(
             "키워드를 선택하세요.",
-            style: CustomTheme.themeData.textTheme.titleSmall,
+            style: CustomTheme.themeData.textTheme.titleMedium,
           ),
           const SizedBox(
             height: 16,

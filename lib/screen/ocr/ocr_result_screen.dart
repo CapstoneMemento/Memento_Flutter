@@ -112,7 +112,10 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: GestureDetector(
                       onTap: goEditText,
-                      child: Text(widget.content),
+                      child: Text(
+                        widget.content,
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
                 ),

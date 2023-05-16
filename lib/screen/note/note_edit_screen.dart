@@ -43,18 +43,37 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
               final editedTitle = titleController.text;
               final editedContent = contentController.text;
 
-              // 노트 수정 DB에 반영
-              // 키워드 수정으로 이동
-              NoteAPI.editNote(
-                      noteId: widget.noteId,
-                      content: editedContent,
-                      title: editedTitle)
-                  .then((_) => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => KeywordEditScreen(
-                          noteId: widget.noteId,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          selectedIndex: <Map>[],
-                          content: widget.content))));
+              if (editedTitle == "") {
+                showDialog(
+                    context: context,
+                    builder: ((context) => AlertDialog(
+                          contentPadding: const EdgeInsets.all(16),
+                          content: Text("판례 제목을 입력해주세요.",
+                              textAlign: TextAlign.center,
+                              style:
+                                  CustomTheme.themeData.textTheme.bodyMedium),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("확인"))
+                          ],
+                        )));
+              } else {
+                // 노트 수정 DB에 반영
+                // 키워드 수정으로 이동
+                NoteAPI.editNote(
+                        noteId: widget.noteId,
+                        content: editedContent,
+                        title: editedTitle)
+                    .then((_) => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => KeywordEditScreen(
+                            noteId: widget.noteId,
+                            // ignore: prefer_const_literals_to_create_immutables
+                            selectedIndex: <Map>[],
+                            content: widget.content))));
+              }
             },
           )
         ],
@@ -80,7 +99,8 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
             ),
             TextField(
               maxLines: (widget.content.length / 30).ceil(),
-              style: CustomTheme.themeData.textTheme.bodyMedium,
+              style: const TextStyle(
+                  fontSize: 16, height: 2, fontWeight: FontWeight.w400),
               controller: contentController,
               decoration: const InputDecoration(
                 border: InputBorder.none,

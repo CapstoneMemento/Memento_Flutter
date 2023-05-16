@@ -18,10 +18,8 @@ class CustomTheme {
           fontSize: 16,
           fontWeight: FontWeight.w700,
         ),
-        bodyMedium: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-        ),
+        bodyMedium:
+            TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 2),
         bodySmall: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w300,

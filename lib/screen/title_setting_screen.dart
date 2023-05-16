@@ -98,7 +98,7 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
           ),
           Text(
             "선택한 내용",
-            style: CustomTheme.themeData.textTheme.titleSmall,
+            style: CustomTheme.themeData.textTheme.titleMedium,
           ),
           const SizedBox(
             height: 16,
@@ -126,6 +126,23 @@ class _TitleSettingScreenState extends State<TitleSettingScreen> {
                           )),
                   (route) => false);
             }
+          } else {
+            // 판례 제목이 없으면 dialog
+            showDialog(
+                context: context,
+                builder: ((context) => AlertDialog(
+                      contentPadding: const EdgeInsets.all(16),
+                      content: Text("판례 제목을 입력해주세요.",
+                          textAlign: TextAlign.center,
+                          style: CustomTheme.themeData.textTheme.bodyMedium),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("확인"))
+                      ],
+                    )));
           }
         },
       ),
