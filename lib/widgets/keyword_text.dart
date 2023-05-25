@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memento_flutter/themes/custom_theme.dart';
 
 class KeywordText extends StatelessWidget {
   final List selectedText;
@@ -18,10 +19,7 @@ class KeywordText extends StatelessWidget {
                   text: e["text"],
                   style: e["isKeyword"]
                       ? highlightStyle
-                      : const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          height: 2)))
+                      : CustomTheme.themeData.textTheme.bodyMedium))
               .toList()),
       toolbarOptions: const ToolbarOptions(selectAll: false),
     );

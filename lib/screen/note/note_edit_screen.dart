@@ -99,8 +99,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
             ),
             TextField(
               maxLines: (widget.content.length / 30).ceil(),
-              style: const TextStyle(
-                  fontSize: 16, height: 2, fontWeight: FontWeight.w400),
+              style: CustomTheme.themeData.textTheme.bodyMedium,
               controller: contentController,
               decoration: const InputDecoration(
                 border: InputBorder.none,

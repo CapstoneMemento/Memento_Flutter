@@ -115,7 +115,8 @@ class _KeywordSelectState extends State<KeywordSelect> {
             style: e["isKeyword"]
                 ? highlightStyle
                 : const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w400, height: 2)))
+                    fontSize: 16,
+                  )))
         .toList();
 
     return result;

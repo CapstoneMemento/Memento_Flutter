@@ -114,7 +114,7 @@ class _OCRResultScreenState extends State<OCRResultScreen> {
                       onTap: goEditText,
                       child: Text(
                         widget.content,
-                        style: const TextStyle(fontSize: 16),
+                        style: CustomTheme.themeData.textTheme.bodyMedium,
                       ),
                     ),
                   ),
